@@ -32,7 +32,7 @@ public class FetchMovieData extends AsyncTask {
         if (params.length == 0)
             return null;
 
-        String API_KEY = "f9b69f2b96bfaa9b1748f12afbe14cea";
+        String API_KEY = "xxxxxxxxxxx";
 //        String IMAGE_SIZE = "w185";
         String BASE_URL = " http://api.themoviedb.org/3/discover/movie?";
         // String SORT_BY = "POPULARITY.desc";
