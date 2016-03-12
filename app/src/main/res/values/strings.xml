@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">MoviesApp</string>
     <string name="action_settings">Settings</string>
+    
+    <!--strings for SharedPreferences-->
+    <string name="SortBy">Sort By</string>
+    <string name="popularity">Popularity</string>
+    <string name="UserRating">User Rating</string>
+
+    <string-array name="sort">
+        <item>@string/popularity</item>
+        <item>@string/UserRating</item>
+    </string-array>
+
 </resources>

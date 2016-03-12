@@ -20,15 +20,8 @@ public class ImageAdapter extends BaseAdapter {
 
 
 
-    public void setMoviePoster(ArrayList<String> moviePoster) {
-        System.out.println("setter : " + moviePoster);
-        this.moviePoster = moviePoster;
-    }
 
-    public ArrayList<String> getMoviePoster() {
-        System.out.println("getter : " + moviePoster);
-        return moviePoster;
-    }
+
 
     public ArrayList<String> moviePoster = new ArrayList();
     Context context;
@@ -46,26 +39,19 @@ public class ImageAdapter extends BaseAdapter {
 //    };
 
 
-    public ImageAdapter(Context context) {
-
+    public ImageAdapter(Context context,ArrayList Posters) {
+        this.moviePoster = Posters;
         this.context = context;
     }
 
-
-    public ImageAdapter(ArrayList<String> movieposter) {
-//        this.moviePoster = movieposter;
-//        System.out.println("in adapter constructor : " + moviePoster);
-        setMoviePoster(movieposter);
-        System.out.println("in adapter constructor : " + getMoviePoster() );
-    }
 
     @Override
     public int getCount() {
 //        return imageId.length;
 //        System.out.println("get count image adapter : " + moviePoster);
-        System.out.println("in get count using getter : " + getMoviePoster());
+//        System.out.println("in get count using getter : " + moviePoster);
 
-        return getMoviePoster().size();
+        return moviePoster.size();
     }
 
     @Override
@@ -76,14 +62,13 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+
+//        return 0;
+        return moviePoster.indexOf(position);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-
-        System.out.println("in get view : " + moviePoster);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.movie_image, parent, false);
@@ -95,12 +80,9 @@ public class ImageAdapter extends BaseAdapter {
 
 //        movie_posters_imageView.setLayoutParams(new GridView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 //        movie_posters_imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        movie_posters_imageView.setPadding(8, 8, 8, 8);
+//        movie_posters_imageView.setPadding(8, 8, 8, 8);
 
         BASE_POSTER_URL = "http://image.tmdb.org/t/p/w185/";
-
-
-        System.out.println("movie poster : " + moviePoster.get(position));
 
         System.out.println("poster url : " + BASE_POSTER_URL+moviePoster.get(position));
 

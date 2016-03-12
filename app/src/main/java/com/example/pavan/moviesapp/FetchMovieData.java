@@ -1,8 +1,10 @@
 package com.example.pavan.moviesapp;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.GridView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,13 +28,20 @@ public class FetchMovieData extends AsyncTask {
     JSONObject jsonObject;
     JSONObject objectsInJSONArray;
     ArrayList<String> Posters = new ArrayList<>();
+    Context context;
+    GridView gridView;
+
+    public FetchMovieData(Context context,GridView gridView) {
+        this.context = context;
+        this.gridView = gridView;
+    }
 
     @Override
     protected Object doInBackground(Object[] params) {
         if (params.length == 0)
             return null;
 
-        String API_KEY = "xxxxxxxxxxx";
+        String API_KEY = "f9b69f2b96bfaa9b1748f12afbe14cea";
 //        String IMAGE_SIZE = "w185";
         String BASE_URL = " http://api.themoviedb.org/3/discover/movie?";
         // String SORT_BY = "POPULARITY.desc";
@@ -95,17 +104,18 @@ public class FetchMovieData extends AsyncTask {
             jsonObject = new JSONObject(result.toString());
             JSONArray jsonArray = jsonObject.getJSONArray("results");
 
+            System.out.println("jsonArray data : " + jsonArray);
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                objectsInJSONArray = jsonArray.getJSONObject(i);
-                for (int j = 0; j < objectsInJSONArray.length(); j++) {
-                    Posters.add(objectsInJSONArray.getString("poster_path"));
-//                    System.out.println("string list content: " + imageAdater.moviePoster.get(j));
-                }
+            for (int i = 0; i < jsonArray.length() ; i++) {
+                objectsInJSONArray = jsonArray.optJSONObject(i);
+                Posters.add(objectsInJSONArray.get("poster_path").toString());
             }
 
-            new ImageAdapter(Posters);
-//            System.out.println("moviePoster in image adapter : "+ imageAdater.moviePoster);
+            System.out.println("objectsInJSONArray : " + objectsInJSONArray);
+
+            gridView.setAdapter(new ImageAdapter(context,Posters));
+
+            System.out.println("moviePoster in image adapter Poster >>>>> : " + Posters);
 
         } catch (JSONException e) {
             e.printStackTrace();

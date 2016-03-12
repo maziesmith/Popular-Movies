@@ -1,5 +1,6 @@
 package com.example.pavan.moviesapp;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,6 +20,8 @@ public class MainActivityFragment extends Fragment {
 //    ArrayAdapter<String> moviePoster;
 
 
+    private SharedPreferences sortOrder;
+
     public MainActivityFragment() {
     }
 
@@ -31,16 +34,13 @@ public class MainActivityFragment extends Fragment {
 
 
 
+
         final GridView gridView = (GridView) rootView.findViewById(R.id.movie_grid_view);
 
 
-        new FetchMovieData().execute("POPULARITY.desc");
+        new FetchMovieData(getContext(),gridView).execute("POPULARITY.desc");
 
-        gridView.setAdapter(new ImageAdapter(getContext()));
-
-//        gridView.setAdapter(new ImageAdater());
-
-
+//        new FetchMovieData(getContext(),gridView).execute(sortOrder);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
