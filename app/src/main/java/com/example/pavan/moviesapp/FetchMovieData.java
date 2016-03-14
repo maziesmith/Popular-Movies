@@ -104,18 +104,18 @@ public class FetchMovieData extends AsyncTask {
             jsonObject = new JSONObject(result.toString());
             JSONArray jsonArray = jsonObject.getJSONArray("results");
 
-            System.out.println("jsonArray data : " + jsonArray);
+//            System.out.println("jsonArray data : " + jsonArray);
 
             for (int i = 0; i < jsonArray.length() ; i++) {
                 objectsInJSONArray = jsonArray.optJSONObject(i);
                 Posters.add(objectsInJSONArray.get("poster_path").toString());
             }
 
-            System.out.println("objectsInJSONArray : " + objectsInJSONArray);
+//            System.out.println("objectsInJSONArray : " + objectsInJSONArray);
 
             gridView.setAdapter(new ImageAdapter(context,Posters));
 
-            System.out.println("moviePoster in image adapter Poster >>>>> : " + Posters);
+//            System.out.println("moviePoster in image adapter Poster >>>>> : " + Posters);
 
         } catch (JSONException e) {
             e.printStackTrace();

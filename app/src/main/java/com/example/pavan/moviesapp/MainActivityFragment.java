@@ -1,8 +1,10 @@
 package com.example.pavan.moviesapp;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +17,9 @@ import android.widget.Toast;
  */
 public class MainActivityFragment extends Fragment {
 
-    //    JSONObject jsonObject;
-//    JSONObject objectsInJSONArray;
-//    ArrayAdapter<String> moviePoster;
-
-
     private SharedPreferences sortOrder;
+    Bundle bundle;
+    Intent movieDetail;
 
     public MainActivityFragment() {
     }
@@ -30,15 +29,17 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-//        new ImageAdater.FetchMovieData().execute("POPULARITY.desc");
 
 
+        bundle = new Bundle();
 
+        movieDetail  = new Intent(getContext(),MovieDetail.class);
 
         final GridView gridView = (GridView) rootView.findViewById(R.id.movie_grid_view);
 
+        final FetchMovieData fetchMovieData = new FetchMovieData(getContext(),gridView);
 
-        new FetchMovieData(getContext(),gridView).execute("POPULARITY.desc");
+        fetchMovieData.execute("POPULARITY.desc");
 
 //        new FetchMovieData(getContext(),gridView).execute(sortOrder);
 
@@ -46,6 +47,12 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getContext(),"position : " + position, Toast.LENGTH_SHORT).show();
+
+                Log.i("poster string", fetchMovieData.Posters.get(position));
+
+                bundle.putString("posterURL", fetchMovieData.Posters.get(position));
+                new MovieDetailFragment().setArguments(bundle);
+                startActivity(movieDetail);
             }
         });
         return rootView;
