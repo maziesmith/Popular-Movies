@@ -41,17 +41,19 @@ public class MainActivityFragment extends Fragment {
 
         fetchMovieData.execute("POPULARITY.desc");
 
+        final MovieDetailFragment detailFragment = new MovieDetailFragment();
+
 //        new FetchMovieData(getContext(),gridView).execute(sortOrder);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(),"position : " + position, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "position : " + position, Toast.LENGTH_SHORT).show();
 
                 Log.i("poster string", fetchMovieData.Posters.get(position));
 
                 bundle.putString("posterURL", fetchMovieData.Posters.get(position));
-                new MovieDetailFragment().setArguments(bundle);
+
                 startActivity(movieDetail);
             }
         });
