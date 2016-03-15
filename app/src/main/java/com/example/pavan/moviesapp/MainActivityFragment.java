@@ -20,6 +20,7 @@ public class MainActivityFragment extends Fragment {
     private SharedPreferences sortOrder;
     Bundle bundle;
     Intent movieDetail;
+    String clickedPoster;
 
     public MainActivityFragment() {
     }
@@ -31,7 +32,7 @@ public class MainActivityFragment extends Fragment {
 
 
 
-        bundle = new Bundle();
+
 
         movieDetail  = new Intent(getContext(),MovieDetail.class);
 
@@ -40,8 +41,6 @@ public class MainActivityFragment extends Fragment {
         final FetchMovieData fetchMovieData = new FetchMovieData(getContext(),gridView);
 
         fetchMovieData.execute("POPULARITY.desc");
-
-        final MovieDetailFragment detailFragment = new MovieDetailFragment();
 
 //        new FetchMovieData(getContext(),gridView).execute(sortOrder);
 
@@ -52,13 +51,22 @@ public class MainActivityFragment extends Fragment {
 
                 Log.i("poster string", fetchMovieData.Posters.get(position));
 
-                bundle.putString("posterURL", fetchMovieData.Posters.get(position));
+                clickedPoster = fetchMovieData.Posters.get(position);
 
-                detailFragment.setArguments(bundle);
+                sendDataTOOtherFragment();
+
                 startActivity(movieDetail);
             }
         });
         return rootView;
+    }
+
+    private Fragment sendDataTOOtherFragment(){
+        bundle = new Bundle();
+        bundle.putString("posterURL",clickedPoster);
+        MovieDetailFragment detailFragment = new MovieDetailFragment();
+        detailFragment.setArguments(bundle);
+        return detailFragment;
     }
 
 
