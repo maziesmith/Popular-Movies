@@ -54,6 +54,7 @@ public class MainActivityFragment extends Fragment {
 
                 bundle.putString("posterURL", fetchMovieData.Posters.get(position));
 
+                detailFragment.setArguments(bundle);
                 startActivity(movieDetail);
             }
         });
