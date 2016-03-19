@@ -3,9 +3,14 @@ package com.example.pavan.moviesapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,32 +22,51 @@ import android.widget.Toast;
  */
 public class MainActivityFragment extends Fragment {
 
-    private SharedPreferences sortOrder;
-    Bundle bundle;
-    Intent movieDetail;
-    String clickedPoster;
+
+    private SharedPreferences sortByPref;
+    Intent intent;
+    String clickedPoster,releaseDate,movieOverView,movieTitle,voteAverage;
+    private String sortByPrefValue;
 
     public MainActivityFragment() {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
+        intent = new Intent(getContext(),MovieDetail.class);
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-
-
-
-
-        movieDetail  = new Intent(getContext(),MovieDetail.class);
 
         final GridView gridView = (GridView) rootView.findViewById(R.id.movie_grid_view);
 
         final FetchMovieData fetchMovieData = new FetchMovieData(getContext(),gridView);
 
-        fetchMovieData.execute("POPULARITY.desc");
+        sortByPref = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-//        new FetchMovieData(getContext(),gridView).execute(sortOrder);
+        sortByPrefValue = sortByPref.getString(getString(R.string.SortBy_key),
+                getString(R.string.SortBy_default));
+        Log.i("sortByPrefValue", sortByPrefValue);
+
+        fetchMovieData.execute(sortByPrefValue);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -52,22 +76,24 @@ public class MainActivityFragment extends Fragment {
                 Log.i("poster string", fetchMovieData.Posters.get(position));
 
                 clickedPoster = fetchMovieData.Posters.get(position);
+                releaseDate = fetchMovieData.releaseDates.get(position).toString();
+                movieOverView = fetchMovieData.movieOverViews.get(position).toString();
+                voteAverage   = fetchMovieData.voteAverage.get(position).toString();
+                movieTitle   = fetchMovieData.titles.get(position).toString();
 
-                sendDataTOOtherFragment();
 
-                startActivity(movieDetail);
+                Log.i("release date 1",releaseDate);
+                Log.i("movieOverview",movieOverView);
+
+                intent.putExtra("posterURL", clickedPoster);
+                intent.putExtra("releaseDate", releaseDate);
+                intent.putExtra("movieOverview",movieOverView);
+                intent.putExtra("movieTitle",movieTitle);
+                intent.putExtra("voteAverage",voteAverage);
+
+                startActivity(intent);
             }
         });
         return rootView;
     }
-
-    private Fragment sendDataTOOtherFragment(){
-        bundle = new Bundle();
-        bundle.putString("posterURL",clickedPoster);
-        MovieDetailFragment detailFragment = new MovieDetailFragment();
-        detailFragment.setArguments(bundle);
-        return detailFragment;
-    }
-
-
 }

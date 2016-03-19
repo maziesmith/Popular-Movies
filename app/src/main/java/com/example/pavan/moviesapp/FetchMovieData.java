@@ -28,6 +28,10 @@ public class FetchMovieData extends AsyncTask {
     JSONObject jsonObject;
     JSONObject objectsInJSONArray;
     ArrayList<String> Posters = new ArrayList<>();
+    ArrayList movieOverViews = new ArrayList();
+    ArrayList releaseDates = new ArrayList();
+    ArrayList titles = new ArrayList();
+    ArrayList voteAverage = new ArrayList();
     Context context;
     GridView gridView;
 
@@ -108,12 +112,21 @@ public class FetchMovieData extends AsyncTask {
 
             for (int i = 0; i < jsonArray.length() ; i++) {
                 objectsInJSONArray = jsonArray.optJSONObject(i);
+
                 Posters.add(objectsInJSONArray.get("poster_path").toString());
+                releaseDates.add(objectsInJSONArray.get("release_date").toString());
+                movieOverViews.add(objectsInJSONArray.get("overview"));
+                titles.add(objectsInJSONArray.get("original_title"));
+                voteAverage.add(objectsInJSONArray.get("vote_average"));
             }
 
+            Log.i("vote_average ",voteAverage.toString());
+            Log.i("movie titles",titles.toString());
+            Log.i("releaseDates",releaseDates.toString());
+            Log.i("movie Posters",Posters.toString());
 //            System.out.println("objectsInJSONArray : " + objectsInJSONArray);
 
-            gridView.setAdapter(new ImageAdapter(context,Posters));
+            gridView.setAdapter(new ImageAdapter(context, Posters));
 
 //            System.out.println("moviePoster in image adapter Poster >>>>> : " + Posters);
 

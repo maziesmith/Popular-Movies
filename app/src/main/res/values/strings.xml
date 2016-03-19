@@ -1,13 +1,22 @@
 <resources>
     <string name="app_name">MoviesApp</string>
+    <string name="movies_list">Popular Movies</string>
+    <string name="movie_detail">Movie Detail</string>
     <string name="action_settings">Settings</string>
 
-    <!--strings for SharedPreferences-->
-    <string name="SortBy">Sort By</string>
-    <string name="popularity">Popularity</string>
-    <string name="UserRating">User Rating</string>
 
-    <string-array name="sort">
+    <!--strings for SharedPreferences-->
+    <string name="SortBy_label">Sort Movies By</string>
+    <!-- Label for SortBy Preference-->
+    <string name="SortBy_key" translatable="false">chosenSortValue</string>
+    <!-- key for storing SortBy value in sharedPreference -->
+    <string name="SortBy_default" translatable="false">Popularity</string>
+    <string name="popularity" translatable="false">Popularity</string>
+    <string name="UserRating" translatable="false">User Rating</string>
+
+    <array name="sort_by_values"></array>
+
+    <string-array name="sort_by_options">
         <item>@string/popularity</item>
         <item>@string/UserRating</item>
     </string-array>

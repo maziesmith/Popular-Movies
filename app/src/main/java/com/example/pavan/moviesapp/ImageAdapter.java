@@ -2,6 +2,7 @@ package com.example.pavan.moviesapp;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,11 +63,16 @@ public class ImageAdapter extends BaseAdapter {
         else
             movie_posters_imageView = (ImageView) convertView;
 
-        Picasso.with(context)
-                .load(BASE_POSTER_URL + moviePoster.get(position))
+        Log.i("movie poster @ position",moviePoster.get(position));
+
+        String extra = moviePoster.get(position).toString();
+
+        if (extra != null)
+        { Picasso.with(context)
+                .load(BASE_POSTER_URL + extra)
                 .noFade()
                 .resize(185 * 2, 278 * 2)
-                .into(movie_posters_imageView);
+                .into(movie_posters_imageView);}
 
         return movie_posters_imageView;
     }
