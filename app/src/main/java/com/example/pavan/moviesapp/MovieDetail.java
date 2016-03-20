@@ -16,7 +16,7 @@ public class MovieDetail extends AppCompatActivity {
 
     private Bundle bundle;
     private TextView release_date,movie_overview,movie_title,vote_average;
-    private String poster_path,releaseDate,year[],movieOverview,movieTitle,voteAverage;
+    private String poster_path,releaseDate,movieOverview,movieTitle,voteAverage;
     private ImageView Poster;
     private String BASE_POSTER_URL = "http://image.tmdb.org/t/p/w185/";
 
@@ -26,7 +26,6 @@ public class MovieDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
 
-//        getActionBar().setDisplayOptions(ActionBar.DISPLAY_HOME_AS_UP);
 
 
         bundle = getIntent().getExtras();

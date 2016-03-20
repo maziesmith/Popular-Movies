@@ -17,7 +17,7 @@ public class SettingsActivity extends PreferenceActivity implements
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
 
-        PreferenceManager.setDefaultValues(getApplication(), R.xml.movie_pref, false);
+        PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.movie_pref, false);
         addPreferencesFromResource(R.xml.movie_pref);
 
 
