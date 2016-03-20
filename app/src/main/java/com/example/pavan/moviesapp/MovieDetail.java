@@ -1,8 +1,6 @@
 package com.example.pavan.moviesapp;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -20,7 +18,7 @@ public class MovieDetail extends AppCompatActivity {
     private ImageView Poster;
     private String BASE_POSTER_URL = "http://image.tmdb.org/t/p/w185/";
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,15 +40,14 @@ public class MovieDetail extends AppCompatActivity {
         movie_title    = (TextView)findViewById(R.id.movie_title);
         vote_average   = (TextView) findViewById(R.id.vote_average);
 
-        System.out.println("poster path in movie detail fragment :" + poster_path);
+
 
         Picasso.with(getApplicationContext())
                 .load(BASE_POSTER_URL + poster_path)
                 .resize(175 * 2, 250 * 2)
                 .into(Poster);
 
-//        year = releaseDate.split("-");
-//        System.out.println("year : " + year[0] + " month : "+ year[1] + "date : " +year[2]);
+
         release_date.setText(releaseDate);
         movie_overview.setText(movieOverview);
         movie_title.setText(movieTitle);
@@ -72,7 +69,8 @@ public class MovieDetail extends AppCompatActivity {
         if (id == R.id.action_settings){
 
             startActivity(new Intent(this,SettingsActivity.class));
-            return true;}
+            return true;
+        }
 
 
         return super.onOptionsItemSelected(item);

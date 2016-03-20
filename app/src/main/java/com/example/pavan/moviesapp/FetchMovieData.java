@@ -113,7 +113,11 @@ public class FetchMovieData extends AsyncTask {
             for (int i = 0; i < jsonArray.length() ; i++) {
                 objectsInJSONArray = jsonArray.optJSONObject(i);
 
+                if (objectsInJSONArray.get("poster_path").equals(null))
+                    Log.i("poster_path",objectsInJSONArray.get("poster_path").toString());
+                else
                 Posters.add(objectsInJSONArray.get("poster_path").toString());
+
                 releaseDates.add(objectsInJSONArray.get("release_date").toString());
                 movieOverViews.add(objectsInJSONArray.get("overview"));
                 titles.add(objectsInJSONArray.get("original_title"));
@@ -124,11 +128,8 @@ public class FetchMovieData extends AsyncTask {
             Log.i("movie titles",titles.toString());
             Log.i("releaseDates",releaseDates.toString());
             Log.i("movie Posters",Posters.toString());
-//            System.out.println("objectsInJSONArray : " + objectsInJSONArray);
 
             gridView.setAdapter(new ImageAdapter(context, Posters));
-
-//            System.out.println("moviePoster in image adapter Poster >>>>> : " + Posters);
 
         } catch (JSONException e) {
             e.printStackTrace();

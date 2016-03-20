@@ -1,5 +1,7 @@
 package com.example.pavan.moviesapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -27,6 +29,8 @@ public class MainActivityFragment extends Fragment {
     Intent intent;
     String clickedPoster,releaseDate,movieOverView,movieTitle,voteAverage;
     private String sortByPrefValue;
+    AndroidUtil checkConnectivityStatus;
+    AlertDialog.Builder builder;
 
     public MainActivityFragment() {
     }
@@ -60,13 +64,26 @@ public class MainActivityFragment extends Fragment {
 
         final FetchMovieData fetchMovieData = new FetchMovieData(getContext(),gridView);
 
+        checkConnectivityStatus = new AndroidUtil(getContext());
+        builder = new AlertDialog.Builder(getContext());
+
         sortByPref = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         sortByPrefValue = sortByPref.getString(getString(R.string.SortBy_key),
                 getString(R.string.SortBy_default));
         Log.i("sortByPrefValue", sortByPrefValue);
 
+        if (checkConnectivityStatus.isOnline())
         fetchMovieData.execute(sortByPrefValue);
+        else
+            builder.setMessage("Please check your INTERNET Connection").setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            killActivity();
+                        }
+                    }).create().show();
+
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -95,5 +112,9 @@ public class MainActivityFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    protected void killActivity(){
+        getActivity().finish();
     }
 }
