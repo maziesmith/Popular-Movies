@@ -6,22 +6,27 @@
 
 
     <!--strings for SharedPreferences-->
-    <string name="SortBy_label">Sort Movies By</string>
+
     <!-- Label for SortBy Preference-->
-    <string name="SortBy_key" translatable="false">chosenSortValue</string>
+    <string name="SortBy_label">Sort Movies By</string>
+
     <!-- key for storing SortBy value in sharedPreference -->
+    <string name="SortBy_key" translatable="false">chosenSortValue</string>
+
+    <!--default value to be considered for sorting the movies -->
     <string name="SortBy_default" translatable="false">Popularity</string>
+
+
+    <!--sort movies based on the following-->
     <string name="popularity" translatable="false">Popularity</string>
     <string name="UserRating" translatable="false">User Rating</string>
+    <string name="favorites" translatable="false">Favorites</string>
 
-    <!--<string-array name="sort_by_values">-->
-        <!--<item>0</item>-->
-        <!--<item>1</item>-->
-    <!--</string-array>-->
 
     <string-array name="sort_by_options">
         <item>@string/popularity</item>
         <item>@string/UserRating</item>
+        <item>@string/favorites</item>
     </string-array>
     <string name="title_activity_movie_detail">MovieDetail</string>
 

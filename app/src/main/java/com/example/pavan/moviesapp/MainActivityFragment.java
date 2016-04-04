@@ -25,12 +25,13 @@ import android.widget.Toast;
 public class MainActivityFragment extends Fragment {
 
 
-    private SharedPreferences sortByPref;
     Intent intent;
     String clickedPoster,releaseDate,movieOverView,movieTitle,voteAverage;
-    private String sortByPrefValue;
+    int movie_id_for_trailers;
     AndroidUtil checkConnectivityStatus;
     AlertDialog.Builder builder;
+    private SharedPreferences sortByPref;
+    private String sortByPrefValue;
 
     public MainActivityFragment() {
     }
@@ -97,8 +98,9 @@ public class MainActivityFragment extends Fragment {
                 movieOverView = fetchMovieData.movieOverViews.get(position).toString();
                 voteAverage   = fetchMovieData.voteAverage.get(position).toString();
                 movieTitle   = fetchMovieData.titles.get(position).toString();
+                movie_id_for_trailers = (int) fetchMovieData.movie_ids_for_trailers.get(position);
 
-
+                Log.i("tapped movie id", String.valueOf((movie_id_for_trailers)));
                 Log.i("release date 1",releaseDate);
                 Log.i("movieOverview",movieOverView);
 
@@ -107,6 +109,7 @@ public class MainActivityFragment extends Fragment {
                 intent.putExtra("movieOverview",movieOverView);
                 intent.putExtra("movieTitle",movieTitle);
                 intent.putExtra("voteAverage",voteAverage);
+                intent.putExtra("movieID", movie_id_for_trailers);
 
                 startActivity(intent);
             }

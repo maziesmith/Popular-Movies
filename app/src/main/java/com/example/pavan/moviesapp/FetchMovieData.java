@@ -32,8 +32,12 @@ public class FetchMovieData extends AsyncTask {
     ArrayList releaseDates = new ArrayList();
     ArrayList titles = new ArrayList();
     ArrayList voteAverage = new ArrayList();
+    ArrayList movie_ids_for_trailers = new ArrayList();
     Context context;
     GridView gridView;
+    String BASE_URL, API_KEY;
+    String API_KEY_PARAM, SORT_BY_PARAM;
+
 
     public FetchMovieData(Context context,GridView gridView) {
         this.context = context;
@@ -45,14 +49,14 @@ public class FetchMovieData extends AsyncTask {
         if (params.length == 0)
             return null;
 
-        String API_KEY = "f9b69f2b96bfaa9b1748f12afbe14cea";
-//        String IMAGE_SIZE = "w185";
-        String BASE_URL = " http://api.themoviedb.org/3/discover/movie?";
-        // String SORT_BY = "POPULARITY.desc";
+        API_KEY = "f9b69f2b96bfaa9b1748f12afbe14cea";
+
+        BASE_URL = " http://api.themoviedb.org/3/discover/movie?";
+
         String SORT_BY = (String) params[0];
 
-        String SORT_BY_PARAM = "sort_by";
-        String API_KEY_PARAM = "api_key";
+        SORT_BY_PARAM = "sort_by";
+        API_KEY_PARAM = "api_key";
         Uri.Builder uri = Uri.parse(BASE_URL).buildUpon().appendQueryParameter(SORT_BY_PARAM, SORT_BY)
                 .appendQueryParameter(API_KEY_PARAM, API_KEY);
 
@@ -122,12 +126,14 @@ public class FetchMovieData extends AsyncTask {
                 movieOverViews.add(objectsInJSONArray.get("overview"));
                 titles.add(objectsInJSONArray.get("original_title"));
                 voteAverage.add(objectsInJSONArray.get("vote_average"));
+                movie_ids_for_trailers.add(objectsInJSONArray.get("id"));
             }
 
             Log.i("vote_average ",voteAverage.toString());
             Log.i("movie titles",titles.toString());
             Log.i("releaseDates",releaseDates.toString());
             Log.i("movie Posters",Posters.toString());
+            Log.i("movie_ids_for_trailers", movie_ids_for_trailers.toString());
 
             gridView.setAdapter(new ImageAdapter(context, Posters));
 
