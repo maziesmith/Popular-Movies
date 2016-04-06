@@ -35,7 +35,7 @@ public class FetchMovieData extends AsyncTask {
     ArrayList movie_ids_for_trailers = new ArrayList();
     Context context;
     GridView gridView;
-    String BASE_URL, API_KEY;
+    String BASE_URL, API_KEY = "f9b69f2b96bfaa9b1748f12afbe14cea";
     String API_KEY_PARAM, SORT_BY_PARAM;
 
 
@@ -49,7 +49,6 @@ public class FetchMovieData extends AsyncTask {
         if (params.length == 0)
             return null;
 
-        API_KEY = "f9b69f2b96bfaa9b1748f12afbe14cea";
 
         BASE_URL = " http://api.themoviedb.org/3/discover/movie?";
 

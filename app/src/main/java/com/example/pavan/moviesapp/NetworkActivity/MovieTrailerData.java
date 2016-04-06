@@ -11,8 +11,9 @@ import java.util.Map;
 public class MovieTrailerData {
 
     private long id;
-    private List<MovieTrailerResponse> results = new ArrayList<MovieTrailerResponse>();
+    private List<MovieTrailerResponse> results = new ArrayList();
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
 
     /**
      * @return The id

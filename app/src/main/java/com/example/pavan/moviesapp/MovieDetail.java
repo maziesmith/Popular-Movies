@@ -9,12 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.pavan.moviesapp.NetworkActivity.MovieTrailerData;
+import com.example.pavan.moviesapp.NetworkActivity.MovieTrailerResponse;
 import com.example.pavan.moviesapp.NetworkActivity.RetrofitAPI;
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -39,13 +36,14 @@ public class MovieDetail extends AppCompatActivity {
 
     private FetchMovieTrailerAndReviewInfo trailerAndReviewInfo = new FetchMovieTrailerAndReviewInfo();
     private FetchMovieData fetchMovieData = new FetchMovieData(getApplication(), null);
-    private MovieTrailerData trailerData = new MovieTrailerData();
+    private MovieTrailerData movieTrailerData = new MovieTrailerData();
+    private MovieTrailerResponse movieTrailerResponse = new MovieTrailerResponse();
 
 
-    private OkHttpClient okHttpClient = new OkHttpClient();
-    private Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_TRAILERS_AND_REVIEWS_URL).client(okHttpClient)
+    private Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_TRAILERS_AND_REVIEWS_URL)
             .addConverterFactory(GsonConverterFactory.create()).build();
     private RetrofitAPI api = retrofit.create(RetrofitAPI.class);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,21 +88,13 @@ public class MovieDetail extends AppCompatActivity {
         fetchTrailerData();
 //        fetchReviewsData();
 
-//        System.out.println("trailerData.getId() : " + trailerData.getId());
-//        System.out.println("getTrailerData()  : " + trailerData.getTrailerData());
-//        System.out.println("getIso_639_1() : " + trailerData.getTrailerData());
+
 
     }
 
     public void fetchTrailerData() {
 
-        okHttpClient.interceptors().add(new Interceptor() {
-            @Override
-            public com.squareup.okhttp.Response intercept(Chain chain) throws IOException {
-                com.squareup.okhttp.Response response = chain.proceed(chain.request());
-                return response;
-            }
-        });
+
 
         Call<MovieTrailerData> responseCall = api.TRAILERS_DATA_CALL(movieID, fetchMovieData.API_KEY);
 
@@ -112,19 +102,42 @@ public class MovieDetail extends AppCompatActivity {
         responseCall.enqueue(new Callback<MovieTrailerData>() {
             @Override
             public void onResponse(Response<MovieTrailerData> response, Retrofit retrofit) {
+
                 System.out.println("response status : " + response.isSuccess());
+
+                movieTrailerData = response.body();
+
+                System.out.println("movieTrailerData : " + movieTrailerData);
+
+
+//               System.out.println(movieTrailerData.getResults());
+
+                System.out.println("response results getID : " + movieTrailerData.getId());
+
+                System.out.println("movieTrailerResponse.getName() : " + movieTrailerResponse.getName());
+
+                System.out.println("response raw : " + response.raw());
+
+                System.out.println("movieTrailerResponse.getId() : " + movieTrailerResponse.getId());
+                System.out.println("movieTrailerResponse.getIso31661() : " + movieTrailerResponse.getIso31661());
+                System.out.println("movieTrailerResponse.getIso6391() : " + movieTrailerResponse.getIso6391());
+                System.out.println("movieTrailerResponse.getKey() : " + movieTrailerResponse.getKey());
+                System.out.println("movieTrailerResponse.getName() : " + movieTrailerResponse.getName());
+                System.out.println("movieTrailerResponse.getSite() : " + movieTrailerResponse.getSite());
 
                 System.out.println("response body : " + response.body());
 
-                System.out.println("response msg : " + response.message());
+                System.out.println("response data : " + response.raw().networkResponse());
+
+//               movieTrailerData.displayData();
+
             }
 
             @Override
             public void onFailure(Throwable t) {
-                System.out.println("failed.......");
+
             }
         });
-
 
     }
 

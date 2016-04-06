@@ -13,11 +13,11 @@ import retrofit.http.Query;
 public interface RetrofitAPI {
 
 
-    @GET("/{id}/videos")
+    @GET("{id}/videos")
     Call<MovieTrailerData> TRAILERS_DATA_CALL(@Path("id") int id, @Query("api_key") String API_KEY);
 
 
-    @GET("/{id}/reviews")
+    @GET("{id}/reviews")
     Call<List<ReviewsData>> REVIEWS_DATA_CALL(@Path("id") int id, @Query("api_key") String API_KEY);
 
 
