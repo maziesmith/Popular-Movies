@@ -1,6 +1,5 @@
 package com.example.pavan.moviesapp.NetworkActivity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,8 +9,9 @@ import java.util.Map;
  */
 public class MovieTrailerData {
 
+    //    MovieDetail movieDetail = new MovieDetail();
     private long id;
-    private List<MovieTrailerResponse> results = new ArrayList();
+    private List<MovieTrailerResponse> results;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 

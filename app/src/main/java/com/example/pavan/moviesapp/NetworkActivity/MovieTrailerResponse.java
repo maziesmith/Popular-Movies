@@ -8,14 +8,30 @@ import java.util.Map;
  */
 public class MovieTrailerResponse {
     private String id;
-    private String iso6391;
-    private String iso31661;
+    private String iso_639_1;
+    private String iso_3166_1;
     private String key;
     private String name;
     private String site;
     private long size;
     private String type;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    public String getIso_639_1() {
+        return iso_639_1;
+    }
+
+    public void setIso_639_1(String iso_639_1) {
+        this.iso_639_1 = iso_639_1;
+    }
+
+    public String getIso_3166_1() {
+        return iso_3166_1;
+    }
+
+    public void setIso_3166_1(String iso_3166_1) {
+        this.iso_3166_1 = iso_3166_1;
+    }
 
     public String getId() {
         return id;
@@ -25,21 +41,6 @@ public class MovieTrailerResponse {
         this.id = id;
     }
 
-    public String getIso6391() {
-        return iso6391;
-    }
-
-    public void setIso6391(String iso6391) {
-        this.iso6391 = iso6391;
-    }
-
-    public String getIso31661() {
-        return iso31661;
-    }
-
-    public void setIso31661(String iso31661) {
-        this.iso31661 = iso31661;
-    }
 
     public String getKey() {
         return key;
