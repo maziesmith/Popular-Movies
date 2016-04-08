@@ -9,7 +9,6 @@ import java.util.Map;
  */
 public class MovieTrailerData {
 
-    //    MovieDetail movieDetail = new MovieDetail();
     private long id;
     private List<MovieTrailerResponse> results;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();

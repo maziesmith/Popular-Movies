@@ -61,6 +61,7 @@ public class FetchMovieData extends AsyncTask {
 
         uri.build();
 
+        System.out.println(uri);
 
         String MoviesJSONdata = null;
         try {

@@ -1,7 +1,5 @@
 package com.example.pavan.moviesapp.NetworkActivity;
 
-import java.util.List;
-
 import retrofit.Call;
 import retrofit.http.GET;
 import retrofit.http.Path;
@@ -18,7 +16,7 @@ public interface RetrofitAPI {
 
 
     @GET("{id}/reviews")
-    Call<List<ReviewsData>> REVIEWS_DATA_CALL(@Path("id") int id, @Query("api_key") String API_KEY);
+    Call<ReviewsData> REVIEWS_DATA_CALL(@Path("id") int id, @Query("api_key") String API_KEY);
 
 
 }

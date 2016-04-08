@@ -1,20 +1,32 @@
 package com.example.pavan.moviesapp.NetworkActivity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by pavan on 4/2/2016.
  */
 public class MovieReviewsResponse {
 
-    private long id;
+    private String id;
     private String author;
     private String content;
     private String url;
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    public long getId() {
+    public Map<String, Object> getAdditionalProperties() {
+        return additionalProperties;
+    }
+
+    public void setAdditionalProperties(Map<String, Object> additionalProperties) {
+        this.additionalProperties = additionalProperties;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -22,12 +22,23 @@
     <string name="UserRating" translatable="false">User Rating</string>
     <string name="favorites" translatable="false">Favorites</string>
 
+    <!--sort movies based on the following values-->
+    <string name="popularity_value" translatable="false">popularity.desc</string>
+    <string name="vote_average" translatable="false">vote_count.desc</string>
+    <string name="favorites_value" translatable="false">Favorites</string>
 
     <string-array name="sort_by_options">
         <item>@string/popularity</item>
         <item>@string/UserRating</item>
         <item>@string/favorites</item>
     </string-array>
+
+    <string-array name="sort_by_values">
+        <item>@string/popularity_value</item>
+        <item>@string/vote_average</item>
+        <item>@string/favorites_value</item>
+    </string-array>
+
     <string name="title_activity_movie_detail">MovieDetail</string>
 
 </resources>

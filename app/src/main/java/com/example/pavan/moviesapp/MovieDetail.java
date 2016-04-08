@@ -7,7 +7,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.VideoView;
 
+import com.example.pavan.moviesapp.NetworkActivity.MovieReviewsResponse;
 import com.example.pavan.moviesapp.NetworkActivity.MovieTrailerData;
 import com.example.pavan.moviesapp.NetworkActivity.MovieTrailerResponse;
 import com.example.pavan.moviesapp.NetworkActivity.RetrofitAPI;
@@ -30,17 +32,21 @@ public class MovieDetail extends AppCompatActivity {
 
     private int movieID;
     private Bundle bundle;
-    private TextView release_date,movie_overview,movie_title,vote_average;
-    private String poster_path, releaseDate, movieOverview, movieTitle, voteAverage, movieReviewsInfo, movieTrailerInfo;
     private ImageView Poster;
+    private TextView release_date,movie_overview,movie_title,vote_average;
+    private VideoView trailers;
+
+    private String poster_path, releaseDate, movieOverview, movieTitle, voteAverage;
     private String BASE_POSTER_URL = "http://image.tmdb.org/t/p/w185/";
     private String BASE_TRAILERS_AND_REVIEWS_URL = "http://api.themoviedb.org/3/movie/";
+
 
 
     private ReviewsData reviewsData = new ReviewsData();
     private FetchMovieData fetchMovieData = new FetchMovieData(getApplication(), null);
     private MovieTrailerData movieTrailerData = new MovieTrailerData();
     private List<MovieTrailerResponse> movieTrailerResponses;
+    private List<MovieReviewsResponse> movieReviewsResponses;
 
 
     private Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_TRAILERS_AND_REVIEWS_URL)
@@ -67,9 +73,9 @@ public class MovieDetail extends AppCompatActivity {
         System.out.println("movieID :  " + movieID);
 
 
-//        fetchTrailerData();
-
         Poster         = (ImageView)findViewById(R.id.movie_poster_in_movie_detail_activity);
+        trailers = (VideoView) findViewById(R.id.trailerVideo);
+
         release_date   = (TextView) findViewById(R.id.release_year);
         movie_overview = (TextView) findViewById(R.id.movie_overview);
         movie_title    = (TextView)findViewById(R.id.movie_title);
@@ -89,7 +95,7 @@ public class MovieDetail extends AppCompatActivity {
         vote_average.setText(voteAverage + "/10");
 
         fetchTrailerData();
-//        fetchReviewsData();
+        fetchReviewsData();
 
 
 
@@ -138,6 +144,7 @@ public class MovieDetail extends AppCompatActivity {
             public void onFailure(Throwable t) {
 
                 System.out.println("failed to fetch trailer data....");
+
             }
         });
 
@@ -145,7 +152,54 @@ public class MovieDetail extends AppCompatActivity {
 
     public void fetchReviewsData() {
 
-        api.REVIEWS_DATA_CALL(movieID, fetchMovieData.API_KEY);
+        Call<ReviewsData> reviewsDataCall = api.REVIEWS_DATA_CALL(movieID, fetchMovieData.API_KEY);
+
+        reviewsDataCall.enqueue(new Callback<ReviewsData>() {
+            @Override
+            public void onResponse(Response<ReviewsData> response, Retrofit retrofit) {
+
+                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                System.out.println("response status reviews : " + response.isSuccess());
+
+                System.out.println("response.raw() reviews : " + response.raw());
+
+                System.out.println("response.body() reviews : " + response.body());
+
+                System.out.println("response.message() reviews : " + response.message());
+
+                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                reviewsData = response.body();
+                movieReviewsResponses = response.body().getReviewsResponse();
+
+                System.out.println("response.body().getReviewsResponse() : " + response.body().getReviewsResponse());
+
+
+                System.out.println("/////////////////////////////////////////////////////////////");
+
+                System.out.println("reviewsData.getId() : " + reviewsData.getId());
+                System.out.println("reviewsData.getPage() : " + reviewsData.getPage());
+                System.out.println("reviewsData.getTotal_pages() : " + reviewsData.getTotal_pages());
+                System.out.println("reviewsData.getReviewsResponse() : " + reviewsData.getReviewsResponse());
+
+                System.out.println("//////////////////////////////////////////////////////////////////////////////");
+
+
+                System.out.println("------------------------------------------------------------------------");
+
+                for (MovieReviewsResponse movieReviewsResponse : movieReviewsResponses) {
+                    System.out.println("movieReviewsResponse.getAuthor() : " + movieReviewsResponse.getAuthor());
+                    System.out.println("movieReviewsResponse.getContent() : " + movieReviewsResponse.getContent());
+                    System.out.println("movieReviewsResponse.getId() : " + movieReviewsResponse.getId());
+                    System.out.println("movieReviewsResponse.getUrl() : " + movieReviewsResponse.getUrl());
+                }
+                System.out.println("---------------------------------------------------------------------------");
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
     }
 
     @Override
