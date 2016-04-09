@@ -51,7 +51,7 @@ public class MovieDetail extends AppCompatActivity {
 
     private Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_TRAILERS_AND_REVIEWS_URL)
             .addConverterFactory(GsonConverterFactory.create()).build();
-    private RetrofitAPI api = retrofit.create(RetrofitAPI.class);
+    protected RetrofitAPI api = retrofit.create(RetrofitAPI.class);
 
 
     @Override

@@ -19,6 +19,17 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.example.pavan.moviesapp.NetworkActivity.MoviesListData;
+import com.example.pavan.moviesapp.NetworkActivity.MoviesResultsJSON;
+
+import java.util.List;
+
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -32,6 +43,14 @@ public class MainActivityFragment extends Fragment {
     AlertDialog.Builder builder;
     private SharedPreferences sortByPref;
     private String sortByPrefValue;
+    private String BASE_URL = "http://api.themoviedb.org";
+    private String API_KEY = "f9b69f2b96bfaa9b1748f12afbe14cea";
+
+    private MovieDetail movieDetail = new MovieDetail();
+    private MoviesListData moviesListData = new MoviesListData();
+    private List<MoviesResultsJSON> moviesResultsJSONs;
+
+    private Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
 
     public MainActivityFragment() {
     }
@@ -74,8 +93,10 @@ public class MainActivityFragment extends Fragment {
                 getString(R.string.SortBy_default));
         Log.i("sortByPrefValue", sortByPrefValue);
 
-        if (checkConnectivityStatus.isOnline())
+        if (checkConnectivityStatus.isOnline()) {
         fetchMovieData.execute(sortByPrefValue);
+            getMoviesListData();
+        }
         else
             builder.setMessage("Please check your INTERNET Connection").setCancelable(false)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -84,6 +105,7 @@ public class MainActivityFragment extends Fragment {
                             killActivity();
                         }
                     }).create().show();
+
 
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -119,5 +141,53 @@ public class MainActivityFragment extends Fragment {
 
     protected void killActivity(){
         getActivity().finish();
+    }
+
+    public void getMoviesListData() {
+
+        Call<MoviesListData> moviesListDataCall = movieDetail.api.MOVIES_LIST_DATA_CALL(sortByPrefValue, API_KEY);
+
+        moviesListDataCall.enqueue(new Callback<MoviesListData>() {
+            @Override
+            public void onResponse(Response<MoviesListData> response, Retrofit retrofit) {
+                if (response.isSuccess()) {
+                    moviesListData = response.body();
+                    moviesResultsJSONs = response.body().getResults();
+
+                    System.out.println("response.body() : " + response.body());
+                    System.out.println("response.raw() : " + response.raw());
+
+                    System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                    System.out.println("moviesListData.getPage() : " + moviesListData.getPage());
+                    System.out.println("moviesListData.getTotal_pages() : " + moviesListData.getTotal_pages());
+                    System.out.println("moviesListData.getTotal_results() :  " + moviesListData.getTotal_results());
+
+                    System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                    for (MoviesResultsJSON moviesResultsJSON : moviesResultsJSONs) {
+
+                        System.out.println("moviesResultsJSON.getId() : " + moviesResultsJSON.getId());
+                        System.out.println("moviesResultsJSON.getGenreIDsList() : " + moviesResultsJSON.getGenreIDsList());
+                        System.out.println("moviesResultsJSON.getBackdrop_path() : " + moviesResultsJSON.getBackdrop_path());
+                        System.out.println("moviesResultsJSON.getOriginal_language() : " + moviesResultsJSON.getOriginal_language());
+                        System.out.println("moviesResultsJSON.getOriginal_title() : " + moviesResultsJSON.getOriginal_title());
+                        System.out.println("moviesResultsJSON.getOverView() : " + moviesResultsJSON.getOverView());
+                        System.out.println("moviesResultsJSON.getPopularity() : " + moviesResultsJSON.getPopularity());
+                        System.out.println("moviesResultsJSON.getPoster_path() : " + moviesResultsJSON.getPoster_path());
+                        System.out.println("moviesResultsJSON.getTitle() : " + moviesResultsJSON.getTitle());
+                        System.out.println("moviesResultsJSON.getVote_average() : " + moviesResultsJSON.getVote_average());
+                        System.out.println("moviesResultsJSON.getVote_count() : " + moviesResultsJSON.getVote_count());
+                        System.out.println("moviesResultsJSON.isAdult() : " + moviesResultsJSON.isAdult());
+                        System.out.println("moviesResultsJSON.isVideo() : " + moviesResultsJSON.isVideo());
+                    }
+                    System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+
     }
 }
