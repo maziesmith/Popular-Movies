@@ -135,7 +135,7 @@ public class FetchMovieData extends AsyncTask {
             Log.i("movie Posters",Posters.toString());
             Log.i("movie_ids_for_trailers", movie_ids_for_trailers.toString());
 
-            gridView.setAdapter(new ImageAdapter(context, Posters));
+//            gridView.setAdapter(new ImageAdapter(context, Posters));
 
         } catch (JSONException e) {
             e.printStackTrace();

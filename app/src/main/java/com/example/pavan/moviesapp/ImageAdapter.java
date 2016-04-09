@@ -18,37 +18,32 @@ import java.util.ArrayList;
  */
 public class ImageAdapter extends BaseAdapter {
 
-
-
-
-
-
-    public ArrayList<String> moviePoster = new ArrayList();
+    ArrayList<String> moviePosters = new ArrayList<>();
     Context context;
     ImageView movie_posters_imageView;
     String BASE_POSTER_URL = "http://image.tmdb.org/t/p/w185/";
 
 
-    public ImageAdapter(Context context,ArrayList Posters) {
-        this.moviePoster = Posters;
+    public ImageAdapter(Context context, ArrayList<String> Posters) {
         this.context = context;
+        this.moviePosters = Posters;
     }
 
 
     @Override
     public int getCount() {
-        return moviePoster.size();
+        return moviePosters.size();
     }
 
     @Override
     public Object getItem(int position) {
 
-        return moviePoster.get(position);
+        return moviePosters.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return moviePoster.indexOf(position);
+        return moviePosters.indexOf(position);
     }
 
     @Override
@@ -63,7 +58,7 @@ public class ImageAdapter extends BaseAdapter {
             movie_posters_imageView = (ImageView) convertView;
 
          Picasso.with(context)
-                .load(BASE_POSTER_URL + moviePoster.get(position))
+                 .load(BASE_POSTER_URL + moviePosters.get(position))
                 .noFade()
                 .resize(185 * 2, 278 * 2)
                 .into(movie_posters_imageView);

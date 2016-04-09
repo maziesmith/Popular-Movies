@@ -13,7 +13,7 @@ public class MovieTrailerResponse {
     private String key;
     private String name;
     private String site;
-    private long size;
+    private Long size;
     private String type;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -43,6 +43,7 @@ public class MovieTrailerResponse {
 
 
     public String getKey() {
+//        System.out.println("key value in MOVIE TRAILER RESPONSE : " + key);
         return key;
     }
 
@@ -70,7 +71,7 @@ public class MovieTrailerResponse {
         return size;
     }
 
-    public void setSize(long size) {
+    public void setSize(Long size) {
         this.size = size;
     }
 

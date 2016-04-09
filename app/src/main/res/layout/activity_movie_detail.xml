@@ -32,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/title_background"
+        android:nestedScrollingEnabled="true"
         android:paddingTop="8dp">
 
 
@@ -108,28 +109,42 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <ScrollView
+
+            <ListView
+                android:id="@+id/trailers_list_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <View
-                    android:id="@+id/trailer_border"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_below="@+id/trailers_heading"
-                    android:layout_marginTop="16dp"
-                    android:background="#d6d6e1" />
-
-            </ScrollView>
-
-            <ScrollView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/trailers_heading">
+                android:layout_below="@+id/trailers_heading"
+                android:layout_marginTop="8dp"
+                android:nestedScrollingEnabled="true"></ListView>
 
-                <include layout="@layout/trailers" />
+            <View
+                android:id="@+id/border_line_2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_below="@+id/trailers_list_view"
+                android:layout_marginTop="16dp"
+                android:background="#030304" />
 
-            </ScrollView>
+            <TextView
+                android:id="@+id/reviews_heading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/border_line_2"
+                android:padding="8dp"
+                android:text="Reviews:"
+                android:textColor="@android:color/black"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <ListView
+                android:id="@+id/reviews_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/reviews_heading"
+                android:layout_marginTop="8dp"
+                android:nestedScrollingEnabled="true"></ListView>
+
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

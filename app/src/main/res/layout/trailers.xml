@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
-    <VideoView
-        android:id="@+id/trailerVideo"
+    <ImageView
+        android:id="@+id/trailer_thumbnail_image"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_play_arrow_black_84dp" />
 
-    <View
-        android:id="@+id/trailer_border"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:background="#d6d6e1" />
+    <TextView
+        android:id="@+id/trailer_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/trailer_thumbnail_image"
+        android:padding="8dp"
+        android:text="Trailer"
+        android:textColor="@android:color/black"
+        android:textSize="34sp" />
+
+
 </LinearLayout>

@@ -14,7 +14,7 @@
     <string name="SortBy_key" translatable="false">chosenSortValue</string>
 
     <!--default value to be considered for sorting the movies -->
-    <string name="SortBy_default" translatable="false">Popularity</string>
+    <string name="SortBy_default" translatable="false">popularity</string>
 
 
     <!--sort movies based on the following-->
