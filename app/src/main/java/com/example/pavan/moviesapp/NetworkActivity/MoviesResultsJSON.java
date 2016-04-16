@@ -14,6 +14,7 @@ public class MoviesResultsJSON {
     private String backdrop_path;
     private String poster_path;
     private String overview;
+<<<<<<< HEAD
     private String release_date;
     private boolean adult, video;
     private List<Long> genre_ids;
@@ -42,6 +43,11 @@ public class MoviesResultsJSON {
         this.genre_ids = genre_ids;
     }
 
+=======
+    private boolean adult, video;
+    private List<Long> genre_ids;
+
+>>>>>>> origin/master
     public List<Long> getGenreIDsList() {
         return genre_ids;
     }

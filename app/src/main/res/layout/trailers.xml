@@ -11,6 +11,7 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_play_arrow_black_84dp" />
 
+<<<<<<< HEAD
     <TextView
         android:id="@+id/trailer_title"
         android:layout_width="wrap_content"
@@ -25,3 +26,13 @@
 
 
 </LinearLayout>
+=======
+
+    <View
+        android:id="@+id/trailer_border"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="#d6d6e1" />
+</LinearLayout>
+>>>>>>> origin/master
