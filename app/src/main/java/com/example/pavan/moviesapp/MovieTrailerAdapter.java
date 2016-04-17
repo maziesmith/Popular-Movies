@@ -8,10 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.pavan.moviesapp.NetworkActivity.MovieTrailerResponse;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by pavan on 4/10/2016.
@@ -19,13 +18,14 @@ import java.util.List;
 public class MovieTrailerAdapter extends BaseAdapter {
 
 
-    List<MovieTrailerResponse> movieTrailerResponseList;
+    ArrayList<String> Name, Key;
 
-    int noOfTrailers, size;
+    int noOfTrailers;
     Context context;
     ImageView trailer_thumbnail_image;
     TextView trailer_title;
-    private String YOUTUBE_THUMBNAIL_BASE_URL = "http://img.youtube.com/vi/", KEY, name, site, type, iso_639_1, iso_3166_1, id;
+    private String YOUTUBE_THUMBNAIL_BASE_URL = "http://img.youtube.com/vi/";
+
 
     public MovieTrailerAdapter(Context context) {
         this.context = context;
@@ -47,36 +47,30 @@ public class MovieTrailerAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.trailers, parent, false);
             trailer_thumbnail_image = (ImageView) convertView.findViewById(R.id.trailer_thumbnail_image);
             trailer_title = (TextView) convertView.findViewById(R.id.trailer_title);
 
+            System.out.println("position : " + position);
 
-            for (MovieTrailerResponse movieTrailerResponse : movieTrailerResponseList
-                    ) {
-                name = movieTrailerResponse.getName();
-                type = movieTrailerResponse.getType();
-                site = movieTrailerResponse.getSite();
-                iso_639_1 = movieTrailerResponse.getIso_639_1();
-                iso_3166_1 = movieTrailerResponse.getIso_3166_1();
-                id = movieTrailerResponse.getId();
-                size = (int) movieTrailerResponse.getSize();
+            System.out.println("names in adapter pos : " + Name.get(position));
+            System.out.println("keys in adapter pos : " + Key.get(position));
 
-                System.out.println(YOUTUBE_THUMBNAIL_BASE_URL + movieTrailerResponse.getKey() + "/maxresdefault.jpg");
-                Picasso.with(context)
-                        .load(YOUTUBE_THUMBNAIL_BASE_URL + movieTrailerResponse.getKey() + "/maxresdefault.jpg")
-                        .centerCrop()
-                        .noFade()
-                        .resize(150, 150).error(R.drawable.ic_play_arrow_black_84dp)
-                        .into(trailer_thumbnail_image);
+            System.out.println("names in adapter : " + Name);
+            System.out.println("keys in adapter : " + Key);
 
+            trailer_title.setText(Name.get(position));
 
-                break;
-            }
+            Picasso.with(context)
+                    .load(YOUTUBE_THUMBNAIL_BASE_URL + Key.get(position) + "/maxresdefault.jpg")
+                    .centerCrop()
+                    .noFade()
+                    .resize(150, 150).error(R.drawable.ic_play_arrow_black_84dp)
+                    .into(trailer_thumbnail_image);
+
         }
-
 
         return convertView;
     }

@@ -16,11 +16,9 @@ public interface RetrofitAPI {
 
 
     @GET("{id}/reviews")
-<<<<<<< HEAD
+
     Call<ReviewsData> REVIEWS_DATA_CALL(@Path("id") Long id, @Query("api_key") String API_KEY);
-=======
-    Call<ReviewsData> REVIEWS_DATA_CALL(@Path("id") int id, @Query("api_key") String API_KEY);
->>>>>>> origin/master
+
 
     @GET("/3/discover/movie")
     Call<MoviesListData> MOVIES_LIST_DATA_CALL(@Query("sort_by") String SORT_BY_PREF_VALUE, @Query("api_key") String API_KEY);

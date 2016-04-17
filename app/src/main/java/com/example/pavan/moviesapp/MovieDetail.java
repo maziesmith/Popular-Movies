@@ -35,6 +35,12 @@ public class MovieDetail extends AppCompatActivity {
 
 
     Intent YOUTUBE_INTENT;
+    ArrayList<String> Key = new ArrayList<String>();
+    ArrayList<String> id = new ArrayList<String>();
+    ArrayList<Long> size = new ArrayList<Long>();
+    ArrayList<String> iso_3166_1 = new ArrayList<String>();
+    ArrayList<String> Name = new ArrayList<String>();
+    ArrayList<String> iso_639_1 = new ArrayList<String>();
     private Long movieID;
     private Bundle bundle;
     private ImageView Poster;
@@ -43,7 +49,7 @@ public class MovieDetail extends AppCompatActivity {
     private String poster_path, releaseDate, movieOverview, movieTitle, voteAverage;
     private String BASE_POSTER_URL = "http://image.tmdb.org/t/p/w185/";
     private String BASE_TRAILERS_AND_REVIEWS_URL = "http://api.themoviedb.org/3/movie/";
-    private String BASE_YOUTUBE_URL = "http://www.youtube.com/";
+    private String BASE_YOUTUBE_URL = "http://www.youtube.com/watch";
     private List<MovieTrailerResponse> movieTrailerResponses;
     private List<MovieReviewsResponse> movieReviewsResponses;
     private ReviewsData reviewsData = new ReviewsData();
@@ -51,16 +57,9 @@ public class MovieDetail extends AppCompatActivity {
     private MovieTrailerData movieTrailerData = new MovieTrailerData();
     private MovieTrailerAdapter movieTrailerAdapter = new MovieTrailerAdapter(this);
     private MovieReviewsAdapter movieReviewsAdapter = new MovieReviewsAdapter(this);
-//    private MovieTrailerResponse movieTrailerResponse = new MovieTrailerResponse();
-
-
     private Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_TRAILERS_AND_REVIEWS_URL)
             .addConverterFactory(GsonConverterFactory.create()).build();
     protected RetrofitAPI api = retrofit.create(RetrofitAPI.class);
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
 
 
     @Override
@@ -106,7 +105,7 @@ public class MovieDetail extends AppCompatActivity {
         vote_average.setText(voteAverage + "/10");
 
         fetchTrailerData();
-        fetchReviewsData();
+//        fetchReviewsData();
     }
 
     public void fetchTrailerData() {
@@ -125,49 +124,37 @@ public class MovieDetail extends AppCompatActivity {
 
                     movieTrailerResponses = movieTrailerData.getResults();
 
-                    movieTrailerAdapter.movieTrailerResponseList = movieTrailerResponses;
-                    ArrayList<String> Key = new ArrayList<String>();
-                    ArrayList<String> id = new ArrayList<String>();
-                    ArrayList<Long> size = new ArrayList<Long>();
-                    ArrayList<String> iso_3166_1 = new ArrayList<String>();
-                    ArrayList<String> Name = new ArrayList<String>();
-                    ArrayList<String> iso_639_1 = new ArrayList<String>();
-
-
                     System.out.println("movieTrailerData.getResults().size() : " + movieTrailerData.getResults().size());
 
                     for (final MovieTrailerResponse movieTrailerResponses1 : movieTrailerResponses) {
-                        System.out.println("----------------------------------------------------------");
+//                        System.out.println("movieTrailerResponse.getId() : " + movieTrailerResponses1.getId());
+//                        System.out.println("movieTrailerResponse.getIso31661() : " + movieTrailerResponses1.getIso_3166_1());
+//                        System.out.println("movieTrailerResponse.getIso6391() : " + movieTrailerResponses1.getIso_639_1());
+//                        System.out.println("movieTrailerResponse.getKey() : " + movieTrailerResponses1.getKey());
+//                        System.out.println("movieTrailerResponse.getName() : " + movieTrailerResponses1.getName());
+//                        System.out.println("movieTrailerResponse.getSite() : " + movieTrailerResponses1.getSite());
+//                        System.out.println("movieTrailerResponses1.getSize() : " + movieTrailerResponses1.getSize());
+//                        System.out.println("movieTrailerResponses1.getType() : " + movieTrailerResponses1.getType());
+//                        System.out.println("----------------------------------------------------------");
 
-                        System.out.println("movieTrailerResponse.getId() : " + movieTrailerResponses1.getId());
+
                         id.add(movieTrailerResponses1.getId());
-                        System.out.println("movieTrailerResponse.getIso31661() : " + movieTrailerResponses1.getIso_3166_1());
                         iso_3166_1.add(movieTrailerResponses1.getIso_3166_1());
-                        System.out.println("movieTrailerResponse.getIso6391() : " + movieTrailerResponses1.getIso_639_1());
                         iso_639_1.add(movieTrailerResponses1.getIso_639_1());
-                        System.out.println("movieTrailerResponse.getKey() : " + movieTrailerResponses1.getKey());
-                        Key.add(movieTrailerResponses1.getKey());
-                        System.out.println("movieTrailerResponse.getName() : " + movieTrailerResponses1.getName());
                         Name.add(movieTrailerResponses1.getName());
-                        System.out.println("movieTrailerResponse.getSite() : " + movieTrailerResponses1.getSite());
-
-                        System.out.println("movieTrailerResponses1.getSize() : " + movieTrailerResponses1.getSize());
+                        Key.add(movieTrailerResponses1.getKey());
                         size.add(movieTrailerResponses1.getSize());
-                        System.out.println("movieTrailerResponses1.getType() : " + movieTrailerResponses1.getType());
-
-                        System.out.println("----------------------------------------------------------");
                         trailersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 YOUTUBE_INTENT = new Intent(Intent.ACTION_VIEW, Uri.parse(BASE_YOUTUBE_URL).buildUpon()
-                                        .appendPath("vi").appendPath(movieTrailerResponses1.getKey()).build());
+                                        .appendQueryParameter("v", movieTrailerResponses1.getKey()).build());
                                 startActivity(YOUTUBE_INTENT);
                             }
                         });
 
                         movieTrailerAdapter.noOfTrailers = movieTrailerData.getResults().size();
                 }
-
                     System.out.println("KEY ArrayList : " + Key);
                     System.out.println(size);
                     System.out.println(Name);
@@ -175,9 +162,10 @@ public class MovieDetail extends AppCompatActivity {
                     System.out.println(iso_3166_1);
                     System.out.println(id);
 
+                    movieTrailerAdapter.Name = Name;
+                    movieTrailerAdapter.Key = Key;
 
                     trailersListView.setAdapter(movieTrailerAdapter);
-
 
                     System.out.println(">>>>>>>>>>>>" + movieTrailerData.getResults());
                     System.out.println("response results getID : " + movieTrailerData.getId());
@@ -192,7 +180,13 @@ public class MovieDetail extends AppCompatActivity {
             public void onFailure(Throwable t) {
 
                 System.out.println("failed to fetch trailer data....");
-
+                Picasso.with(getApplicationContext())
+                        .load(R.drawable.ic_mood_bad_black_24dp)
+                        .centerCrop()
+                        .noFade()
+                        .resize(150, 150)
+                        .into(movieTrailerAdapter.trailer_thumbnail_image);
+                movieTrailerAdapter.trailer_title.setText("Sorry, we couldn't fetch the Trailer information");
             }
         });
 
