@@ -144,14 +144,6 @@ public class MovieDetail extends AppCompatActivity {
                         Name.add(movieTrailerResponses1.getName());
                         Key.add(movieTrailerResponses1.getKey());
                         size.add(movieTrailerResponses1.getSize());
-                        trailersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                YOUTUBE_INTENT = new Intent(Intent.ACTION_VIEW, Uri.parse(BASE_YOUTUBE_URL).buildUpon()
-                                        .appendQueryParameter("v", movieTrailerResponses1.getKey()).build());
-                                startActivity(YOUTUBE_INTENT);
-                            }
-                        });
 
                         movieTrailerAdapter.noOfTrailers = movieTrailerData.getResults().size();
                 }
@@ -164,6 +156,16 @@ public class MovieDetail extends AppCompatActivity {
 
 
                     trailersListView.setAdapter(movieTrailerAdapter);
+
+                    trailersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            YOUTUBE_INTENT = new Intent(Intent.ACTION_VIEW, Uri.parse(BASE_YOUTUBE_URL).buildUpon()
+                                    .appendQueryParameter("v", movieTrailerAdapter.Key.get(position)).build());
+                            startActivity(YOUTUBE_INTENT);
+                        }
+                    });
+
 
                     System.out.println(">>>>>>>>>>>>" + movieTrailerData.getResults());
                     System.out.println("response results getID : " + movieTrailerData.getId());
