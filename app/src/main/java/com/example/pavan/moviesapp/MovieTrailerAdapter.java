@@ -27,8 +27,10 @@ public class MovieTrailerAdapter extends BaseAdapter {
     private String YOUTUBE_THUMBNAIL_BASE_URL = "http://img.youtube.com/vi/";
 
 
-    public MovieTrailerAdapter(Context context) {
+    public MovieTrailerAdapter(Context context, ArrayList<String> name, ArrayList<String> key) {
         this.context = context;
+        this.Name = name;
+        this.Key = key;
     }
 
     @Override

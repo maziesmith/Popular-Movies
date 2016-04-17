@@ -55,7 +55,7 @@ public class MovieDetail extends AppCompatActivity {
     private ReviewsData reviewsData = new ReviewsData();
     private FetchMovieData fetchMovieData = new FetchMovieData(getApplication(), null);
     private MovieTrailerData movieTrailerData = new MovieTrailerData();
-    private MovieTrailerAdapter movieTrailerAdapter = new MovieTrailerAdapter(this);
+    private MovieTrailerAdapter movieTrailerAdapter = new MovieTrailerAdapter(this, Name, Key);
     private MovieReviewsAdapter movieReviewsAdapter = new MovieReviewsAdapter(this);
     private Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_TRAILERS_AND_REVIEWS_URL)
             .addConverterFactory(GsonConverterFactory.create()).build();
@@ -162,8 +162,6 @@ public class MovieDetail extends AppCompatActivity {
                     System.out.println(iso_3166_1);
                     System.out.println(id);
 
-                    movieTrailerAdapter.Name = Name;
-                    movieTrailerAdapter.Key = Key;
 
                     trailersListView.setAdapter(movieTrailerAdapter);
 
