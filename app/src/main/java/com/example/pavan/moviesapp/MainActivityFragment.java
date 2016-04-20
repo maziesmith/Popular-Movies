@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.pavan.moviesapp.NetworkActivity.MoviesListData;
 import com.example.pavan.moviesapp.NetworkActivity.MoviesResultsJSON;
+import com.example.pavan.moviesapp.NetworkActivity.RetrofitAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,7 @@ public class MainActivityFragment extends Fragment {
     GridView gridView = null;
     private String clickedPoster, releaseDate, movieOverView, movieTitle, voteAverage, sortByPrefValue;
     private Long movie_id_for_trailers;
+    private Bundle bundle = new Bundle();
 
 
     private AndroidUtil checkConnectivityStatus;
@@ -55,13 +57,21 @@ public class MainActivityFragment extends Fragment {
 
     private String BASE_URL = "http://api.themoviedb.org";
     private String API_KEY = "f9b69f2b96bfaa9b1748f12afbe14cea";
-
-    private MovieDetail movieDetail = new MovieDetail();
+    //    private MovieDetail movieDetail = new MovieDetail();
     private MoviesListData moviesListData = new MoviesListData();
+    private MovieDetail_PagerAdapter movieDetail_pagerAdapter = new MovieDetail_PagerAdapter(getFragmentManager(), getContext(), clickedPoster, releaseDate, movieOverView, movieTitle, voteAverage, movie_id_for_trailers);
+    private MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
+    //    private MovieDetail_tab movieDetail_tab = new MovieDetail_tab();
+    private Fragment fragment = movieDetailFragment;
+    //    private Trailers_tab trailers_tab = new Trailers_tab();
+//    private Reviews_tab reviews_tab = new Reviews_tab();
     private List<MoviesResultsJSON> moviesResultsJSONs;
-
     private Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+    protected RetrofitAPI api = retrofit.create(RetrofitAPI.class);
 
+    public String getAPI_KEY() {
+        return API_KEY;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,7 +94,7 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
         intent = new Intent(getContext(),MovieDetail.class);
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -118,14 +128,34 @@ public class MainActivityFragment extends Fragment {
                 Log.i("release date 1",releaseDate);
                 Log.i("movieOverview",movieOverView);
 
-                intent.putExtra("posterURL", clickedPoster);
-                intent.putExtra("releaseDate", releaseDate);
-                intent.putExtra("movieOverview",movieOverView);
-                intent.putExtra("movieTitle",movieTitle);
-                intent.putExtra("voteAverage",voteAverage);
-                intent.putExtra("movieID", movie_id_for_trailers);
+//                savedInstanceState.putString("posterURL", clickedPoster);
+//                savedInstanceState.putString("releaseDate", releaseDate);
+//                savedInstanceState.putString("movieOverview",movieOverView);
+//                savedInstanceState.putString("movieTitle",movieTitle);
+//                savedInstanceState.putString("voteAverage",voteAverage);
+//                savedInstanceState.putLong("movieID", movie_id_for_trailers);
 
-                startActivity(intent);
+//                System.out.println("savedInstanceState : " + savedInstanceState);
+
+//                movieDetail_tab.setArguments(bundle);
+//                trailers_tab.setArguments(bundle);
+//                reviews_tab.setArguments(bundle);
+
+
+//                intent.putExtra("posterURL", clickedPoster);
+//                intent.putExtra("releaseDate", releaseDate);
+//                intent.putExtra("movieOverview",movieOverView);
+//                intent.putExtra("movieTitle",movieTitle);
+//                intent.putExtra("voteAverage",voteAverage);
+//                intent.putExtra("movieID", movie_id_for_trailers);
+
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.movie_detail_fragment, movieDetailFragment)
+                        .addToBackStack(null)
+                        .commit();
+
+//                startActivity(intent);
             }
         });
         return rootView;
@@ -137,7 +167,7 @@ public class MainActivityFragment extends Fragment {
 
     public void getMoviesListData() {
 
-        Call<MoviesListData> moviesListDataCall = movieDetail.api.MOVIES_LIST_DATA_CALL(sortByPrefValue, API_KEY);
+        Call<MoviesListData> moviesListDataCall = api.MOVIES_LIST_DATA_CALL(sortByPrefValue, API_KEY);
 
         moviesListDataCall.enqueue(new Callback<MoviesListData>() {
             @Override
