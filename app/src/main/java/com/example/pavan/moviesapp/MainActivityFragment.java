@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -46,6 +49,7 @@ public class MainActivityFragment extends Fragment {
     ArrayList movie_ids_for_trailers_and_reviews = new ArrayList();
     Intent intent;
     GridView gridView = null;
+    FrameLayout frameLayout;
     private String clickedPoster, releaseDate, movieOverView, movieTitle, voteAverage, sortByPrefValue;
     private Long movie_id_for_trailers;
     private Bundle bundle = new Bundle();
@@ -62,7 +66,9 @@ public class MainActivityFragment extends Fragment {
     private MovieDetail_PagerAdapter movieDetail_pagerAdapter = new MovieDetail_PagerAdapter(getFragmentManager(), getContext(), clickedPoster, releaseDate, movieOverView, movieTitle, voteAverage, movie_id_for_trailers);
     private MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
     //    private MovieDetail_tab movieDetail_tab = new MovieDetail_tab();
-    private Fragment fragment = movieDetailFragment;
+    private Fragment fragment = new MovieDetailFragment();
+    private FragmentManager fragmentManager = getChildFragmentManager();
+    private FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
     //    private Trailers_tab trailers_tab = new Trailers_tab();
 //    private Reviews_tab reviews_tab = new Reviews_tab();
     private List<MoviesResultsJSON> moviesResultsJSONs;
@@ -95,10 +101,12 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
-        intent = new Intent(getContext(),MovieDetail.class);
+//        intent = new Intent(getContext(),MovieDetail.class);
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         gridView = (GridView) rootView.findViewById(R.id.movie_grid_view);
+
+//        frameLayout = (FrameLayout) rootView.findViewById(R.id.movie_detail_fragment_placeholder);
 
         checkConnectivityStatus = new AndroidUtil(getContext());
         builder = new AlertDialog.Builder(getContext());
@@ -149,11 +157,9 @@ public class MainActivityFragment extends Fragment {
 //                intent.putExtra("voteAverage",voteAverage);
 //                intent.putExtra("movieID", movie_id_for_trailers);
 
-                getFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.movie_detail_fragment, movieDetailFragment)
-                        .addToBackStack(null)
-                        .commit();
+
+                fragmentTransaction.replace(R.id.movie_detail_fragment_placeholder, fragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(null).commit();
 
 //                startActivity(intent);
             }
