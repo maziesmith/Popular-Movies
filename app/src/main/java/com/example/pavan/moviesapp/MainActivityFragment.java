@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -66,9 +64,7 @@ public class MainActivityFragment extends Fragment {
     private MovieDetail_PagerAdapter movieDetail_pagerAdapter = new MovieDetail_PagerAdapter(getFragmentManager(), getContext(), clickedPoster, releaseDate, movieOverView, movieTitle, voteAverage, movie_id_for_trailers);
     private MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
     //    private MovieDetail_tab movieDetail_tab = new MovieDetail_tab();
-    private Fragment fragment = new MovieDetailFragment();
-    private FragmentManager fragmentManager = getChildFragmentManager();
-    private FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
     //    private Trailers_tab trailers_tab = new Trailers_tab();
 //    private Reviews_tab reviews_tab = new Reviews_tab();
     private List<MoviesResultsJSON> moviesResultsJSONs;
@@ -83,7 +79,6 @@ public class MainActivityFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
     }
 
     @Override
@@ -136,6 +131,11 @@ public class MainActivityFragment extends Fragment {
                 Log.i("release date 1",releaseDate);
                 Log.i("movieOverview",movieOverView);
 
+
+                getChildFragmentManager().beginTransaction().replace(R.id.movie_detail_fragment_placeholder, movieDetailFragment, "movie details")
+                        .commit();
+
+
 //                savedInstanceState.putString("posterURL", clickedPoster);
 //                savedInstanceState.putString("releaseDate", releaseDate);
 //                savedInstanceState.putString("movieOverview",movieOverView);
@@ -158,12 +158,10 @@ public class MainActivityFragment extends Fragment {
 //                intent.putExtra("movieID", movie_id_for_trailers);
 
 
-                fragmentTransaction.replace(R.id.movie_detail_fragment_placeholder, fragment)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(null).commit();
-
 //                startActivity(intent);
             }
         });
+
         return rootView;
     }
 
@@ -247,6 +245,7 @@ public class MainActivityFragment extends Fragment {
         });
 
     }
+
 
     @Override
     public void onStart() {
