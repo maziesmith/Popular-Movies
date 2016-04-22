@@ -39,11 +39,11 @@ public class MovieDetail_PagerAdapter extends FragmentPagerAdapter {
         this.context = context;
     }
 
-    public MovieDetail_PagerAdapter(FragmentManager fm, Context context, Bundle bundle) {
-        super(fm);
-        this.context = context;
-        this.bundle = bundle;
-    }
+//    public MovieDetail_PagerAdapter(FragmentManager fm, Context context, Bundle bundle) {
+//        super(fm);
+//        this.context = context;
+//        this.bundle = bundle;
+//    }
 
     @Override
     public Fragment getItem(int position) {
