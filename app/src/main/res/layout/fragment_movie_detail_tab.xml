@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/title_background"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="wrap_content"
         android:background="#029789"
         android:orientation="horizontal"
         android:weightSum="1">
@@ -99,52 +99,26 @@
                 android:layout_marginTop="16dp"
                 android:background="#030304" />
 
-            <TextView
-                android:id="@+id/trailers_heading"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/border_line"
-                android:padding="8dp"
-                android:text="Trailers:"
-                android:textColor="@android:color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+            <!--<TextView-->
+            <!--android:id="@+id/trailers_heading"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@+id/border_line"-->
+            <!--android:padding="8dp"-->
+            <!--android:text="Trailers:"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--android:textSize="24sp"-->
+            <!--android:textStyle="bold" />-->
 
 
-            <ListView
-                android:id="@+id/trailers_list_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/trailers_heading"
-                android:layout_marginTop="8dp"
-                android:nestedScrollingEnabled="true"></ListView>
+            <!--<ListView-->
+            <!--android:id="@+id/trailers_list_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@+id/trailers_heading"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:nestedScrollingEnabled="true"></ListView>-->
 
-            <View
-                android:id="@+id/border_line_2"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_below="@+id/trailers_list_view"
-                android:layout_marginTop="16dp"
-                android:background="#030304" />
-
-            <TextView
-                android:id="@+id/reviews_heading"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/border_line_2"
-                android:padding="8dp"
-                android:text="Reviews:"
-                android:textColor="@android:color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <ListView
-                android:id="@+id/reviews_list_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/reviews_heading"
-                android:layout_marginTop="8dp"
-                android:nestedScrollingEnabled="true"></ListView>
 
         </RelativeLayout>
     </ScrollView>

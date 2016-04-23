@@ -11,7 +11,9 @@
         android:id="@+id/sliding_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#BC1EFF"
+        android:layout_centerHorizontal="true"
+        android:background="#029789"
+        android:textAlignment="center"
         app:tabGravity="fill"
         app:tabMode="scrollable"></android.support.design.widget.TabLayout>
 
