@@ -47,6 +47,14 @@ public class MovieDetail_tab extends Fragment {
         return fragment;
     }
 
+    public String getMovieTitle() {
+        return movieTitle;
+    }
+
+    public String getMovieOverview() {
+        return movieOverview;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

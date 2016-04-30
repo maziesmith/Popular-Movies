@@ -53,7 +53,9 @@ public class Trailers_tab extends Fragment {
     private RetrofitAPI api = retrofit.create(RetrofitAPI.class);
     private MainActivityFragment mainActivityFragment = new MainActivityFragment();
     private MovieTrailerData movieTrailerData = new MovieTrailerData();
+    private MovieDetail_tab movieDetail_tab = new MovieDetail_tab();
     private MovieTrailerAdapter movieTrailerAdapter;
+    private Uri uri;
 
     public Trailers_tab() {
         // Required empty public constructor
@@ -145,8 +147,9 @@ public class Trailers_tab extends Fragment {
                     trailersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            YOUTUBE_INTENT = new Intent(Intent.ACTION_VIEW, Uri.parse(BASE_YOUTUBE_URL).buildUpon()
-                                    .appendQueryParameter("v", movieTrailerAdapter.Key.get(position)).build());
+                            uri = Uri.parse(BASE_YOUTUBE_URL).buildUpon()
+                                    .appendQueryParameter("v", movieTrailerAdapter.Key.get(position)).build();
+                            YOUTUBE_INTENT = new Intent(Intent.ACTION_VIEW, uri);
                             startActivity(YOUTUBE_INTENT);
                         }
                     });
@@ -168,5 +171,13 @@ public class Trailers_tab extends Fragment {
             }
         });
 
+    }
+
+    Intent shareMovieAndTrailersInfo() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET).setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, movieDetail_tab.getMovieTitle());
+        shareIntent.putExtra(Intent.EXTRA_TEXT, uri);
+        return shareIntent;
     }
 }

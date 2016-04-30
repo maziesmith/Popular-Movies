@@ -14,7 +14,7 @@
     <string name="SortBy_key" translatable="false">chosenSortValue</string>
 
     <!--default value to be considered for sorting the movies -->
-    <string name="SortBy_default" translatable="false">popularity</string>
+    <string name="SortBy_default" translatable="false">popularity.desc</string>
 
 
     <!--sort movies based on the following-->
@@ -43,5 +43,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="share_menu_item_title">Share</string>
 
 </resources>

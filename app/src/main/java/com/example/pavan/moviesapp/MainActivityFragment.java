@@ -25,6 +25,8 @@ import com.example.pavan.moviesapp.NetworkActivity.RetrofitAPI;
 import java.util.ArrayList;
 import java.util.List;
 
+import Utils.AndroidUtil;
+import Utils.DatabaseInsertions;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -58,6 +60,7 @@ public class MainActivityFragment extends Fragment {
     private String API_KEY = "f9b69f2b96bfaa9b1748f12afbe14cea";
 
     private MoviesListData moviesListData = new MoviesListData();
+    private DatabaseInsertions databaseInsertions;
     private MovieDetail_PagerAdapter movieDetail_pagerAdapter;
     private MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
 
@@ -95,6 +98,7 @@ public class MainActivityFragment extends Fragment {
         gridView = (GridView) rootView.findViewById(R.id.movie_grid_view);
 
         checkConnectivityStatus = new AndroidUtil(getContext());
+        databaseInsertions = new DatabaseInsertions(getContext());
         builder = new AlertDialog.Builder(getContext());
 
         sortByPref = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -130,7 +134,7 @@ public class MainActivityFragment extends Fragment {
 
                 movieDetail_pagerAdapter = new MovieDetail_PagerAdapter(getFragmentManager(), getContext(), bundle);
 
-                getChildFragmentManager().beginTransaction().add(R.id.movie_detail_fragment_placeholder, movieDetailFragment, "movie details")
+                getFragmentManager().beginTransaction().add(R.id.movie_detail_fragment_placeholder, movieDetailFragment, "movie details")
                         .addToBackStack("MainActivityFragment").commit();
             }
         });
@@ -165,6 +169,10 @@ public class MainActivityFragment extends Fragment {
                         titles.add(moviesResultsJSON.getTitle());
                         voteAverageArray.add(moviesResultsJSON.getVote_average());
                         releaseDates.add(moviesResultsJSON.getRelease_date());
+
+                        databaseInsertions.insertDataIntoMoviesTable(moviesResultsJSON.getId(), moviesResultsJSON.getTitle()
+                                , moviesResultsJSON.getVote_average(), moviesResultsJSON.getRelease_date()
+                                , moviesResultsJSON.getPoster_path(), moviesResultsJSON.getOverView());
                     }
 
                     System.out.println("titles array : " + titles);

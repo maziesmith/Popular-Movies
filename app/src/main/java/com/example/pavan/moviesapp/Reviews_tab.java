@@ -1,7 +1,9 @@
 package com.example.pavan.moviesapp;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,7 @@ public class Reviews_tab extends Fragment {
 
     private TextView no_reviews_msg;
     private ListView reviews_list_view;
+    private AlertDialog.Builder builder;
 
     public Reviews_tab() {
         // Required empty public constructor
@@ -104,6 +107,13 @@ public class Reviews_tab extends Fragment {
             @Override
             public void onFailure(Throwable t) {
                 System.out.println("failed to fetch reviews data....");
+                builder.setMessage("Sorry, We couldn't fetch the movie reviews information. Inconvenience regretted").setCancelable(false)
+                        .setPositiveButton("It's Okay", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).create().show();
             }
         });
     }

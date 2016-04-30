@@ -14,8 +14,7 @@
         android:layout_centerHorizontal="true"
         android:background="#029789"
         android:textAlignment="center"
-        app:tabGravity="fill"
-        app:tabMode="scrollable"></android.support.design.widget.TabLayout>
+        app:tabGravity="fill"></android.support.design.widget.TabLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/movie_details_view_pager"
