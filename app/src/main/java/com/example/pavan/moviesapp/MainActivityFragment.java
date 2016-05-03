@@ -27,6 +27,8 @@ import java.util.List;
 
 import Utils.AndroidUtil;
 import Utils.DatabaseInsertions;
+import Utils.ValuesForDatabase;
+import Utils.checkDatabaseRecords;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -60,9 +62,11 @@ public class MainActivityFragment extends Fragment {
     private String API_KEY = "f9b69f2b96bfaa9b1748f12afbe14cea";
 
     private MoviesListData moviesListData = new MoviesListData();
+    private checkDatabaseRecords checkDatabaseRecords;
     private DatabaseInsertions databaseInsertions;
     private MovieDetail_PagerAdapter movieDetail_pagerAdapter;
     private MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
+    private ValuesForDatabase valuesForDatabase = new ValuesForDatabase();
 
     private List<MoviesResultsJSON> moviesResultsJSONs;
     private Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
@@ -98,6 +102,7 @@ public class MainActivityFragment extends Fragment {
         gridView = (GridView) rootView.findViewById(R.id.movie_grid_view);
 
         checkConnectivityStatus = new AndroidUtil(getContext());
+        checkDatabaseRecords = new checkDatabaseRecords(getContext());
         databaseInsertions = new DatabaseInsertions(getContext());
         builder = new AlertDialog.Builder(getContext());
 
@@ -170,9 +175,29 @@ public class MainActivityFragment extends Fragment {
                         voteAverageArray.add(moviesResultsJSON.getVote_average());
                         releaseDates.add(moviesResultsJSON.getRelease_date());
 
-                        databaseInsertions.insertDataIntoMoviesTable(moviesResultsJSON.getId(), moviesResultsJSON.getTitle()
+                        valuesForDatabase.createMoviesDatabaseValues(moviesResultsJSON.getId(), moviesResultsJSON.getTitle()
                                 , moviesResultsJSON.getVote_average(), moviesResultsJSON.getRelease_date()
                                 , moviesResultsJSON.getPoster_path(), moviesResultsJSON.getOverView());
+
+                        String confirmation = checkDatabaseRecords.checkAllMovieRecordsWithDBRecords(moviesResultsJSON.getId(), moviesResultsJSON.getTitle()
+                                , moviesResultsJSON.getVote_average(), moviesResultsJSON.getRelease_date()
+                                , moviesResultsJSON.getPoster_path(), moviesResultsJSON.getOverView());
+
+                        switch (confirmation) {
+                            case "checked all the records and no insertions required":
+                                System.out.println("no insertions are required in movies database");
+                                break;
+
+                            case "records that need to be inserted are in valuesForDatabase.createMoviesDatabaseValues()":
+                                long rowid = databaseInsertions.insertDataIntoMoviesTable();
+                                if (rowid != -1)
+                                    System.out.println("records are inserted successfully into the movie table");
+                                else
+                                    System.out.println("failed to insert records into the movie table");
+                                break;
+                        }
+//                        ReadDatabaseRecords readDatabaseRecords = new ReadDatabaseRecords(getContext());
+//                        readDatabaseRecords.fetchMovieDatabaseRecords();
                     }
 
                     System.out.println("titles array : " + titles);

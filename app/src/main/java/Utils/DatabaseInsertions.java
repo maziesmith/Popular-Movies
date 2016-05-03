@@ -14,16 +14,20 @@ import com.example.pavan.moviesapp.MovieSQLiteDatabase.MoviesDatabaseHelper;
 public class DatabaseInsertions {
     private Context con;
 
+    private ValuesForDatabase ValuesForDatabase = new ValuesForDatabase();
+
     public DatabaseInsertions(Context con) {
         this.con = con;
     }
 
-    public long insertDataIntoMoviesTable(long movie_ID, String movie_title, double vote_average,
-                                          String release_date, String movie_poster, String movie_overview) {
+    public long insertDataIntoMoviesTable() {
         MoviesDatabaseHelper databaseHelper = new MoviesDatabaseHelper(con, MoviesDatabaseHelper.DATABASE_NAME, null, MoviesDatabaseHelper.DATABASE_VERSION);
         SQLiteDatabase liteDatabase = databaseHelper.getWritableDatabase();
+        liteDatabase.beginTransaction();
 
-        ContentValues contentValues = ValuesForDatabase.createMoviesDatabaseValues(movie_ID, movie_title, vote_average, release_date, movie_poster, movie_overview);
+
+        ContentValues contentValues = ValuesForDatabase.getMovieTableValues();
+
 
         long movieRowId = liteDatabase.insert(MovieContract.MoviesDatabase.TABLE_NAME, null, contentValues);
 
@@ -36,8 +40,10 @@ public class DatabaseInsertions {
                 MovieContract.MoviesDatabase.TABLE_NAME,
                 null, null, null, null, null, null);
 
-        if (cursor.moveToFirst())
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
             System.out.println("Error: No Records returned from favorite movies database query.");
+        }
         else {
             while (cursor.moveToNext()) {
                 System.out.println("cursor value : " + cursor.moveToNext());
@@ -46,17 +52,22 @@ public class DatabaseInsertions {
 
         AndroidUtil.validateCurrentRecord("Error: Favorite Movies query validation failed", cursor, contentValues);
 
+
         cursor.close();
+
+        liteDatabase.setTransactionSuccessful();
+        liteDatabase.endTransaction();
+        databaseHelper.close();
 
         return movieRowId;
     }
 
-    public long insertDataIntoFavoriteMoviesTable(long movie_ID) {
+    public long insertDataIntoFavoriteMoviesTable() {
 
         MoviesDatabaseHelper databaseHelper = new MoviesDatabaseHelper(con, "movies.db", null, 1);
         SQLiteDatabase liteDatabase = databaseHelper.getWritableDatabase();
 
-        ContentValues contentValues = ValuesForDatabase.createFavoriteMoviesDatabaseValues(movie_ID);
+        ContentValues contentValues = ValuesForDatabase.getFavoriteMoviesTableValues();
 
         long movieRowId = liteDatabase.insert(MovieContract.FavoriteMovie.TABLE_NAME, null, contentValues);
 
@@ -85,12 +96,12 @@ public class DatabaseInsertions {
 
     }
 
-    public long insertDataIntoMovieReviewsTable(long movie_ID, String movie_reviews, String review_author) {
+    public long insertDataIntoMovieReviewsTable() {
 
         MoviesDatabaseHelper databaseHelper = new MoviesDatabaseHelper(con, "movies.db", null, 1);
         SQLiteDatabase liteDatabase = databaseHelper.getWritableDatabase();
 
-        ContentValues contentValues = ValuesForDatabase.createMovieReviewsDatabaseValues(movie_ID, movie_reviews, review_author);
+        ContentValues contentValues = ValuesForDatabase.getMovieReviewsTableValues();
 
         long movieRowId = liteDatabase.insert(MovieContract.MovieReviewsDB.TABLE_NAME, null, contentValues);
 

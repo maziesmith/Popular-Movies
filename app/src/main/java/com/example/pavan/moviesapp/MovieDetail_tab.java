@@ -1,5 +1,6 @@
 package com.example.pavan.moviesapp;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,8 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+
+import Utils.DatabaseInsertions;
+import Utils.checkDatabaseRecords;
 
 
 
@@ -22,18 +27,21 @@ public class MovieDetail_tab extends Fragment {
     private String movieOverview;
     private String movieTitle;
     private String voteAverage;
+    private Long movieID;
 
     private ListView trailersListView;
     private String BASE_TRAILERS_AND_REVIEWS_URL = "http://api.themoviedb.org/3/movie/";
-    private TextView release_date, movie_overview, movie_title, vote_average;
+    private TextView release_date, movie_overview, movie_title, vote_average, mark_favorite_button;
     private String BASE_POSTER_URL = "http://image.tmdb.org/t/p/w185/";
 
+    private checkDatabaseRecords checkDatabaseRecords;
+    private DatabaseInsertions databaseInsertions;
 
     public MovieDetail_tab() {
         // Required empty public constructor
     }
 
-    public static MovieDetail_tab newInstance(String clickedPoster, String movieTitle, String releaseDate, String movieOverView, String voteAverage) {
+    public static MovieDetail_tab newInstance(String clickedPoster, String movieTitle, String releaseDate, String movieOverView, String voteAverage, Long movieID) {
         MovieDetail_tab fragment = new MovieDetail_tab();
         Bundle args = new Bundle();
 
@@ -42,6 +50,7 @@ public class MovieDetail_tab extends Fragment {
         args.putString("movieOverview", movieOverView);
         args.putString("movieTitle", movieTitle);
         args.putString("voteAverage", voteAverage);
+        args.putLong("movieID", movieID);
 
         fragment.setArguments(args);
         return fragment;
@@ -64,6 +73,7 @@ public class MovieDetail_tab extends Fragment {
             movieOverview = getArguments().getString("movieOverview");
             movieTitle = getArguments().getString("movieTitle");
             voteAverage = getArguments().getString("voteAverage");
+            movieID = getArguments().getLong("movieID");
         }
     }
 
@@ -78,11 +88,41 @@ public class MovieDetail_tab extends Fragment {
 
 //        trailersListView = (ListView) findViewById(R.id.trailers_list_view);
 //        reviews_list_view = (ListView) findViewById(R.id.reviews_list_view);
+        checkDatabaseRecords = new checkDatabaseRecords(getContext());
+        databaseInsertions = new DatabaseInsertions(getContext());
 
         release_date = (TextView) view.findViewById(R.id.release_year);
         movie_overview = (TextView) view.findViewById(R.id.movie_overview);
         movie_title = (TextView) view.findViewById(R.id.movie_title);
         vote_average = (TextView) view.findViewById(R.id.vote_average);
+        mark_favorite_button = (TextView) view.findViewById(R.id.mark_favorite);
+
+
+        mark_favorite_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "listening......", Toast.LENGTH_SHORT).show();
+                String confirmation = checkDatabaseRecords.checkFavoriteMovieRecords(movieID);
+                switch (confirmation) {
+                    case "already marked favorite":
+                        mark_favorite_button.setText("Marked Favorite");
+                        mark_favorite_button.setBackgroundColor(Color.parseColor("#969696"));
+                        mark_favorite_button.setEnabled(false);
+                        break;
+
+                    case "not marked yet":
+                        long rowId = databaseInsertions.insertDataIntoFavoriteMoviesTable();
+                        if (rowId != -1) {
+                            System.out.println("row id in detail tab : " + rowId);
+                            Toast.makeText(getContext(), "added into your favorite movies list.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            System.out.println("row id in detail tab : " + rowId);
+                            Toast.makeText(getContext(), " problem occured while adding it to your favorite movies list.", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                }
+            }
+        });
 
 
         Picasso.with(getContext())

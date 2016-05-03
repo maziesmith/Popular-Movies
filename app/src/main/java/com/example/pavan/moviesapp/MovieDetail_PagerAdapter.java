@@ -67,7 +67,7 @@ public class MovieDetail_PagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return MovieDetail_tab.newInstance(getClickedPoster(), getMovieTitle(), getReleaseDate(), getMovieOverView(), getVoteAverage());
+                return MovieDetail_tab.newInstance(getClickedPoster(), getMovieTitle(), getReleaseDate(), getMovieOverView(), getVoteAverage(), getMovie_id_for_trailers());
             case 1:
                 return Trailers_tab.newInstance(getMovie_id_for_trailers());
             case 2:
