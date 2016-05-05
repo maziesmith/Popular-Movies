@@ -7,6 +7,8 @@ import android.provider.BaseColumns;
  */
 public class MovieContract {
 
+    private final String LOG_TAG = getClass().getSimpleName();
+
     public static final class MoviesDatabase implements BaseColumns {
         public static final String TABLE_NAME = "movies_database";
 

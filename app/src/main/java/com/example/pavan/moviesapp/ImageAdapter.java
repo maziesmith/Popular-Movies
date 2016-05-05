@@ -18,6 +18,8 @@ import java.util.ArrayList;
  */
 public class ImageAdapter extends BaseAdapter {
 
+    private final String LOG_TAG = getClass().getSimpleName();
+
     ArrayList<String> moviePosters = new ArrayList<>();
     Context context;
     ImageView movie_posters_imageView;

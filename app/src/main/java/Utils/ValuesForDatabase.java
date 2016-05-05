@@ -13,6 +13,7 @@ public class ValuesForDatabase {
     private static ContentValues MovieTableValues = new ContentValues();
     private static ContentValues FavoriteMoviesTableValues = new ContentValues();
     private static ContentValues MovieReviewsTableValues = new ContentValues();
+    private final String LOG_TAG = getClass().getSimpleName();
 
     public ContentValues getMovieTableValues() {
         return MovieTableValues;

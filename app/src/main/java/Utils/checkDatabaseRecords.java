@@ -9,6 +9,8 @@ import android.util.Log;
 import com.example.pavan.moviesapp.MovieSQLiteDatabase.MovieContract;
 import com.example.pavan.moviesapp.MovieSQLiteDatabase.MoviesDatabaseHelper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,21 +20,26 @@ import java.util.Set;
 public class checkDatabaseRecords {
     // check if the selected movie data is in the database. and also the complete movie grid data.
 
+    private final String LOG_TAG = getClass().getSimpleName();
     private Context context;
     private String columnName;// = {"movie_id","movie_title","movie_vote_average","movie_release_date","movie_poster","movie_overview"};
-    private int index, i = 0;
-    private long movieID;
-    private String movieTitle;
-    private double voteAverage;
-    private String releaseDate;
-    private String moviePoster;
-    private String movieOverview;
-    private String movieReview;
-    private String reviewAuthorName;
+    private int index;
+
+    private List<Long> movieId = new ArrayList<>();
+    private List<String> movieTitle = new ArrayList<>();
+    private List<Double> voteAverage = new ArrayList<>();
+    private List<String> releaseDate = new ArrayList<>();
+    private List<String> moviePoster = new ArrayList<>();
+    private List<String> movieOverview = new ArrayList<>();
+    private List<String> movieReview = new ArrayList<>();
+    private List<String> reviewAuthorName = new ArrayList<>();
+
+
     private Set<Map.Entry<String, Object>> valueSet;
 
     private MoviesDatabaseHelper moviesDatabaseHelper;
     private Utils.ValuesForDatabase valuesForDatabase = new ValuesForDatabase();
+    private DatabaseInsertions databaseInsertions = new DatabaseInsertions(context);
     private ValuesForDatabase ValuesForDatabase = new ValuesForDatabase();
     private SQLiteDatabase sqLiteDatabase;
     private ContentValues contentValues;
@@ -42,96 +49,117 @@ public class checkDatabaseRecords {
         this.context = context;
     }
 
-    public String checkAllMovieRecordsWithDBRecords(long movie_ID, String movie_title, double vote_average,
-                                                    String release_date, String movie_poster, String movie_overview) {
+    public String checkAllMovieRecordsWithDBRecordsAndInsertIfRequired(long movie_ID, String movie_title, double vote_average,
+                                                                       String release_date, String movie_poster, String movie_overview) {
+
+        movie_overview.equalsIgnoreCase("\"");
+
+        movie_title.equalsIgnoreCase("\"");
+
 
         moviesDatabaseHelper = new MoviesDatabaseHelper(context, MoviesDatabaseHelper.DATABASE_NAME, null, MoviesDatabaseHelper.DATABASE_VERSION);
-
-
-//        valuesForDatabase = new ValuesForDatabase();
 
         sqLiteDatabase = moviesDatabaseHelper.getReadableDatabase();
 
         contentValues = ValuesForDatabase.getMovieTableValues();
 
-        cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + MovieContract.MoviesDatabase.TABLE_NAME + " WHERE movie_id = ", null);
+        cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + MovieContract.MoviesDatabase.TABLE_NAME + " WHERE movie_id = " + movie_ID
+                + " AND movie_title = \'" + movie_title + "\' "
+                + " AND movie_vote_average = " + vote_average
+                + " AND movie_release_date = '" + release_date + "' "
+                + " AND movie_poster = ' " + movie_poster + "' "
+                + " AND movie_overview = \'" + movie_overview + "\' ", null);
 
         valueSet = contentValues.valueSet();
 
 
         for (Map.Entry<String, Object> entry : valueSet) {
 
-            index = cursor.getColumnIndex(entry.getKey());
-            System.out.println("column name :" + entry.getKey());
-            System.out.println("index value : " + index);
+            columnName = entry.getKey();
+
+            index = cursor.getColumnIndex(columnName);
+
             cursor.moveToFirst();
-            if (index == -1)
-                Log.d(MovieContract.MoviesDatabase.TABLE_NAME, "column not found");
 
-            else if (cursor != null) {
+            if (index == -1) {
+                Log.d(LOG_TAG, MovieContract.MoviesDatabase.TABLE_NAME + " column not found");
+                Log.d(LOG_TAG, "column name :" + columnName);
+            } else {
 
-                do {
+                switch (cursor.getColumnName(index)) {
+                    case "movie_id":
+                        if (movie_ID != (long) entry.getValue()) {
+                            Log.i(LOG_TAG, "new movie id available for insertions");
+                            movieId.add(movie_ID);
+                        } else
+                            Log.i(LOG_TAG, "movie id : " + movie_ID + " of the movie " + movie_title + " is already inserted");
 
-                    switch (entry.getKey()) {
-                        case "movie_id":
-                            if (movie_ID == cursor.getLong(index)) {
-                                System.out.println("value already exists in the table");
-                            } else
-                                movieID = movie_ID;
-                            break;
+                        break;
 
-                        case "movie_title":
-                            if (movie_title == cursor.getString(index))
-                                System.out.println("movie title already exists");
-                            else
-                                movieTitle = movie_title;
-                            break;
+                    case "movie_release_date":
+                        if (release_date != entry.getValue()) {
+                            Log.i(LOG_TAG, "new movie release date available for insertions");
+                            releaseDate.add(release_date);
+                        } else
+                            Log.i(LOG_TAG, "movie release date : " + release_date + " of the movie " + movie_title + " is already inserted");
 
-                        case "movie_vote_average":
-                            if (vote_average == cursor.getDouble(index))
-                                System.out.println("vote_average already exists");
-                            else
-                                voteAverage = vote_average;
-                            break;
+                        break;
+
+                    case "movie_title":
+                        if (movie_title != entry.getValue()) {
+                            Log.i(LOG_TAG, "new movie title available for insertion");
+                            movieTitle.add(movie_title);
+                        } else
+                            Log.i(LOG_TAG, "movie title : " + movie_title + " is already inserted");
+
+                        break;
 
 
-                        case "movie_release_date":
-                            if (release_date == cursor.getString(index))
-                                System.out.println("release date already exists");
-                            else
-                                releaseDate = release_date;
-                            break;
+                    case "movie_overview":
+                        if (movie_overview != entry.getValue())
 
-                        case "movie_poster":
-                            if (movie_poster == cursor.getString(index))
-                                System.out.println("movie poster already exits");
-                            else
-                                moviePoster = movie_poster;
-                            break;
+                        {
+                            Log.i(LOG_TAG, "new movie_overview available for insertion");
+                            movieOverview.add(movie_overview);
+                        } else
+                            Log.i(LOG_TAG, "movie movie_overview : " + movie_overview + " of the movie " + movie_title + " is already inserted");
 
-                        case "movie_overview":
-                            if (movie_overview == null)
-                                movieOverview = " Synopsis for this movie is not available";
-                            else if (movie_overview == cursor.getString(index))
-                                System.out.println("synopsis already exits");
-                            else movieOverview = movie_overview;
-                            break;
-                    }
+                        break;
 
-                } while (cursor.moveToNext());
+                    case "movie_poster":
+                        if (movie_poster != entry.getValue()) {
+                            Log.i(LOG_TAG, "new movie release date available for insertion ");
+                            moviePoster.add(movie_poster);
+                        } else
+                            Log.i(LOG_TAG, "movie poster : " + movie_poster + " of the movie " + movie_title + " is already inserted");
 
-                if (movieID != 0 && movieTitle != null && voteAverage != 0 && releaseDate != null && moviePoster != null && movieOverview != null)
-                    valuesForDatabase.createMoviesDatabaseValues(movieID, movieTitle, voteAverage, releaseDate, moviePoster, movieOverview);
-                else {
-                    System.out.println("checked all the records in database");
-                    moviesDatabaseHelper.close();
-                    return "checked all the records and no insertions required";
+                        break;
+                    case "movie_vote_average":
+                        if (vote_average != Double.parseDouble(entry.getValue().toString())) {
+                            Log.i(LOG_TAG, "new movie vote_average available for insertion");
+                            voteAverage.add(vote_average);
+                        } else
+                            Log.i(LOG_TAG, "movie vote_average : " + vote_average + " of the movie " + movie_title + " is already inserted");
+
+                        break;
                 }
             }
         }
-        System.out.println("checked all the records in database and insertions are needed.");
+        if (movieId.isEmpty() && releaseDate.isEmpty() && movieTitle.isEmpty() && movieOverview.isEmpty() && movie_poster
+                .isEmpty() && voteAverage.isEmpty()) {
+            Log.i(LOG_TAG, "all lists are empty");
+            moviesDatabaseHelper.close();
+            return "checked all the records and no insertions required";
+        } else {
+            for (int i = 0; i < movieId.size(); i++) {
+                valuesForDatabase.createMoviesDatabaseValues(movieId.get(i), movieTitle.get(i), voteAverage.get(i), releaseDate.get(i),
+                        moviePoster.get(i), movieOverview.get(i));
+                databaseInsertions.insertDataIntoMoviesTable();
+            }
+        }
         moviesDatabaseHelper.close();
-        return "records that need to be inserted are in valuesForDatabase.createMoviesDatabaseValues()";
+        return "new records are inserted";
+
     }
 
     public String checkFavoriteMovieRecords(long movie_ID) {
@@ -141,23 +169,30 @@ public class checkDatabaseRecords {
 
         contentValues = valuesForDatabase.getFavoriteMoviesTableValues();
 
+        cursor = sqLiteDatabase.rawQuery("SELECT favorite_movies_id FROM " + MovieContract.FavoriteMovie.TABLE_NAME +
+                " WHERE favorite_movies_id = " + movie_ID, null);
+
         valueSet = contentValues.valueSet();
+
 
         for (Map.Entry<String, Object> entry : valueSet) {
             columnName = entry.getKey();
+            cursor.moveToFirst();
             index = cursor.getColumnIndex(columnName);
             if (index == -1)
-                Log.d(MovieContract.MoviesDatabase.TABLE_NAME, "column not found");
-            else if (cursor != null && cursor.getCount() > 0) {
-                cursor.moveToFirst();
-                if (columnName == "favorite_movies_id" && movie_ID == cursor.getLong(index)) {
-                    System.out.println("already marked favorite");
+                Log.d(MovieContract.FavoriteMovie.TABLE_NAME, "column not found");
+            else {
+
+                if (movie_ID == (long) entry.getValue()) {
+                    Log.d(LOG_TAG, "already marked favorite");
                     moviesDatabaseHelper.close();
                     return "already marked favorite";
-                } else
+                } else {
                     valuesForDatabase.createFavoriteMoviesDatabaseValues(movie_ID);
+                }
             }
         }
+
         moviesDatabaseHelper.close();
         return "not marked yet";
     }
@@ -174,39 +209,16 @@ public class checkDatabaseRecords {
             columnName = entry.getKey();
             index = cursor.getColumnIndex(columnName);
             if (index == -1)
-                Log.d(MovieContract.MoviesDatabase.TABLE_NAME, "column not found");
+                Log.d(MovieContract.MovieReviewsDB.TABLE_NAME, "column not found");
             else if (cursor != null && cursor.getCount() > 0) {
                 cursor.moveToFirst();
-                switch (columnName) {
-                    case "movies_id":
-                        if (movie_ID == cursor.getLong(index)) {
-                            System.out.println("value already exists in the table");
-                        } else
-                            movieID = movie_ID;
 
-                    case "reviews":
-                        if (movie_reviews == cursor.getString(index))
-                            System.out.println("reviews value already exists");
-                        else
-                            movieReview = movie_reviews;
-                        break;
-
-                    case "author_name":
-                        if (review_author == cursor.getString(index))
-                            System.out.println("author name already exists");
-                        else
-                            reviewAuthorName = review_author;
-                        break;
-
-                }
-                if (movieID != 0 && movieReview != null && reviewAuthorName != null)
-                    valuesForDatabase.createMovieReviewsDatabaseValues(movieID, movieReview, reviewAuthorName);
+            }
                 else {
                     moviesDatabaseHelper.close();
                     return "checked all the records and no insertions required in reviews table";
                 }
             }
-        }
 
         moviesDatabaseHelper.close();
         return "records that need to be inserted are in valuesForDatabase.createMovieReviewsDatabaseValues()";

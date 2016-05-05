@@ -1,6 +1,7 @@
 package com.example.pavan.moviesapp;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import java.util.ArrayList;
  */
 public class MovieTrailerAdapter extends BaseAdapter {
 
+
+    private final String LOG_TAG = getClass().getSimpleName();
 
     ArrayList<String> Name, Key;
 
@@ -55,13 +58,13 @@ public class MovieTrailerAdapter extends BaseAdapter {
             trailer_thumbnail_image = (ImageView) convertView.findViewById(R.id.trailer_thumbnail_image);
             trailer_title = (TextView) convertView.findViewById(R.id.trailer_title);
 
-            System.out.println("position : " + position);
+            Log.i(LOG_TAG, "position : " + position);
 
-            System.out.println("names in adapter pos : " + Name.get(position));
-            System.out.println("keys in adapter pos : " + Key.get(position));
+            Log.i(LOG_TAG, "names in adapter pos : " + Name.get(position));
+            Log.i(LOG_TAG, "keys in adapter pos : " + Key.get(position));
 
-            System.out.println("names in adapter : " + Name);
-            System.out.println("keys in adapter : " + Key);
+            Log.i(LOG_TAG, "names in adapter : " + Name);
+            Log.i(LOG_TAG, "keys in adapter : " + Key);
 
             trailer_title.setText(Name.get(position));
 

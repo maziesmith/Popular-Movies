@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ import retrofit.Retrofit;
 
 
 public class Reviews_tab extends Fragment {
+
+    private final String LOG_TAG = getClass().getSimpleName();
 
     private long movieID;
 
@@ -83,13 +86,13 @@ public class Reviews_tab extends Fragment {
             @Override
             public void onResponse(Response<ReviewsData> response, Retrofit retrofit) {
 
-                System.out.println("response status reviews : " + response.isSuccess());
+                Log.i(LOG_TAG, "response status reviews : " + response.isSuccess());
 
                 reviewsData = response.body();
                 movieReviewsResponses = reviewsData.getReviewsResponse();
 
                 movieReviewsAdapter.noOfReviews = reviewsData.getReviewsResponse().size();
-                System.out.println("response.body().getReviewsResponse() : " + response.body().getReviewsResponse().size());
+                Log.i(LOG_TAG, "response.body().getReviewsResponse() : " + response.body().getReviewsResponse().size());
 
                 if (response.body().getReviewsResponse().size() == 0) {
                     no_reviews_msg.setText("No Reviews Found for this Movie");
@@ -106,7 +109,7 @@ public class Reviews_tab extends Fragment {
 
             @Override
             public void onFailure(Throwable t) {
-                System.out.println("failed to fetch reviews data....");
+                Log.i(LOG_TAG, "failed to fetch reviews data....");
                 builder.setMessage("Sorry, We couldn't fetch the movie reviews information. Inconvenience regretted").setCancelable(false)
                         .setPositiveButton("It's Okay", new DialogInterface.OnClickListener() {
                             @Override

@@ -17,6 +17,7 @@ public class MovieDetail_PagerAdapter extends FragmentPagerAdapter {
     private static String voteAverage;
     private static Long movie_id_for_trailers;
     final int PAGE_COUNT = 3;
+    private final String LOG_TAG = getClass().getSimpleName();
     private Bundle bundle = new Bundle();
     private String tabTitles[] = new String[]{"Details", "Trailers", "Reviews"};
     private Context context;

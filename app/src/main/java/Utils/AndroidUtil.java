@@ -13,7 +13,11 @@ import java.util.Set;
  * Created by pavan on 3/21/2016.
  */
 public class AndroidUtil {
+
+    public String LOG_TAG = getClass().getSimpleName();
+
     private Context con;
+
 
     public AndroidUtil(Context con) {
         this.con = con;
@@ -22,6 +26,7 @@ public class AndroidUtil {
     public AndroidUtil() {
 
     }
+
 
     public static void validateCurrentRecord(String error, Cursor valueCursor, ContentValues expectedValues) {
         Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet();

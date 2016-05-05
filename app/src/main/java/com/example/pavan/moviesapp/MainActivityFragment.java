@@ -27,6 +27,7 @@ import java.util.List;
 
 import Utils.AndroidUtil;
 import Utils.DatabaseInsertions;
+import Utils.ReadDatabaseRecords;
 import Utils.ValuesForDatabase;
 import Utils.checkDatabaseRecords;
 import retrofit.Call;
@@ -40,6 +41,7 @@ import retrofit.Retrofit;
  */
 public class MainActivityFragment extends Fragment {
 
+    private final String LOG_TAG = getClass().getSimpleName();
 
     ArrayList<String> Posters = new ArrayList<>();
     ArrayList movieOverViews = new ArrayList();
@@ -63,6 +65,7 @@ public class MainActivityFragment extends Fragment {
 
     private MoviesListData moviesListData = new MoviesListData();
     private checkDatabaseRecords checkDatabaseRecords;
+    private ReadDatabaseRecords readDatabaseRecords;
     private DatabaseInsertions databaseInsertions;
     private MovieDetail_PagerAdapter movieDetail_pagerAdapter;
     private MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
@@ -104,6 +107,7 @@ public class MainActivityFragment extends Fragment {
         checkConnectivityStatus = new AndroidUtil(getContext());
         checkDatabaseRecords = new checkDatabaseRecords(getContext());
         databaseInsertions = new DatabaseInsertions(getContext());
+        readDatabaseRecords = new ReadDatabaseRecords(getContext());
         builder = new AlertDialog.Builder(getContext());
 
         sortByPref = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -135,7 +139,7 @@ public class MainActivityFragment extends Fragment {
                 bundle.putLong("movieID", movie_id_for_trailers);
                 bundle.putString("voteAverage", voteAverage);
 
-                System.out.println("bundle data : " + bundle);
+                Log.i(LOG_TAG, "bundle data : " + bundle);
 
                 movieDetail_pagerAdapter = new MovieDetail_PagerAdapter(getFragmentManager(), getContext(), bundle);
 
@@ -162,8 +166,8 @@ public class MainActivityFragment extends Fragment {
                     moviesListData = response.body();
                     moviesResultsJSONs = response.body().getResults();
 
-                    System.out.println("response.body() : " + response.body());
-                    System.out.println("response.raw() : " + response.raw());
+                    Log.i(LOG_TAG, "response.body() : " + response.body());
+                    Log.i(LOG_TAG, "response.raw() : " + response.raw());
 
 
                     for (MoviesResultsJSON moviesResultsJSON : moviesResultsJSONs) {
@@ -179,40 +183,40 @@ public class MainActivityFragment extends Fragment {
                                 , moviesResultsJSON.getVote_average(), moviesResultsJSON.getRelease_date()
                                 , moviesResultsJSON.getPoster_path(), moviesResultsJSON.getOverView());
 
-                        String confirmation = checkDatabaseRecords.checkAllMovieRecordsWithDBRecords(moviesResultsJSON.getId(), moviesResultsJSON.getTitle()
+
+                        String confirmation = checkDatabaseRecords.checkAllMovieRecordsWithDBRecordsAndInsertIfRequired(moviesResultsJSON.getId(), moviesResultsJSON.getTitle()
                                 , moviesResultsJSON.getVote_average(), moviesResultsJSON.getRelease_date()
                                 , moviesResultsJSON.getPoster_path(), moviesResultsJSON.getOverView());
 
                         switch (confirmation) {
                             case "checked all the records and no insertions required":
-                                System.out.println("no insertions are required in movies database");
+                                Log.i(LOG_TAG, "no insertions are required in movies database");
                                 break;
 
                             case "records that need to be inserted are in valuesForDatabase.createMoviesDatabaseValues()":
                                 long rowid = databaseInsertions.insertDataIntoMoviesTable();
                                 if (rowid != -1)
-                                    System.out.println("records are inserted successfully into the movie table");
+                                    Log.i(LOG_TAG, "records are inserted successfully into the movie table");
                                 else
-                                    System.out.println("failed to insert records into the movie table");
+                                    Log.i(LOG_TAG, "failed to insert records into the movie table");
                                 break;
                         }
-//                        ReadDatabaseRecords readDatabaseRecords = new ReadDatabaseRecords(getContext());
-//                        readDatabaseRecords.fetchMovieDatabaseRecords();
                     }
 
-                    System.out.println("titles array : " + titles);
-                    System.out.println("posters path : " + Posters);
-                    System.out.println("vote avg : " + voteAverageArray);
-                    System.out.println("release date : " + releaseDates);
-                    System.out.println("over views : " + movieOverViews);
-                    System.out.println("movie IDs : " + movie_ids_for_trailers_and_reviews);
+                    Log.i(LOG_TAG, "titles array : " + titles);
+                    Log.i(LOG_TAG, "posters path : " + Posters);
+                    Log.i(LOG_TAG, "vote avg : " + voteAverageArray);
+                    Log.i(LOG_TAG, "release date : " + releaseDates);
+                    Log.i(LOG_TAG, "over views : " + movieOverViews);
+                    Log.i(LOG_TAG, "movie IDs : " + movie_ids_for_trailers_and_reviews);
+
                     gridView.setAdapter(new ImageAdapter(getContext(), Posters));
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                System.out.println("failed to fetch the data");
+                Log.i(LOG_TAG, "failed to fetch the data");
                 builder.setMessage("Sorry, We couldn't fetch the movies information. Please try after sometime. Inconvenience regretted").setCancelable(false)
                         .setPositiveButton("It's Okay", new DialogInterface.OnClickListener() {
                             @Override
@@ -250,5 +254,6 @@ public class MainActivityFragment extends Fragment {
         super.onPause();
 
     }
+
 
 }

@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class MovieReviewsAdapter extends BaseAdapter {
 
+    private final String LOG_TAG = getClass().getSimpleName();
+
     int noOfReviews;
     TextView review_author_name, review_content;
 

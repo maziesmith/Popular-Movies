@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,8 @@ import retrofit.Retrofit;
 
 
 public class Trailers_tab extends Fragment {
+
+    private final String LOG_TAG = getClass().getSimpleName();
 
     private String BASE_TRAILERS_AND_REVIEWS_URL = "http://api.themoviedb.org/3/movie/";
     private String BASE_YOUTUBE_URL = "http://www.youtube.com/watch";
@@ -116,7 +119,7 @@ public class Trailers_tab extends Fragment {
 
                     movieTrailerResponses = movieTrailerData.getResults();
 
-                    System.out.println("movieTrailerData.getResults().size() : " + movieTrailerData.getResults().size());
+                    Log.i(LOG_TAG, "movieTrailerData.getResults().size() : " + movieTrailerData.getResults().size());
 
                     if (movieTrailerData.getResults().size() == 0)
                         no_trailers_msg.setText("No Trailers Found for this Movie");
@@ -134,12 +137,12 @@ public class Trailers_tab extends Fragment {
 
                         movieTrailerAdapter.noOfTrailers = movieTrailerData.getResults().size();
                     }
-                    System.out.println("KEY ArrayList : " + Key);
-                    System.out.println(size);
-                    System.out.println(Name);
-                    System.out.println(iso_639_1);
-                    System.out.println(iso_3166_1);
-                    System.out.println(id);
+                    Log.i(LOG_TAG, "KEY ArrayList : " + Key);
+                    Log.i(LOG_TAG, String.valueOf(size));
+                    Log.i(LOG_TAG, String.valueOf(Name));
+                    Log.i(LOG_TAG, String.valueOf(iso_639_1));
+                    Log.i(LOG_TAG, String.valueOf(iso_3166_1));
+                    Log.i(LOG_TAG, String.valueOf(id));
 
 
                     trailersListView.setAdapter(movieTrailerAdapter);
@@ -160,7 +163,7 @@ public class Trailers_tab extends Fragment {
             @Override
             public void onFailure(Throwable t) {
 
-                System.out.println("failed to fetch trailer data....");
+                Log.i(LOG_TAG, "failed to fetch trailer data....");
                 Picasso.with(getContext())
                         .load(R.drawable.ic_mood_bad_black_24dp)
                         .centerCrop()

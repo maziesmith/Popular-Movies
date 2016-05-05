@@ -3,6 +3,7 @@ package com.example.pavan.moviesapp;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import Utils.checkDatabaseRecords;
 
 public class MovieDetail_tab extends Fragment {
 
+
+    private final String LOG_TAG = getClass().getSimpleName();
 
     private ImageView Poster;
     private String poster_path;
@@ -86,8 +89,6 @@ public class MovieDetail_tab extends Fragment {
 
         Poster = (ImageView) view.findViewById(R.id.movie_poster_in_movie_detail_activity);
 
-//        trailersListView = (ListView) findViewById(R.id.trailers_list_view);
-//        reviews_list_view = (ListView) findViewById(R.id.reviews_list_view);
         checkDatabaseRecords = new checkDatabaseRecords(getContext());
         databaseInsertions = new DatabaseInsertions(getContext());
 
@@ -97,31 +98,30 @@ public class MovieDetail_tab extends Fragment {
         vote_average = (TextView) view.findViewById(R.id.vote_average);
         mark_favorite_button = (TextView) view.findViewById(R.id.mark_favorite);
 
+        String confirmation = checkDatabaseRecords.checkFavoriteMovieRecords(movieID);
+
+        if (confirmation == "already marked favorite")
+            FavoriteButtonMarked();
+        else if (confirmation == "not marked yet")
+            FavoriteButtonUnmarked();
+
 
         mark_favorite_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "listening......", Toast.LENGTH_SHORT).show();
-                String confirmation = checkDatabaseRecords.checkFavoriteMovieRecords(movieID);
-                switch (confirmation) {
-                    case "already marked favorite":
-                        mark_favorite_button.setText("Marked Favorite");
-                        mark_favorite_button.setBackgroundColor(Color.parseColor("#969696"));
-                        mark_favorite_button.setEnabled(false);
-                        break;
 
-                    case "not marked yet":
-                        long rowId = databaseInsertions.insertDataIntoFavoriteMoviesTable();
-                        if (rowId != -1) {
-                            System.out.println("row id in detail tab : " + rowId);
-                            Toast.makeText(getContext(), "added into your favorite movies list.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            System.out.println("row id in detail tab : " + rowId);
-                            Toast.makeText(getContext(), " problem occured while adding it to your favorite movies list.", Toast.LENGTH_SHORT).show();
-                        }
-                        break;
+                long rowId = databaseInsertions.insertDataIntoFavoriteMoviesTable();
+                if (rowId != -1) {
+                    Log.i(LOG_TAG, "row id in detail tab : " + rowId);
+                    Toast.makeText(getContext(), "added into your favorite movies list.", Toast.LENGTH_SHORT).show();
+                } else {
+                    FavoriteButtonUnmarked();
+                    Log.i(LOG_TAG, "row id of inserted record : " + rowId);
+                    Toast.makeText(getContext(), " problem occurred while adding it to your favorite movies list.", Toast.LENGTH_SHORT).show();
                 }
+
             }
+
         });
 
 
@@ -139,4 +139,19 @@ public class MovieDetail_tab extends Fragment {
 
         return view;
     }
+
+    public void FavoriteButtonUnmarked() {
+        mark_favorite_button.setText("Mark as Favorite");
+        mark_favorite_button.setBackgroundColor(Color.parseColor("#029789"));
+        mark_favorite_button.setEnabled(true);
+    }
+
+    public void FavoriteButtonMarked() {
+        mark_favorite_button.setText("Marked Favorite");
+        mark_favorite_button.setBackgroundColor(Color.parseColor("#969696"));
+        mark_favorite_button.setEnabled(false);
+    }
 }
+
+
+
