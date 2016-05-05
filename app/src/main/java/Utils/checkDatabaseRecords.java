@@ -52,10 +52,6 @@ public class checkDatabaseRecords {
     public String checkAllMovieRecordsWithDBRecordsAndInsertIfRequired(long movie_ID, String movie_title, double vote_average,
                                                                        String release_date, String movie_poster, String movie_overview) {
 
-        movie_overview.equalsIgnoreCase("\"");
-
-        movie_title.equalsIgnoreCase("\"");
-
 
         moviesDatabaseHelper = new MoviesDatabaseHelper(context, MoviesDatabaseHelper.DATABASE_NAME, null, MoviesDatabaseHelper.DATABASE_VERSION);
 
