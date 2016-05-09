@@ -16,6 +16,7 @@ import com.example.pavan.moviesapp.NetworkActivity.ReviewsData;
 
 import java.util.List;
 
+import butterknife.BindView;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
@@ -26,19 +27,18 @@ import retrofit.Retrofit;
 public class Reviews_tab extends Fragment {
 
     private final String LOG_TAG = getClass().getSimpleName();
-
+    //    private TextView no_reviews_msg;
+    @BindView(R.id.no_reviews_msg)
+    TextView no_reviews_msg;
+    //    private ListView reviews_list_view;
+    @BindView(R.id.reviews_list_view)
+    ListView reviews_list_view;
     private long movieID;
-
     private List<MovieReviewsResponse> movieReviewsResponses;
-
     private Trailers_tab trailers_tab = new Trailers_tab();
     private MainActivityFragment mainActivityFragment = new MainActivityFragment();
     private MovieReviewsAdapter movieReviewsAdapter;
     private ReviewsData reviewsData = new ReviewsData();
-
-
-    private TextView no_reviews_msg;
-    private ListView reviews_list_view;
     private AlertDialog.Builder builder;
 
     public Reviews_tab() {
@@ -86,13 +86,13 @@ public class Reviews_tab extends Fragment {
             @Override
             public void onResponse(Response<ReviewsData> response, Retrofit retrofit) {
 
-                Log.i(LOG_TAG, "response status reviews : " + response.isSuccess());
+//                Log.i(LOG_TAG, "response status reviews : " + response.isSuccess());
 
                 reviewsData = response.body();
                 movieReviewsResponses = reviewsData.getReviewsResponse();
 
                 movieReviewsAdapter.noOfReviews = reviewsData.getReviewsResponse().size();
-                Log.i(LOG_TAG, "response.body().getReviewsResponse() : " + response.body().getReviewsResponse().size());
+//                Log.i(LOG_TAG, "response.body().getReviewsResponse() : " + response.body().getReviewsResponse().size());
 
                 if (response.body().getReviewsResponse().size() == 0) {
                     no_reviews_msg.setText("No Reviews Found for this Movie");

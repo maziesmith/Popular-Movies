@@ -14,7 +14,7 @@ import com.example.pavan.moviesapp.MovieSQLiteDatabase.MoviesDatabaseHelper;
 public class DatabaseInsertions {
     private final String LOG_TAG = getClass().getSimpleName();
     private Context con;
-    private ValuesForDatabase ValuesForDatabase = new ValuesForDatabase();
+    private ValuesForDatabase valuesForDatabase = new ValuesForDatabase();
 
     public DatabaseInsertions(Context con) {
         this.con = con;
@@ -26,7 +26,7 @@ public class DatabaseInsertions {
         liteDatabase.beginTransaction();
 
 
-        ContentValues contentValues = ValuesForDatabase.getMovieTableValues();
+        ContentValues contentValues = valuesForDatabase.getMovieTableValues();
 
 
         long movieRowId = liteDatabase.insert(MovieContract.MoviesDatabase.TABLE_NAME, null, contentValues);
@@ -46,11 +46,11 @@ public class DatabaseInsertions {
 
     public long insertDataIntoFavoriteMoviesTable() {
 
-        MoviesDatabaseHelper databaseHelper = new MoviesDatabaseHelper(con, "movies.db", null, 1);
+        MoviesDatabaseHelper databaseHelper = new MoviesDatabaseHelper(con, null, null, 1);
         SQLiteDatabase liteDatabase = databaseHelper.getWritableDatabase();
         liteDatabase.beginTransaction();
 
-        ContentValues contentValues = ValuesForDatabase.getFavoriteMoviesTableValues();
+        ContentValues contentValues = valuesForDatabase.getFavoriteMoviesTableValues();
 
         long movieRowId = liteDatabase.insert(MovieContract.FavoriteMovie.TABLE_NAME, null, contentValues);
 
@@ -71,7 +71,7 @@ public class DatabaseInsertions {
 
         liteDatabase.beginTransaction();
 
-        ContentValues contentValues = ValuesForDatabase.getMovieReviewsTableValues();
+        ContentValues contentValues = valuesForDatabase.getMovieReviewsTableValues();
 
         long movieRowId = liteDatabase.insert(MovieContract.MovieReviewsDB.TABLE_NAME, null, contentValues);
 

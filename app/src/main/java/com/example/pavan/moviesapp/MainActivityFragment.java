@@ -1,8 +1,10 @@
 package com.example.pavan.moviesapp;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -30,6 +32,7 @@ import Utils.DatabaseInsertions;
 import Utils.ReadDatabaseRecords;
 import Utils.ValuesForDatabase;
 import Utils.checkDatabaseRecords;
+import butterknife.BindView;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -49,7 +52,9 @@ public class MainActivityFragment extends Fragment {
     ArrayList titles = new ArrayList();
     ArrayList voteAverageArray = new ArrayList();
     ArrayList movie_ids_for_trailers_and_reviews = new ArrayList();
-    GridView gridView = null;
+    //    GridView gridView = null;
+    @BindView(R.id.movie_grid_view)
+    GridView gridView;
 
     private String clickedPoster, releaseDate, movieOverView, movieTitle, voteAverage, sortByPrefValue;
     private Long movie_id_for_trailers;
@@ -74,6 +79,12 @@ public class MainActivityFragment extends Fragment {
     private List<MoviesResultsJSON> moviesResultsJSONs;
     private Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
     protected RetrofitAPI api = retrofit.create(RetrofitAPI.class);
+
+    public static boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
 
     public String getAPI_KEY() {
         return API_KEY;
@@ -100,6 +111,7 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
+
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         gridView = (GridView) rootView.findViewById(R.id.movie_grid_view);
@@ -109,6 +121,7 @@ public class MainActivityFragment extends Fragment {
         databaseInsertions = new DatabaseInsertions(getContext());
         readDatabaseRecords = new ReadDatabaseRecords(getContext());
         builder = new AlertDialog.Builder(getContext());
+
 
         sortByPref = PreferenceManager.getDefaultSharedPreferences(getContext());
 
@@ -141,12 +154,22 @@ public class MainActivityFragment extends Fragment {
 
                 Log.i(LOG_TAG, "bundle data : " + bundle);
 
+
                 movieDetail_pagerAdapter = new MovieDetail_PagerAdapter(getFragmentManager(), getContext(), bundle);
 
-                getFragmentManager().beginTransaction().add(R.id.movie_detail_fragment_placeholder, movieDetailFragment, "movie details")
-                        .addToBackStack("MainActivityFragment").commit();
+                if (isTablet(getContext())) {
+                    Log.i(LOG_TAG, "running on tablet");
+                    getFragmentManager().beginTransaction()
+                            .add(R.id.movie_detail_fragment_placeholder_for_tablet, movieDetailFragment, "movie details")
+                            .addToBackStack("MainActivityFragment").commit();
+                } else {
+                    Log.i(LOG_TAG, "running on phone");
+                    getFragmentManager().beginTransaction().add(R.id.movie_detail_fragment_placeholder, movieDetailFragment, "movie details")
+                            .addToBackStack("MainActivityFragment").commit();
+                }
             }
         });
+
 
         return rootView;
     }
@@ -203,12 +226,12 @@ public class MainActivityFragment extends Fragment {
                         }
                     }
 
-                    Log.i(LOG_TAG, "titles array : " + titles);
-                    Log.i(LOG_TAG, "posters path : " + Posters);
-                    Log.i(LOG_TAG, "vote avg : " + voteAverageArray);
-                    Log.i(LOG_TAG, "release date : " + releaseDates);
-                    Log.i(LOG_TAG, "over views : " + movieOverViews);
-                    Log.i(LOG_TAG, "movie IDs : " + movie_ids_for_trailers_and_reviews);
+//                    Log.i(LOG_TAG, "titles array : " + titles);
+//                    Log.i(LOG_TAG, "posters path : " + Posters);
+//                    Log.i(LOG_TAG, "vote avg : " + voteAverageArray);
+//                    Log.i(LOG_TAG, "release date : " + releaseDates);
+//                    Log.i(LOG_TAG, "over views : " + movieOverViews);
+//                    Log.i(LOG_TAG, "movie IDs : " + movie_ids_for_trailers_and_reviews);
 
                     gridView.setAdapter(new ImageAdapter(getContext(), Posters));
                 }
@@ -228,9 +251,7 @@ public class MainActivityFragment extends Fragment {
 
             }
         });
-
     }
-
 
     @Override
     public void onStart() {
@@ -246,7 +267,6 @@ public class MainActivityFragment extends Fragment {
                             killActivity();
                         }
                     }).create().show();
-
     }
 
     @Override
@@ -254,6 +274,5 @@ public class MainActivityFragment extends Fragment {
         super.onPause();
 
     }
-
 
 }

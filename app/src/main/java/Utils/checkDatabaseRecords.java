@@ -1,9 +1,12 @@
 package Utils;
 
+import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.util.Log;
 
 import com.example.pavan.moviesapp.MovieSQLiteDatabase.MovieContract;
@@ -38,6 +41,7 @@ public class checkDatabaseRecords {
     private Set<Map.Entry<String, Object>> valueSet;
 
     private MoviesDatabaseHelper moviesDatabaseHelper;
+    private DatabaseUtils databaseUtils = new DatabaseUtils();
     private Utils.ValuesForDatabase valuesForDatabase = new ValuesForDatabase();
     private DatabaseInsertions databaseInsertions = new DatabaseInsertions(context);
     private ValuesForDatabase ValuesForDatabase = new ValuesForDatabase();
@@ -52,19 +56,29 @@ public class checkDatabaseRecords {
     public String checkAllMovieRecordsWithDBRecordsAndInsertIfRequired(long movie_ID, String movie_title, double vote_average,
                                                                        String release_date, String movie_poster, String movie_overview) {
 
+        movie_title = DatabaseUtils.sqlEscapeString(movie_title);
+        release_date = DatabaseUtils.sqlEscapeString(release_date);
+        movie_overview = DatabaseUtils.sqlEscapeString(movie_overview);
+        movie_poster = DatabaseUtils.sqlEscapeString(movie_poster);
+
+        if (movie_overview.isEmpty())
+            movie_overview = "Synopsis of this movie is not available";
 
         moviesDatabaseHelper = new MoviesDatabaseHelper(context, MoviesDatabaseHelper.DATABASE_NAME, null, MoviesDatabaseHelper.DATABASE_VERSION);
 
         sqLiteDatabase = moviesDatabaseHelper.getReadableDatabase();
 
         contentValues = ValuesForDatabase.getMovieTableValues();
-
-        cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + MovieContract.MoviesDatabase.TABLE_NAME + " WHERE movie_id = " + movie_ID
-                + " AND movie_title = \'" + movie_title + "\' "
+        String query = "SELECT * FROM " + MovieContract.MoviesDatabase.TABLE_NAME + " WHERE movie_id = " + movie_ID
+                + " AND movie_title = " + movie_title
                 + " AND movie_vote_average = " + vote_average
-                + " AND movie_release_date = '" + release_date + "' "
-                + " AND movie_poster = ' " + movie_poster + "' "
-                + " AND movie_overview = \'" + movie_overview + "\' ", null);
+                + " AND movie_release_date = " + release_date
+                + " AND movie_poster =  " + movie_poster
+                + " AND movie_overview = " + movie_overview;
+
+        Log.i(LOG_TAG, "Query : " + query);
+
+        cursor = sqLiteDatabase.rawQuery(query, null);
 
         valueSet = contentValues.valueSet();
 
@@ -75,14 +89,14 @@ public class checkDatabaseRecords {
 
             index = cursor.getColumnIndex(columnName);
 
-            cursor.moveToFirst();
+
 
             if (index == -1) {
                 Log.d(LOG_TAG, MovieContract.MoviesDatabase.TABLE_NAME + " column not found");
                 Log.d(LOG_TAG, "column name :" + columnName);
             } else {
-
-                switch (cursor.getColumnName(index)) {
+                String name = cursor.getColumnName(index);
+                switch (name) {
                     case "movie_id":
                         if (movie_ID != (long) entry.getValue()) {
                             Log.i(LOG_TAG, "new movie id available for insertions");
@@ -92,57 +106,11 @@ public class checkDatabaseRecords {
 
                         break;
 
-                    case "movie_release_date":
-                        if (release_date != entry.getValue()) {
-                            Log.i(LOG_TAG, "new movie release date available for insertions");
-                            releaseDate.add(release_date);
-                        } else
-                            Log.i(LOG_TAG, "movie release date : " + release_date + " of the movie " + movie_title + " is already inserted");
-
-                        break;
-
-                    case "movie_title":
-                        if (movie_title != entry.getValue()) {
-                            Log.i(LOG_TAG, "new movie title available for insertion");
-                            movieTitle.add(movie_title);
-                        } else
-                            Log.i(LOG_TAG, "movie title : " + movie_title + " is already inserted");
-
-                        break;
-
-
-                    case "movie_overview":
-                        if (movie_overview != entry.getValue())
-
-                        {
-                            Log.i(LOG_TAG, "new movie_overview available for insertion");
-                            movieOverview.add(movie_overview);
-                        } else
-                            Log.i(LOG_TAG, "movie movie_overview : " + movie_overview + " of the movie " + movie_title + " is already inserted");
-
-                        break;
-
-                    case "movie_poster":
-                        if (movie_poster != entry.getValue()) {
-                            Log.i(LOG_TAG, "new movie release date available for insertion ");
-                            moviePoster.add(movie_poster);
-                        } else
-                            Log.i(LOG_TAG, "movie poster : " + movie_poster + " of the movie " + movie_title + " is already inserted");
-
-                        break;
-                    case "movie_vote_average":
-                        if (vote_average != Double.parseDouble(entry.getValue().toString())) {
-                            Log.i(LOG_TAG, "new movie vote_average available for insertion");
-                            voteAverage.add(vote_average);
-                        } else
-                            Log.i(LOG_TAG, "movie vote_average : " + vote_average + " of the movie " + movie_title + " is already inserted");
-
-                        break;
                 }
             }
         }
-        if (movieId.isEmpty() && releaseDate.isEmpty() && movieTitle.isEmpty() && movieOverview.isEmpty() && movie_poster
-                .isEmpty() && voteAverage.isEmpty()) {
+
+        if (movieId.size() == 0) {
             Log.i(LOG_TAG, "all lists are empty");
             moviesDatabaseHelper.close();
             return "checked all the records and no insertions required";
@@ -151,6 +119,7 @@ public class checkDatabaseRecords {
                 valuesForDatabase.createMoviesDatabaseValues(movieId.get(i), movieTitle.get(i), voteAverage.get(i), releaseDate.get(i),
                         moviePoster.get(i), movieOverview.get(i));
                 databaseInsertions.insertDataIntoMoviesTable();
+                Log.i(LOG_TAG, "record has been inserted");
             }
         }
         moviesDatabaseHelper.close();
@@ -158,10 +127,14 @@ public class checkDatabaseRecords {
 
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public String checkFavoriteMovieRecords(long movie_ID) {
+
         moviesDatabaseHelper = new MoviesDatabaseHelper(context, MoviesDatabaseHelper.DATABASE_NAME, null, MoviesDatabaseHelper.DATABASE_VERSION);
 
         sqLiteDatabase = moviesDatabaseHelper.getReadableDatabase();
+
+        sqLiteDatabase.enableWriteAheadLogging();
 
         contentValues = valuesForDatabase.getFavoriteMoviesTableValues();
 
@@ -181,6 +154,7 @@ public class checkDatabaseRecords {
 
                 if (movie_ID == (long) entry.getValue()) {
                     Log.d(LOG_TAG, "already marked favorite");
+                    sqLiteDatabase.disableWriteAheadLogging();
                     moviesDatabaseHelper.close();
                     return "already marked favorite";
                 } else {
@@ -189,6 +163,7 @@ public class checkDatabaseRecords {
             }
         }
 
+        sqLiteDatabase.disableWriteAheadLogging();
         moviesDatabaseHelper.close();
         return "not marked yet";
     }

@@ -20,6 +20,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -31,13 +32,16 @@ import retrofit.Retrofit;
 public class Trailers_tab extends Fragment {
 
     private final String LOG_TAG = getClass().getSimpleName();
-
+    //    private ListView trailersListView;
+    @BindView(R.id.trailers_list_view)
+    ListView trailersListView;
+    //    private TextView no_trailers_msg, no_of_trailers;
+    @BindView(R.id.no_trailers_msg)
+    TextView no_trailers_msg;
+    @BindView(R.id.no_of_Trailers)
+    TextView no_of_trailers;
     private String BASE_TRAILERS_AND_REVIEWS_URL = "http://api.themoviedb.org/3/movie/";
     private String BASE_YOUTUBE_URL = "http://www.youtube.com/watch";
-
-
-    private ListView trailersListView;
-    private TextView no_trailers_msg, no_of_trailers;
     private long movieID;
 
 
@@ -119,7 +123,7 @@ public class Trailers_tab extends Fragment {
 
                     movieTrailerResponses = movieTrailerData.getResults();
 
-                    Log.i(LOG_TAG, "movieTrailerData.getResults().size() : " + movieTrailerData.getResults().size());
+//                    Log.i(LOG_TAG, "movieTrailerData.getResults().size() : " + movieTrailerData.getResults().size());
 
                     if (movieTrailerData.getResults().size() == 0)
                         no_trailers_msg.setText("No Trailers Found for this Movie");
@@ -137,12 +141,12 @@ public class Trailers_tab extends Fragment {
 
                         movieTrailerAdapter.noOfTrailers = movieTrailerData.getResults().size();
                     }
-                    Log.i(LOG_TAG, "KEY ArrayList : " + Key);
-                    Log.i(LOG_TAG, String.valueOf(size));
-                    Log.i(LOG_TAG, String.valueOf(Name));
-                    Log.i(LOG_TAG, String.valueOf(iso_639_1));
-                    Log.i(LOG_TAG, String.valueOf(iso_3166_1));
-                    Log.i(LOG_TAG, String.valueOf(id));
+//                    Log.i(LOG_TAG, "KEY ArrayList : " + Key);
+//                    Log.i(LOG_TAG, String.valueOf(size));
+//                    Log.i(LOG_TAG, String.valueOf(Name));
+//                    Log.i(LOG_TAG, String.valueOf(iso_639_1));
+//                    Log.i(LOG_TAG, String.valueOf(iso_3166_1));
+//                    Log.i(LOG_TAG, String.valueOf(id));
 
 
                     trailersListView.setAdapter(movieTrailerAdapter);

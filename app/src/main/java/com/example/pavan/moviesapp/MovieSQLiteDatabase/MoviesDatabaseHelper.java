@@ -9,14 +9,14 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class MoviesDatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "movies.db";
 
     private final String LOG_TAG = getClass().getSimpleName();
 
 
     public MoviesDatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, null, version);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
 
@@ -34,15 +34,18 @@ public class MoviesDatabaseHelper extends SQLiteOpenHelper {
 
         final String CREATE_FAVORITE_MOVIES_TABLE = "CREATE TABLE IF NOT EXISTS " + MovieContract.FavoriteMovie.TABLE_NAME
                 + "(" + MovieContract.MoviesDatabase._ID + " INTEGER, "
-                + MovieContract.FavoriteMovie.COLUMN_FAVORITE_MOVIES_ID + " INTEGER REFERENCES "
+                + MovieContract.FavoriteMovie.COLUMN_FAVORITE_MOVIES_ID + " INTEGER," +
+                "FOREIGN KEY (" + MovieContract.FavoriteMovie.COLUMN_FAVORITE_MOVIES_ID + ")  REFERENCES "
                 + MovieContract.MoviesDatabase.TABLE_NAME + "(" + MovieContract.MoviesDatabase.COLUMN_MOVIE_ID + "));";
+
 
         final String CREATE_MOVIE_REVIEWS_TABLE = "CREATE TABLE IF NOT EXISTS " + MovieContract.MovieReviewsDB.TABLE_NAME
                 + " (" + MovieContract.MoviesDatabase._ID + " INTEGER, "
                 + MovieContract.MovieReviewsDB.COLUMN_MOVIE_REVIEWS + " TEXT, "
-                + MovieContract.MovieReviewsDB.COLUMN_MOVIE_ID + " INTEGER REFERENCES "
-                + MovieContract.MoviesDatabase.TABLE_NAME + "(" + MovieContract.MoviesDatabase.COLUMN_MOVIE_ID + "),"
-                + MovieContract.MovieReviewsDB.COLUMN_REVIEW_AUTHOR_NAME + " TEXT" + ");";
+                + MovieContract.MovieReviewsDB.COLUMN_REVIEW_AUTHOR_NAME + " TEXT, "
+                + MovieContract.MovieReviewsDB.COLUMN_MOVIE_ID + " INTEGER," +
+                " FOREIGN KEY (" + MovieContract.MovieReviewsDB.COLUMN_MOVIE_ID + ") REFERENCES "
+                + MovieContract.MoviesDatabase.TABLE_NAME + "(" + MovieContract.MoviesDatabase.COLUMN_MOVIE_ID + "))";
 
         db.execSQL(CREATE_MOVIES_TABLE);
         db.execSQL(CREATE_FAVORITE_MOVIES_TABLE);
@@ -64,7 +67,13 @@ public class MoviesDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        super.onDowngrade(db, oldVersion, newVersion);
+        // Drop older table if existed
+        db.execSQL("DROP TABLE IF EXISTS " + MovieContract.MoviesDatabase.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + MovieContract.FavoriteMovie.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + MovieContract.MovieReviewsDB.TABLE_NAME);
+
+// Create tables again
+        onCreate(db);
     }
 
 

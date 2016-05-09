@@ -1,7 +1,6 @@
 package com.example.pavan.moviesapp;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
 
 /**
  * Created by pavan on 4/10/2016.
@@ -25,8 +26,15 @@ public class MovieTrailerAdapter extends BaseAdapter {
 
     int noOfTrailers;
     Context context;
-    ImageView trailer_thumbnail_image;
+
+//    ImageView trailer_thumbnail_image;
+//    TextView trailer_title;
+
+    @BindView(R.id.trailer_title)
     TextView trailer_title;
+    @BindView(R.id.trailer_thumbnail_image)
+    ImageView trailer_thumbnail_image;
+
     private String YOUTUBE_THUMBNAIL_BASE_URL = "http://img.youtube.com/vi/";
 
 
@@ -58,13 +66,13 @@ public class MovieTrailerAdapter extends BaseAdapter {
             trailer_thumbnail_image = (ImageView) convertView.findViewById(R.id.trailer_thumbnail_image);
             trailer_title = (TextView) convertView.findViewById(R.id.trailer_title);
 
-            Log.i(LOG_TAG, "position : " + position);
-
-            Log.i(LOG_TAG, "names in adapter pos : " + Name.get(position));
-            Log.i(LOG_TAG, "keys in adapter pos : " + Key.get(position));
-
-            Log.i(LOG_TAG, "names in adapter : " + Name);
-            Log.i(LOG_TAG, "keys in adapter : " + Key);
+//            Log.i(LOG_TAG, "position : " + position);
+//
+//            Log.i(LOG_TAG, "names in adapter pos : " + Name.get(position));
+//            Log.i(LOG_TAG, "keys in adapter pos : " + Key.get(position));
+//
+//            Log.i(LOG_TAG, "names in adapter : " + Name);
+//            Log.i(LOG_TAG, "keys in adapter : " + Key);
 
             trailer_title.setText(Name.get(position));
 

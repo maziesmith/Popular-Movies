@@ -15,15 +15,28 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import Utils.DatabaseInsertions;
+import Utils.DeleteMovieRecords;
+import Utils.ReadDatabaseRecords;
+import Utils.ValuesForDatabase;
 import Utils.checkDatabaseRecords;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class MovieDetail_tab extends Fragment {
 
 
     private final String LOG_TAG = getClass().getSimpleName();
-
+    @BindView(R.id.release_year)
+    TextView release_date;
+    @BindView(R.id.movie_overview)
+    TextView movie_overview;
+    @BindView(R.id.movie_title)
+    TextView movie_title;
+    @BindView(R.id.vote_average)
+    TextView vote_average;
+    @BindView(R.id.mark_favorite)
+    TextView mark_favorite_button;
     private ImageView Poster;
     private String poster_path;
     private String releaseDate;
@@ -31,14 +44,15 @@ public class MovieDetail_tab extends Fragment {
     private String movieTitle;
     private String voteAverage;
     private Long movieID;
-
     private ListView trailersListView;
     private String BASE_TRAILERS_AND_REVIEWS_URL = "http://api.themoviedb.org/3/movie/";
-    private TextView release_date, movie_overview, movie_title, vote_average, mark_favorite_button;
+    //    private TextView release_date, movie_overview, movie_title, vote_average, mark_favorite_button;
     private String BASE_POSTER_URL = "http://image.tmdb.org/t/p/w185/";
-
     private checkDatabaseRecords checkDatabaseRecords;
+    private DeleteMovieRecords deleteMovieRecords;
     private DatabaseInsertions databaseInsertions;
+    private ValuesForDatabase valuesForDatabase;
+    private ReadDatabaseRecords readDatabaseRecords;
 
     public MovieDetail_tab() {
         // Required empty public constructor
@@ -86,11 +100,15 @@ public class MovieDetail_tab extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_movie_detail_tab, container, false);
 
+        ButterKnife.bind(view);
 
         Poster = (ImageView) view.findViewById(R.id.movie_poster_in_movie_detail_activity);
 
         checkDatabaseRecords = new checkDatabaseRecords(getContext());
         databaseInsertions = new DatabaseInsertions(getContext());
+        valuesForDatabase = new ValuesForDatabase();
+        deleteMovieRecords = new DeleteMovieRecords(getContext());
+        readDatabaseRecords = new ReadDatabaseRecords(getContext());
 
         release_date = (TextView) view.findViewById(R.id.release_year);
         movie_overview = (TextView) view.findViewById(R.id.movie_overview);
@@ -98,12 +116,17 @@ public class MovieDetail_tab extends Fragment {
         vote_average = (TextView) view.findViewById(R.id.vote_average);
         mark_favorite_button = (TextView) view.findViewById(R.id.mark_favorite);
 
+        deleteMovieRecords.deleteAllFavoriteMovieRecods();
+
+        valuesForDatabase.createFavoriteMoviesDatabaseValues(movieID);
+        readDatabaseRecords.fetchFavoriteMovieRecords();
         String confirmation = checkDatabaseRecords.checkFavoriteMovieRecords(movieID);
 
         if (confirmation == "already marked favorite")
             FavoriteButtonMarked();
         else if (confirmation == "not marked yet")
             FavoriteButtonUnmarked();
+
 
 
         mark_favorite_button.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +136,7 @@ public class MovieDetail_tab extends Fragment {
                 long rowId = databaseInsertions.insertDataIntoFavoriteMoviesTable();
                 if (rowId != -1) {
                     Log.i(LOG_TAG, "row id in detail tab : " + rowId);
+                    FavoriteButtonMarked();
                     Toast.makeText(getContext(), "added into your favorite movies list.", Toast.LENGTH_SHORT).show();
                 } else {
                     FavoriteButtonUnmarked();
@@ -148,8 +172,18 @@ public class MovieDetail_tab extends Fragment {
 
     public void FavoriteButtonMarked() {
         mark_favorite_button.setText("Marked Favorite");
-        mark_favorite_button.setBackgroundColor(Color.parseColor("#969696"));
-        mark_favorite_button.setEnabled(false);
+        mark_favorite_button.setBackgroundColor(Color.parseColor("#FF160A"));
+
+        mark_favorite_button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                deleteMovieRecords.deleteFavoriteMovieRecord(movieID);
+                Toast.makeText(getContext(), "responding to long press....", Toast.LENGTH_SHORT).show();
+                FavoriteButtonUnmarked();
+                return true;
+            }
+        });
+
     }
 }
 

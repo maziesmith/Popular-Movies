@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public class AndroidUtil {
 
-    public String LOG_TAG = getClass().getSimpleName();
+    public String LOG_TAG = "Utils";
 
     private Context con;
 
