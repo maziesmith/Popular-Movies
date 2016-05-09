@@ -23,7 +23,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        tools:layout="@android:layout/list_content"></fragment>
+        tools:layout="@layout/fragment_main"></fragment>
 
     <FrameLayout
         android:id="@+id/movie_detail_fragment_placeholder_for_tablet"
