@@ -11,24 +11,17 @@
         android:id="@+id/movie_grid_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:gravity="center"
         android:horizontalSpacing="10dp"
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp" />
 
-    <fragment
-        android:id="@+id/main_activity_fragment_placeholder"
-        android:name="com.example.pavan.moviesapp.MainActivityFragment"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        tools:layout="@layout/fragment_main"></fragment>
 
     <FrameLayout
         android:id="@+id/movie_detail_fragment_placeholder_for_tablet"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@+id/main_activity_fragment_placeholder"
         android:layout_weight="1"></FrameLayout>
 </LinearLayout>

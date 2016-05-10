@@ -159,9 +159,11 @@ public class MainActivityFragment extends Fragment {
 
                 if (isTablet(getContext())) {
                     Log.i(LOG_TAG, "running on tablet");
+                    ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
+                    layoutParams.width = 0;
                     getFragmentManager().beginTransaction()
-                            .add(R.id.movie_detail_fragment_placeholder_for_tablet, movieDetailFragment, "movie details")
-                            .addToBackStack("MainActivityFragment").commit();
+                            .replace(R.id.movie_detail_fragment_placeholder_for_tablet, movieDetailFragment, "movie details")
+                            .commit();
                 } else {
                     Log.i(LOG_TAG, "running on phone");
                     getFragmentManager().beginTransaction().add(R.id.movie_detail_fragment_placeholder, movieDetailFragment, "movie details")
