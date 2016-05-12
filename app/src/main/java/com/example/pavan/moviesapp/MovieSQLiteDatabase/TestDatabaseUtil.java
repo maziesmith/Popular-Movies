@@ -16,33 +16,17 @@ public class TestDatabaseUtil extends AndroidTestCase {
 
         ContentValues testValues = new ContentValues();
 
-        testValues.put(MovieContract.MoviesDatabase.COLUMN_MOVIE_ID, 271110);
-        testValues.put(MovieContract.MoviesDatabase.COLUMN_MOVIE_TITLE, "test Movie Title");
-        testValues.put(MovieContract.MoviesDatabase.COLUMN_MOVIE_VOTE_AVERAGE, 5.81);
-        testValues.put(MovieContract.MoviesDatabase.COLUMN_MOVIE_RELEASE_DATE, "2016-04-27");
-        testValues.put(MovieContract.MoviesDatabase.COLUMN_MOVIE_POSTER, "/rDT86hJCxnoOs4ARjrCiRej7pOi.jpg");
-        testValues.put(MovieContract.MoviesDatabase.COLUMN_MOVIE_OVERVIEW, "qwertyuiopasdfghjkzxcvbnm");
+        testValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID, 271110);
+        testValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_TITLE, "test Movie Title");
+        testValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_VOTE_AVERAGE, 5.81);
+        testValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_RELEASE_DATE, "2016-04-27");
+        testValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_POSTER, "/rDT86hJCxnoOs4ARjrCiRej7pOi.jpg");
+        testValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_OVERVIEW, "qwertyuiopasdfghjkzxcvbnm");
+        testValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_REVIEWS, "movie reviews content");
 
         return testValues;
     }
 
-    public static ContentValues createFavoriteMoviesDatabaseValues() {
-
-        ContentValues testValues = new ContentValues();
-        testValues.put(MovieContract.FavoriteMovie.COLUMN_FAVORITE_MOVIES_ID, 271110);
-
-        return testValues;
-    }
-
-
-    public static ContentValues createMovieReviewsDatabaseValues() {
-
-        ContentValues testValues = new ContentValues();
-        testValues.put(MovieContract.MovieReviewsDB.COLUMN_MOVIE_ID, 271110);
-        testValues.put(MovieContract.MovieReviewsDB.COLUMN_MOVIE_REVIEWS, "movie reviews content");
-
-        return testValues;
-    }
 
     public static void validateCurrentRecord(String error, Cursor valueCursor, ContentValues expectedValues) {
         Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet();

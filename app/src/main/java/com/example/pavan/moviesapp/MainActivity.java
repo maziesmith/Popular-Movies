@@ -12,7 +12,8 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
     private final String LOG_TAG = getClass().getSimpleName();
-    private Trailers_tab trailers_tab = new Trailers_tab();
+    //    private Trailers_tab trailers_tab = new Trailers_tab();
+    private MovieDetail_tab movieDetail_tab = new MovieDetail_tab();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
 
         if (shareActionProvider != null)
-            shareActionProvider.setShareIntent(trailers_tab.shareMovieAndTrailersInfo());
+            shareActionProvider.setShareIntent(movieDetail_tab.shareMovieAndTrailersInfo());
         return true;
     }
 

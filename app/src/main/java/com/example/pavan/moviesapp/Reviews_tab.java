@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.pavan.moviesapp.MovieSQLiteDatabase.ValuesForDatabase;
+import com.example.pavan.moviesapp.MovieSQLiteDatabase.checkDatabaseRecords;
 import com.example.pavan.moviesapp.NetworkActivity.MovieReviewsResponse;
 import com.example.pavan.moviesapp.NetworkActivity.ReviewsData;
 
@@ -38,6 +40,8 @@ public class Reviews_tab extends Fragment {
     private Trailers_tab trailers_tab = new Trailers_tab();
     private MainActivityFragment mainActivityFragment = new MainActivityFragment();
     private MovieReviewsAdapter movieReviewsAdapter;
+    private ValuesForDatabase valuesForDatabase = new ValuesForDatabase();
+    private checkDatabaseRecords checkDatabaseRecords;
     private ReviewsData reviewsData = new ReviewsData();
     private AlertDialog.Builder builder;
 
@@ -73,6 +77,7 @@ public class Reviews_tab extends Fragment {
         no_reviews_msg = (TextView) view.findViewById(R.id.no_reviews_msg);
 
         movieReviewsAdapter = new MovieReviewsAdapter(getContext());
+        checkDatabaseRecords = new checkDatabaseRecords(getContext());
         fetchReviewsData();
 
         return view;
@@ -96,13 +101,13 @@ public class Reviews_tab extends Fragment {
 
                 if (response.body().getReviewsResponse().size() == 0) {
                     no_reviews_msg.setText("No Reviews Found for this Movie");
-                }
-
-
+                } else
                 for (MovieReviewsResponse movieReviewsResponse : movieReviewsResponses) {
                     movieReviewsAdapter.author_name.add(movieReviewsResponse.getAuthor());
                     movieReviewsAdapter.author_review.add(movieReviewsResponse.getContent());
 
+                    valuesForDatabase.createMoviesDatabaseValues(movieID, movieReviewsResponse.getContent(), movieReviewsResponse.getAuthor());
+                    checkDatabaseRecords.checkAllMovieReviewRecords(movieID);
                 }
                 reviews_list_view.setAdapter(movieReviewsAdapter);
             }

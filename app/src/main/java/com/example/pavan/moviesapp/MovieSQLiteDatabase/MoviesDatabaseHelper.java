@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class MoviesDatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 5;
     public static final String DATABASE_NAME = "movies.db";
 
     private final String LOG_TAG = getClass().getSimpleName();
@@ -23,43 +23,26 @@ public class MoviesDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        final String CREATE_MOVIES_TABLE = " CREATE TABLE IF NOT EXISTS " + MovieContract.MoviesDatabase.TABLE_NAME + "("
-                + MovieContract.MoviesDatabase._ID + " INTEGER, "
-                + MovieContract.MoviesDatabase.COLUMN_MOVIE_ID + " INTEGER PRIMARY KEY,"
-                + MovieContract.MoviesDatabase.COLUMN_MOVIE_TITLE + " TEXT NOT NULL,"
-                + MovieContract.MoviesDatabase.COLUMN_MOVIE_RELEASE_DATE + " TEXT NOT NULL,"
-                + MovieContract.MoviesDatabase.COLUMN_MOVIE_OVERVIEW + " TEXT,"
-                + MovieContract.MoviesDatabase.COLUMN_MOVIE_VOTE_AVERAGE + " REAL NOT NULL,"
-                + MovieContract.MoviesDatabase.COLUMN_MOVIE_POSTER + " TEXT NOT NULL" + ");";
+        final String CREATE_MOVIES_TABLE = " CREATE TABLE IF NOT EXISTS " + MovieContract.FavoriteMoviesDatabase.TABLE_NAME + "("
+                + MovieContract.FavoriteMoviesDatabase._ID + " INTEGER, "
+                + MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID + " INTEGER PRIMARY KEY,"
+                + MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_TITLE + " TEXT NOT NULL,"
+                + MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_RELEASE_DATE + " TEXT NOT NULL,"
+                + MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_OVERVIEW + " TEXT,"
+                + MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_VOTE_AVERAGE + " REAL NOT NULL,"
+                + MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_POSTER + " TEXT NOT NULL, " +
+                MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_REVIEWS + " TEXT NOT NULL, "
+                + MovieContract.FavoriteMoviesDatabase.COLUMN_REVIEW_AUTHOR_NAME + " TEXT NOT NULL " + ");";
 
-        final String CREATE_FAVORITE_MOVIES_TABLE = "CREATE TABLE IF NOT EXISTS " + MovieContract.FavoriteMovie.TABLE_NAME
-                + "(" + MovieContract.MoviesDatabase._ID + " INTEGER, "
-                + MovieContract.FavoriteMovie.COLUMN_FAVORITE_MOVIES_ID + " INTEGER," +
-                "FOREIGN KEY (" + MovieContract.FavoriteMovie.COLUMN_FAVORITE_MOVIES_ID + ")  REFERENCES "
-                + MovieContract.MoviesDatabase.TABLE_NAME + "(" + MovieContract.MoviesDatabase.COLUMN_MOVIE_ID + "));";
-
-
-        final String CREATE_MOVIE_REVIEWS_TABLE = "CREATE TABLE IF NOT EXISTS " + MovieContract.MovieReviewsDB.TABLE_NAME
-                + " (" + MovieContract.MoviesDatabase._ID + " INTEGER, "
-                + MovieContract.MovieReviewsDB.COLUMN_MOVIE_REVIEWS + " TEXT, "
-                + MovieContract.MovieReviewsDB.COLUMN_REVIEW_AUTHOR_NAME + " TEXT, "
-                + MovieContract.MovieReviewsDB.COLUMN_MOVIE_ID + " INTEGER," +
-                " FOREIGN KEY (" + MovieContract.MovieReviewsDB.COLUMN_MOVIE_ID + ") REFERENCES "
-                + MovieContract.MoviesDatabase.TABLE_NAME + "(" + MovieContract.MoviesDatabase.COLUMN_MOVIE_ID + "))";
 
         db.execSQL(CREATE_MOVIES_TABLE);
-        db.execSQL(CREATE_FAVORITE_MOVIES_TABLE);
-        db.execSQL(CREATE_MOVIE_REVIEWS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + MovieContract.MoviesDatabase.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + MovieContract.FavoriteMovie.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + MovieContract.MovieReviewsDB.TABLE_NAME);
-
+        db.execSQL("DROP TABLE IF EXISTS " + MovieContract.FavoriteMoviesDatabase.TABLE_NAME);
 // Create tables again
         onCreate(db);
 
@@ -68,10 +51,7 @@ public class MoviesDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + MovieContract.MoviesDatabase.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + MovieContract.FavoriteMovie.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + MovieContract.MovieReviewsDB.TABLE_NAME);
-
+        db.execSQL("DROP TABLE IF EXISTS " + MovieContract.FavoriteMoviesDatabase.TABLE_NAME);
 // Create tables again
         onCreate(db);
     }

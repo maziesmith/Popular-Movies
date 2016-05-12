@@ -180,11 +180,5 @@ public class Trailers_tab extends Fragment {
 
     }
 
-    Intent shareMovieAndTrailersInfo() {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET).setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, movieDetail_tab.getMovieTitle());
-        shareIntent.putExtra(Intent.EXTRA_TEXT, uri);
-        return shareIntent;
-    }
+
 }

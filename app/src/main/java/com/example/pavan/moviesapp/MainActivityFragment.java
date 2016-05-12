@@ -20,6 +20,10 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.example.pavan.moviesapp.MovieSQLiteDatabase.DatabaseInsertions;
+import com.example.pavan.moviesapp.MovieSQLiteDatabase.ReadDatabaseRecords;
+import com.example.pavan.moviesapp.MovieSQLiteDatabase.ValuesForDatabase;
+import com.example.pavan.moviesapp.MovieSQLiteDatabase.checkDatabaseRecords;
 import com.example.pavan.moviesapp.NetworkActivity.MoviesListData;
 import com.example.pavan.moviesapp.NetworkActivity.MoviesResultsJSON;
 import com.example.pavan.moviesapp.NetworkActivity.RetrofitAPI;
@@ -28,10 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Utils.AndroidUtil;
-import Utils.DatabaseInsertions;
-import Utils.ReadDatabaseRecords;
-import Utils.ValuesForDatabase;
-import Utils.checkDatabaseRecords;
 import butterknife.BindView;
 import retrofit.Call;
 import retrofit.Callback;
@@ -161,8 +161,9 @@ public class MainActivityFragment extends Fragment {
                     Log.i(LOG_TAG, "running on tablet");
                     ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
                     layoutParams.width = 0;
+
                     getFragmentManager().beginTransaction()
-                            .replace(R.id.movie_detail_fragment_placeholder_for_tablet, movieDetailFragment, "movie details")
+                            .replace(R.id.movie_detail_fragment_placeholder_for_tablet, new MovieDetailFragment(), "movie details")
                             .commit();
                 } else {
                     Log.i(LOG_TAG, "running on phone");
@@ -203,41 +204,19 @@ public class MainActivityFragment extends Fragment {
                         titles.add(moviesResultsJSON.getTitle());
                         voteAverageArray.add(moviesResultsJSON.getVote_average());
                         releaseDates.add(moviesResultsJSON.getRelease_date());
-
-                        valuesForDatabase.createMoviesDatabaseValues(moviesResultsJSON.getId(), moviesResultsJSON.getTitle()
-                                , moviesResultsJSON.getVote_average(), moviesResultsJSON.getRelease_date()
-                                , moviesResultsJSON.getPoster_path(), moviesResultsJSON.getOverView());
-
-
-                        String confirmation = checkDatabaseRecords.checkAllMovieRecordsWithDBRecordsAndInsertIfRequired(moviesResultsJSON.getId(), moviesResultsJSON.getTitle()
-                                , moviesResultsJSON.getVote_average(), moviesResultsJSON.getRelease_date()
-                                , moviesResultsJSON.getPoster_path(), moviesResultsJSON.getOverView());
-
-                        switch (confirmation) {
-                            case "checked all the records and no insertions required":
-                                Log.i(LOG_TAG, "no insertions are required in movies database");
-                                break;
-
-                            case "records that need to be inserted are in valuesForDatabase.createMoviesDatabaseValues()":
-                                long rowid = databaseInsertions.insertDataIntoMoviesTable();
-                                if (rowid != -1)
-                                    Log.i(LOG_TAG, "records are inserted successfully into the movie table");
-                                else
-                                    Log.i(LOG_TAG, "failed to insert records into the movie table");
-                                break;
                         }
                     }
 
-//                    Log.i(LOG_TAG, "titles array : " + titles);
-//                    Log.i(LOG_TAG, "posters path : " + Posters);
-//                    Log.i(LOG_TAG, "vote avg : " + voteAverageArray);
-//                    Log.i(LOG_TAG, "release date : " + releaseDates);
-//                    Log.i(LOG_TAG, "over views : " + movieOverViews);
-//                    Log.i(LOG_TAG, "movie IDs : " + movie_ids_for_trailers_and_reviews);
+                Log.i(LOG_TAG, "titles array : " + titles);
+                Log.i(LOG_TAG, "posters path : " + Posters);
+                Log.i(LOG_TAG, "vote avg : " + voteAverageArray);
+                Log.i(LOG_TAG, "release date : " + releaseDates);
+                Log.i(LOG_TAG, "over views : " + movieOverViews);
+                Log.i(LOG_TAG, "movie IDs : " + movie_ids_for_trailers_and_reviews);
 
                     gridView.setAdapter(new ImageAdapter(getContext(), Posters));
                 }
-            }
+
 
             @Override
             public void onFailure(Throwable t) {

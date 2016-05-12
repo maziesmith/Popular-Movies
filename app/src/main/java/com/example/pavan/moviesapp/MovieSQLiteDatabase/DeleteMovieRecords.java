@@ -1,4 +1,4 @@
-package Utils;
+package com.example.pavan.moviesapp.MovieSQLiteDatabase;
 
 import android.annotation.TargetApi;
 import android.content.ContentValues;
@@ -7,9 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.util.Log;
-
-import com.example.pavan.moviesapp.MovieSQLiteDatabase.MovieContract;
-import com.example.pavan.moviesapp.MovieSQLiteDatabase.MoviesDatabaseHelper;
 
 /**
  * Created by pavan on 5/6/2016.
@@ -29,7 +26,7 @@ public class DeleteMovieRecords {
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public void deleteAllFavoriteMovieRecods() {
+    public void deleteAllFavoriteMovieRecords() {
         moviesDatabaseHelper = new MoviesDatabaseHelper(context, MoviesDatabaseHelper.DATABASE_NAME, null, MoviesDatabaseHelper.DATABASE_VERSION);
 
         sqLiteDatabase = moviesDatabaseHelper.getWritableDatabase();
@@ -38,7 +35,7 @@ public class DeleteMovieRecords {
 
         sqLiteDatabase.beginTransaction();
 
-        int flag = sqLiteDatabase.delete(MovieContract.FavoriteMovie.TABLE_NAME, null, null);
+        int flag = sqLiteDatabase.delete(MovieContract.FavoriteMoviesDatabase.TABLE_NAME, null, null);
 
         Log.i(LOG_TAG, "flag : " + flag);
 
@@ -50,7 +47,7 @@ public class DeleteMovieRecords {
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public void deleteFavoriteMovieRecord(long movieID) {
+    public String deleteFavoriteMovieRecord(long movieID) {
         moviesDatabaseHelper = new MoviesDatabaseHelper(context, MoviesDatabaseHelper.DATABASE_NAME, null, MoviesDatabaseHelper.DATABASE_VERSION);
 
         sqLiteDatabase = moviesDatabaseHelper.getWritableDatabase();
@@ -59,7 +56,7 @@ public class DeleteMovieRecords {
 
         sqLiteDatabase.beginTransaction();
 
-        sqLiteDatabase.rawQuery("DELETE FROM " + MovieContract.FavoriteMovie.TABLE_NAME + " WHERE " + MovieContract.FavoriteMovie.COLUMN_FAVORITE_MOVIES_ID + " = " + movieID, null);
+        sqLiteDatabase.rawQuery("DELETE FROM " + MovieContract.FavoriteMoviesDatabase.TABLE_NAME + " WHERE " + MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID + " = " + movieID, null);
 
         Log.i(LOG_TAG, "record : " + movieID + "is deleted");
 
@@ -67,6 +64,8 @@ public class DeleteMovieRecords {
         sqLiteDatabase.endTransaction();
         sqLiteDatabase.disableWriteAheadLogging();
         moviesDatabaseHelper.close();
+
+        return "movie record deleted";
     }
 
 

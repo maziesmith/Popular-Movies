@@ -9,10 +9,11 @@ public class MovieContract {
 
     private final String LOG_TAG = getClass().getSimpleName();
 
-    public static final class MoviesDatabase implements BaseColumns {
-        public static final String TABLE_NAME = "movies_database";
+    public static final class FavoriteMoviesDatabase implements BaseColumns {
 
-        public static final String COLUMN_MOVIE_ID = "movie_id"; // primary key
+        public static final String TABLE_NAME = "favorite_movies_database";
+
+        public static final String COLUMN_MOVIE_ID = "movie_id";
 
         public static final String COLUMN_MOVIE_TITLE = "movie_title";
 
@@ -25,24 +26,10 @@ public class MovieContract {
 
         public static final String COLUMN_MOVIE_OVERVIEW = "movie_overview";
 
-
-    }
-
-    public static final class FavoriteMovie implements BaseColumns {
-
-        public static final String TABLE_NAME = "favorite_movies";
-
-        public static final String COLUMN_FAVORITE_MOVIES_ID = "favorite_movies_id"; // foreign key
-    }
-
-    public static final class MovieReviewsDB implements BaseColumns {
-
-        public static final String TABLE_NAME = "reviews_table";
-
-        public static final String COLUMN_MOVIE_ID = "movies_id";
-
         public static final String COLUMN_MOVIE_REVIEWS = "reviews";
 
         public static final String COLUMN_REVIEW_AUTHOR_NAME = "author_name";
+
+
     }
 }

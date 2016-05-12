@@ -1,6 +1,8 @@
 package com.example.pavan.moviesapp;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,13 +14,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pavan.moviesapp.MovieSQLiteDatabase.DatabaseInsertions;
+import com.example.pavan.moviesapp.MovieSQLiteDatabase.DeleteMovieRecords;
+import com.example.pavan.moviesapp.MovieSQLiteDatabase.ReadDatabaseRecords;
+import com.example.pavan.moviesapp.MovieSQLiteDatabase.ValuesForDatabase;
+import com.example.pavan.moviesapp.MovieSQLiteDatabase.checkDatabaseRecords;
 import com.squareup.picasso.Picasso;
 
-import Utils.DatabaseInsertions;
-import Utils.DeleteMovieRecords;
-import Utils.ReadDatabaseRecords;
-import Utils.ValuesForDatabase;
-import Utils.checkDatabaseRecords;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -53,6 +55,8 @@ public class MovieDetail_tab extends Fragment {
     private DatabaseInsertions databaseInsertions;
     private ValuesForDatabase valuesForDatabase;
     private ReadDatabaseRecords readDatabaseRecords;
+    private Uri uri;
+
 
     public MovieDetail_tab() {
         // Required empty public constructor
@@ -73,13 +77,8 @@ public class MovieDetail_tab extends Fragment {
         return fragment;
     }
 
-    public String getMovieTitle() {
-        return movieTitle;
-    }
 
-    public String getMovieOverview() {
-        return movieOverview;
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,6 +92,7 @@ public class MovieDetail_tab extends Fragment {
             movieID = getArguments().getLong("movieID");
         }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -116,16 +116,16 @@ public class MovieDetail_tab extends Fragment {
         vote_average = (TextView) view.findViewById(R.id.vote_average);
         mark_favorite_button = (TextView) view.findViewById(R.id.mark_favorite);
 
-        deleteMovieRecords.deleteAllFavoriteMovieRecods();
+        deleteMovieRecords.deleteAllFavoriteMovieRecords();
 
-        valuesForDatabase.createFavoriteMoviesDatabaseValues(movieID);
-        readDatabaseRecords.fetchFavoriteMovieRecords();
-        String confirmation = checkDatabaseRecords.checkFavoriteMovieRecords(movieID);
+        valuesForDatabase.createMoviesDatabaseValues(movieID, movieTitle, Double.parseDouble(voteAverage), releaseDate, poster_path, movieOverview);
+        readDatabaseRecords.fetchAllMovieDatabaseRecords();
+        String confirmation = checkDatabaseRecords.checkAllMovieRecordsWithDBRecords(movieID);
 
         if (confirmation == "already marked favorite")
             FavoriteButtonMarked();
         else if (confirmation == "not marked yet")
-            FavoriteButtonUnmarked();
+            FavoriteButtonNotMarked();
 
 
 
@@ -133,13 +133,13 @@ public class MovieDetail_tab extends Fragment {
             @Override
             public void onClick(View v) {
 
-                long rowId = databaseInsertions.insertDataIntoFavoriteMoviesTable();
+                long rowId = databaseInsertions.insertDataIntoMoviesTable();
                 if (rowId != -1) {
                     Log.i(LOG_TAG, "row id in detail tab : " + rowId);
                     FavoriteButtonMarked();
                     Toast.makeText(getContext(), "added into your favorite movies list.", Toast.LENGTH_SHORT).show();
                 } else {
-                    FavoriteButtonUnmarked();
+                    FavoriteButtonNotMarked();
                     Log.i(LOG_TAG, "row id of inserted record : " + rowId);
                     Toast.makeText(getContext(), " problem occurred while adding it to your favorite movies list.", Toast.LENGTH_SHORT).show();
                 }
@@ -164,10 +164,27 @@ public class MovieDetail_tab extends Fragment {
         return view;
     }
 
-    public void FavoriteButtonUnmarked() {
+    public String getMovieTitle() {
+        return movieTitle;
+    }
+
+    public String getMovieOverview() {
+        return movieOverview;
+    }
+
+    Intent shareMovieAndTrailersInfo() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "Movie Title : " + getMovieTitle() + ", \n\n" + "Overview : " + getMovieOverview() +
+                ",\n\n" + "Trailer : " + uri);
+
+        return shareIntent;
+    }
+
+    public void FavoriteButtonNotMarked() {
         mark_favorite_button.setText("Mark as Favorite");
         mark_favorite_button.setBackgroundColor(Color.parseColor("#029789"));
-        mark_favorite_button.setEnabled(true);
+        mark_favorite_button.cancelLongPress();
     }
 
     public void FavoriteButtonMarked() {
@@ -177,14 +194,20 @@ public class MovieDetail_tab extends Fragment {
         mark_favorite_button.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                deleteMovieRecords.deleteFavoriteMovieRecord(movieID);
-                Toast.makeText(getContext(), "responding to long press....", Toast.LENGTH_SHORT).show();
-                FavoriteButtonUnmarked();
+                String confirmation = deleteMovieRecords.deleteFavoriteMovieRecord(movieID);
+                if (confirmation == "movie record deleted") {
+                    FavoriteButtonNotMarked();
+                    Toast.makeText(getContext(), "Movie is removed from your favorite movies list", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(getContext(), "Failed to remove movie from your favorite movies list", Toast.LENGTH_SHORT).show();
+
                 return true;
             }
         });
 
     }
+
+
 }
 
 
