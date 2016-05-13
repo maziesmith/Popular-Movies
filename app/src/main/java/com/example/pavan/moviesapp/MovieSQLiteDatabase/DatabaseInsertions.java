@@ -25,7 +25,6 @@ public class DatabaseInsertions {
 
         ContentValues contentValues = valuesForDatabase.getMovieTableValues();
 
-
         long movieRowId = liteDatabase.insert(MovieContract.FavoriteMoviesDatabase.TABLE_NAME, null, contentValues);
 
         if (movieRowId != -1)  // movieRowId value will be -1 if the insertion fails.

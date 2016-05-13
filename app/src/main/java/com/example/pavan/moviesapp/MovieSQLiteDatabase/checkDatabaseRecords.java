@@ -62,36 +62,17 @@ public class checkDatabaseRecords {
 
         cursor = sqLiteDatabase.rawQuery(query, null);
 
-        valueSet = contentValues.valueSet();
-
-
-        for (Map.Entry<String, Object> entry : valueSet) {
-
-            columnName = entry.getKey();
-
-            index = cursor.getColumnIndex(columnName);
-
-
-
-            if (index == -1) {
-                Log.d(LOG_TAG, MovieContract.FavoriteMoviesDatabase.TABLE_NAME + " column not found");
-                Log.d(LOG_TAG, "column name :" + columnName);
-            } else {
-                        if (movie_ID != (long) entry.getValue()) {
-                            Log.i(LOG_TAG, "movie is not marked as favorite movie");
-                            moviesDatabaseHelper.close();
-                            return "not marked yet";
-                        } else {
-                            Log.i(LOG_TAG, "movie id : " + movie_ID + " is already inserted");
-                            moviesDatabaseHelper.close();
-                            return "already marked favorite";
-                        }
-                }
-            }
-
-        moviesDatabaseHelper.close();
-        return "";
+        if (cursor.getCount() == 0) {
+            Log.i(LOG_TAG, "movie is not marked as favorite movie");
+            moviesDatabaseHelper.close();
+            return "not marked yet";
+        } else {
+            Log.i(LOG_TAG, "movie id : " + movie_ID + " is already inserted");
+            moviesDatabaseHelper.close();
+            return "already marked favorite";
+        }
     }
+
 
     public String checkAllMovieReviewRecords(long movieID) {
 
