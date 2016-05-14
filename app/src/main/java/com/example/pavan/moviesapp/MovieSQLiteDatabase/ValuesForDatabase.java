@@ -32,6 +32,8 @@ public class ValuesForDatabase {
         MovieTableValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_RELEASE_DATE, release_date);
         MovieTableValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_POSTER, movie_poster);
         MovieTableValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_OVERVIEW, movie_overview);
+        MovieTableValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_REVIEW_AUTHOR_NAME, "reviews data for this movie is not yet fetched");
+        MovieTableValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_REVIEWS, "reviews data for this movie is not yet fetched");
 
         setMovieTableValues(MovieTableValues);
     }

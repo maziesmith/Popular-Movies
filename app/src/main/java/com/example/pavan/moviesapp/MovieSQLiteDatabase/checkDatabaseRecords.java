@@ -91,6 +91,8 @@ public class checkDatabaseRecords {
 
         valueSet = contentValues.valueSet();
 
+        Log.i(LOG_TAG, "cursor.getCount() : " + String.valueOf(cursor.getCount()));
+
         for (Map.Entry<String, Object> entry : valueSet) {
             columnName = entry.getKey();
             index = cursor.getColumnIndex(columnName);

@@ -56,7 +56,7 @@ public class MovieDetail_tab extends Fragment {
     private ValuesForDatabase valuesForDatabase;
     private ReadDatabaseRecords readDatabaseRecords;
     private Uri uri;
-
+    private String confirmation;
 
     public MovieDetail_tab() {
         // Required empty public constructor
@@ -77,9 +77,6 @@ public class MovieDetail_tab extends Fragment {
         return fragment;
     }
 
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +89,6 @@ public class MovieDetail_tab extends Fragment {
             movieID = getArguments().getLong("movieID");
         }
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -120,7 +116,8 @@ public class MovieDetail_tab extends Fragment {
 
         valuesForDatabase.createMoviesDatabaseValues(movieID, movieTitle, Double.parseDouble(voteAverage), releaseDate, poster_path, movieOverview);
         readDatabaseRecords.fetchAllMovieDatabaseRecords();
-        String confirmation = checkDatabaseRecords.checkAllMovieRecordsWithDBRecords(movieID);
+        confirmation = checkDatabaseRecords.checkAllMovieRecordsWithDBRecords(movieID);
+        setConfirmation(confirmation);
 
         if (confirmation == "already marked favorite")
             FavoriteButtonMarked();
@@ -162,6 +159,14 @@ public class MovieDetail_tab extends Fragment {
 
 
         return view;
+    }
+
+    public String getConfirmation() {
+        return confirmation;
+    }
+
+    public void setConfirmation(String confirmation) {
+        this.confirmation = confirmation;
     }
 
     public String getMovieTitle() {

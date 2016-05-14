@@ -39,6 +39,7 @@ public class Reviews_tab extends Fragment {
     private List<MovieReviewsResponse> movieReviewsResponses;
     private Trailers_tab trailers_tab = new Trailers_tab();
     private MainActivityFragment mainActivityFragment = new MainActivityFragment();
+    private MovieDetail_tab movieDetail_tab;
     private MovieReviewsAdapter movieReviewsAdapter;
     private ValuesForDatabase valuesForDatabase = new ValuesForDatabase();
     private checkDatabaseRecords checkDatabaseRecords;
@@ -78,7 +79,11 @@ public class Reviews_tab extends Fragment {
 
         movieReviewsAdapter = new MovieReviewsAdapter(getContext());
         checkDatabaseRecords = new checkDatabaseRecords(getContext());
+        movieDetail_tab = new MovieDetail_tab();
         fetchReviewsData();
+
+        Log.i(LOG_TAG, "movieDetail_tab.getConfirmation() : " + movieDetail_tab.getConfirmation());
+
 
         return view;
     }
