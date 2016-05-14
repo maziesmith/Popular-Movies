@@ -117,7 +117,6 @@ public class MovieDetail_tab extends Fragment {
         valuesForDatabase.createMoviesDatabaseValues(movieID, movieTitle, Double.parseDouble(voteAverage), releaseDate, poster_path, movieOverview);
         readDatabaseRecords.fetchAllMovieDatabaseRecords();
         confirmation = checkDatabaseRecords.checkAllMovieRecordsWithDBRecords(movieID);
-        setConfirmation(confirmation);
 
         if (confirmation == "already marked favorite")
             FavoriteButtonMarked();
