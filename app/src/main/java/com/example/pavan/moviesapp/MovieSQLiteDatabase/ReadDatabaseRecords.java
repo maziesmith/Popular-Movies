@@ -18,7 +18,7 @@ public class ReadDatabaseRecords {
     // select statements
 
     private final String LOG_TAG = getClass().getSimpleName();
-
+    public Boolean NoDBContent = false;
     private MoviesDatabaseHelper moviesDatabaseHelper;
     private com.example.pavan.moviesapp.MovieSQLiteDatabase.ValuesForDatabase valuesForDatabase = new ValuesForDatabase();
     private ValuesForDatabase ValuesForDatabase = new ValuesForDatabase();
@@ -26,9 +26,7 @@ public class ReadDatabaseRecords {
     private ContentValues contentValues;
     private Cursor cursor;
     private Context context;
-
     private MoviesResultsJSON moviesResultsJSON = new MoviesResultsJSON();
-
     private Set<Map.Entry<String, Object>> valueSet;
     private int index;
     private String columnName;
@@ -76,6 +74,8 @@ public class ReadDatabaseRecords {
                 moviesResultsJSON.setOverview(String.valueOf(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_OVERVIEW)));
             } while (cursor.moveToNext());
 
+        } else {
+            NoDBContent = true;
         }
 
     }

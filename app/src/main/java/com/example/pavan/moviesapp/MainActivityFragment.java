@@ -254,6 +254,15 @@ public class MainActivityFragment extends Fragment {
 
                             readDatabaseRecords.fetchAllMovieDatabaseRecords();
 
+                            if (readDatabaseRecords.NoDBContent)
+                                builder.setMessage("No favorite movies marked to show when the device is offline")
+                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                killActivity();
+                                            }
+                                        });
+
                             for (MoviesResultsJSON moviesResultsJSON : moviesResultsJSONs) {
                                 movie_ids_for_trailers_and_reviews.add(moviesResultsJSON.getId());
                                 movieOverViews.add(moviesResultsJSON.getOverView());
