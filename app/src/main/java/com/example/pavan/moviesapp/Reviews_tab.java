@@ -18,6 +18,7 @@ import com.example.pavan.moviesapp.NetworkActivity.ReviewsData;
 
 import java.util.List;
 
+import Utils.AndroidUtil;
 import butterknife.BindView;
 import retrofit.Call;
 import retrofit.Callback;
@@ -44,6 +45,7 @@ public class Reviews_tab extends Fragment {
     private ValuesForDatabase valuesForDatabase = new ValuesForDatabase();
     private checkDatabaseRecords checkDatabaseRecords;
     private ReviewsData reviewsData = new ReviewsData();
+    private AndroidUtil androidUtil;
     private AlertDialog.Builder builder;
 
     public Reviews_tab() {
@@ -76,6 +78,14 @@ public class Reviews_tab extends Fragment {
 
         reviews_list_view = (ListView) view.findViewById(R.id.reviews_list_view);
         no_reviews_msg = (TextView) view.findViewById(R.id.no_reviews_msg);
+
+
+        androidUtil = new AndroidUtil(getContext());
+
+        if (androidUtil.isOnline() != true) {
+            no_reviews_msg.setText("Reviews cannot be shown when there is no Internet Connectivity");
+            return view;
+        }
 
         movieReviewsAdapter = new MovieReviewsAdapter(getContext());
         checkDatabaseRecords = new checkDatabaseRecords(getContext());
@@ -110,9 +120,6 @@ public class Reviews_tab extends Fragment {
                 for (MovieReviewsResponse movieReviewsResponse : movieReviewsResponses) {
                     movieReviewsAdapter.author_name.add(movieReviewsResponse.getAuthor());
                     movieReviewsAdapter.author_review.add(movieReviewsResponse.getContent());
-
-                    valuesForDatabase.createMoviesDatabaseValues(movieID, movieReviewsResponse.getContent(), movieReviewsResponse.getAuthor());
-                    checkDatabaseRecords.checkAllMovieReviewRecords(movieID);
                 }
                 reviews_list_view.setAdapter(movieReviewsAdapter);
             }

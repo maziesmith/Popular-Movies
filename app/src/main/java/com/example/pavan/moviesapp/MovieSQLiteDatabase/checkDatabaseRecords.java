@@ -74,41 +74,5 @@ public class checkDatabaseRecords {
     }
 
 
-    public String checkAllMovieReviewRecords(long movieID) {
 
-        moviesDatabaseHelper = new MoviesDatabaseHelper(context, MoviesDatabaseHelper.DATABASE_NAME, null, MoviesDatabaseHelper.DATABASE_VERSION);
-
-        sqLiteDatabase = moviesDatabaseHelper.getReadableDatabase();
-
-        contentValues = valuesForDatabase.getMovieTableValues();
-
-        String query = "SELECT " + MovieContract.FavoriteMoviesDatabase.COLUMN_REVIEW_AUTHOR_NAME + ","
-                + MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_REVIEWS +
-                " FROM " + MovieContract.FavoriteMoviesDatabase.TABLE_NAME + " WHERE "
-                + MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID + "= " + movieID;
-
-        cursor = sqLiteDatabase.rawQuery(query, null);
-
-        valueSet = contentValues.valueSet();
-
-        Log.i(LOG_TAG, "cursor.getCount() : " + String.valueOf(cursor.getCount()));
-
-        for (Map.Entry<String, Object> entry : valueSet) {
-            columnName = entry.getKey();
-            index = cursor.getColumnIndex(columnName);
-
-            if (index != -1) {
-                Log.d(LOG_TAG, MovieContract.FavoriteMoviesDatabase.TABLE_NAME + " column not found");
-                Log.d(LOG_TAG, "column name :" + columnName);
-            } else {
-                if (entry.getKey() == MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_REVIEWS || entry.getKey() == MovieContract.FavoriteMoviesDatabase.COLUMN_REVIEW_AUTHOR_NAME) {
-                    Log.i(LOG_TAG, entry.getKey() + " :" + entry.getValue());
-                    return "reviews data is available in the database";
-                }
-
-            }
-        }
-        Log.i(LOG_TAG, "reviews data not available");
-        return "reviews data not available";
-    }
 }

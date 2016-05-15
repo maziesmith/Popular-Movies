@@ -12,16 +12,6 @@ public class ValuesForDatabase {
     private final String LOG_TAG = getClass().getSimpleName();
 
 
-    public void createMoviesDatabaseValues(long movie_ID, String review, String reviewAuthorName) {
-
-
-        MovieTableValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID, movie_ID);
-        MovieTableValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_REVIEW_AUTHOR_NAME, review);
-        MovieTableValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_REVIEWS, reviewAuthorName);
-
-        setMovieTableValues(MovieTableValues);
-    }
-
     public void createMoviesDatabaseValues(long movie_ID, String movie_title, double vote_average,
                                            String release_date, String movie_poster, String movie_overview) {
 
@@ -32,9 +22,6 @@ public class ValuesForDatabase {
         MovieTableValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_RELEASE_DATE, release_date);
         MovieTableValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_POSTER, movie_poster);
         MovieTableValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_OVERVIEW, movie_overview);
-        MovieTableValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_REVIEW_AUTHOR_NAME, "reviews data for this movie is not yet fetched");
-        MovieTableValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_REVIEWS, "reviews data for this movie is not yet fetched");
-
         setMovieTableValues(MovieTableValues);
     }
 

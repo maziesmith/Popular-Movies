@@ -26,10 +26,6 @@ public class MovieContract {
 
         public static final String COLUMN_MOVIE_OVERVIEW = "movie_overview";
 
-        public static final String COLUMN_MOVIE_REVIEWS = "reviews";
-
-        public static final String COLUMN_REVIEW_AUTHOR_NAME = "author_name";
-
 
     }
 }

@@ -76,7 +76,7 @@ public class MainActivityFragment extends Fragment {
     private MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
     private ValuesForDatabase valuesForDatabase = new ValuesForDatabase();
 
-    private List<MoviesResultsJSON> moviesResultsJSONs;
+    private List<MoviesResultsJSON> moviesResultsJSONs = new ArrayList<>();
     private Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
     protected RetrofitAPI api = retrofit.create(RetrofitAPI.class);
 
@@ -130,12 +130,18 @@ public class MainActivityFragment extends Fragment {
         Log.i("sortByPrefValue", sortByPrefValue);
 
 
+        if (sortByPrefValue == getString(R.string.favorites_value)) {
+            // TODO: offline data from the database.
+        }
+
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getContext(), "position : " + position, Toast.LENGTH_SHORT).show();
 
                 Log.i("poster string", Posters.get(position));
+
 
                 clickedPoster = Posters.get(position);
                 releaseDate = releaseDates.get(position).toString();
@@ -241,11 +247,22 @@ public class MainActivityFragment extends Fragment {
         if (checkConnectivityStatus.isOnline())
             getMoviesListData();
         else
-            builder.setMessage("Please check your INTERNET Connection").setCancelable(false)
+            builder.setMessage("We couldn't detect an INTERNET Connectivity to your device. You can view your favorite movies without Internet Connectivity").setCancelable(false)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            killActivity();
+
+                            readDatabaseRecords.fetchAllMovieDatabaseRecords();
+
+                            for (MoviesResultsJSON moviesResultsJSON : moviesResultsJSONs) {
+                                movie_ids_for_trailers_and_reviews.add(moviesResultsJSON.getId());
+                                movieOverViews.add(moviesResultsJSON.getOverView());
+                                Posters.add(moviesResultsJSON.getPoster_path());
+                                titles.add(moviesResultsJSON.getTitle());
+                                voteAverageArray.add(moviesResultsJSON.getVote_average());
+                                releaseDates.add(moviesResultsJSON.getRelease_date());
+
+                            }
                         }
                     }).create().show();
     }

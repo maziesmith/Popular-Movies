@@ -20,6 +20,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import Utils.AndroidUtil;
 import butterknife.BindView;
 import retrofit.Call;
 import retrofit.Callback;
@@ -62,6 +63,7 @@ public class Trailers_tab extends Fragment {
     private MovieTrailerData movieTrailerData = new MovieTrailerData();
     private MovieDetail_tab movieDetail_tab = new MovieDetail_tab();
     private MovieTrailerAdapter movieTrailerAdapter;
+    private AndroidUtil androidUtil;
     private Uri uri;
 
     public Trailers_tab() {
@@ -98,6 +100,13 @@ public class Trailers_tab extends Fragment {
         no_trailers_msg = (TextView) view.findViewById(R.id.no_trailers_msg);
         trailersListView = (ListView) view.findViewById(R.id.trailers_list_view);
         no_of_trailers = (TextView) view.findViewById(R.id.no_of_Trailers);
+
+        androidUtil = new AndroidUtil(getContext());
+
+        if (androidUtil.isOnline() != true) {
+            no_trailers_msg.setText("Trailers cannot be displayed when there is no Internet Connectivity");
+            return view;
+        }
 
         movieTrailerAdapter = new MovieTrailerAdapter(getContext(), Name, Key);
 

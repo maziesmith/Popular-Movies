@@ -52,7 +52,6 @@ public class DeleteMovieRecords {
 
         sqLiteDatabase = moviesDatabaseHelper.getWritableDatabase();
 
-        sqLiteDatabase.enableWriteAheadLogging();
 
         sqLiteDatabase.beginTransaction();
 
@@ -62,7 +61,6 @@ public class DeleteMovieRecords {
 
         sqLiteDatabase.setTransactionSuccessful();
         sqLiteDatabase.endTransaction();
-        sqLiteDatabase.disableWriteAheadLogging();
         moviesDatabaseHelper.close();
 
         return "movie record deleted";

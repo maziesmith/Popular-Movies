@@ -22,7 +22,6 @@ public class TestDatabaseUtil extends AndroidTestCase {
         testValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_RELEASE_DATE, "2016-04-27");
         testValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_POSTER, "/rDT86hJCxnoOs4ARjrCiRej7pOi.jpg");
         testValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_OVERVIEW, "qwertyuiopasdfghjkzxcvbnm");
-        testValues.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_REVIEWS, "movie reviews content");
 
         return testValues;
     }

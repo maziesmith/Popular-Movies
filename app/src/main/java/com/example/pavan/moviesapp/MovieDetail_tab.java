@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,10 +111,10 @@ public class MovieDetail_tab extends Fragment {
         vote_average = (TextView) view.findViewById(R.id.vote_average);
         mark_favorite_button = (TextView) view.findViewById(R.id.mark_favorite);
 
-        deleteMovieRecords.deleteAllFavoriteMovieRecords();
+//        deleteMovieRecords.deleteAllFavoriteMovieRecords();
 
         valuesForDatabase.createMoviesDatabaseValues(movieID, movieTitle, Double.parseDouble(voteAverage), releaseDate, poster_path, movieOverview);
-        readDatabaseRecords.fetchAllMovieDatabaseRecords();
+//        readDatabaseRecords.fetchAllMovieDatabaseRecords();
         confirmation = checkDatabaseRecords.checkAllMovieRecordsWithDBRecords(movieID);
 
         if (confirmation == "already marked favorite")
@@ -129,14 +128,17 @@ public class MovieDetail_tab extends Fragment {
             @Override
             public void onClick(View v) {
 
-                long rowId = databaseInsertions.insertDataIntoMoviesTable();
-                if (rowId != -1) {
-                    Log.i(LOG_TAG, "row id in detail tab : " + rowId);
+//                long rowId = databaseInsertions.insertDataIntoMoviesTable(movieID,movieTitle,Double.parseDouble(voteAverage),releaseDate,poster_path,movie_overview);
+                String confirmation = databaseInsertions.insertDataIntoMoviesTable(movieID, movieTitle, Double.parseDouble(voteAverage), releaseDate, poster_path, movieOverview);
+//                if (rowId != -1) {
+                if (confirmation == "inserted successfully")
+//                    Log.i(LOG_TAG, "row id in detail tab : " + rowId);
+                {
                     FavoriteButtonMarked();
                     Toast.makeText(getContext(), "added into your favorite movies list.", Toast.LENGTH_SHORT).show();
                 } else {
                     FavoriteButtonNotMarked();
-                    Log.i(LOG_TAG, "row id of inserted record : " + rowId);
+//                    Log.i(LOG_TAG, "row id of inserted record : " + rowId);
                     Toast.makeText(getContext(), " problem occurred while adding it to your favorite movies list.", Toast.LENGTH_SHORT).show();
                 }
 
