@@ -19,10 +19,9 @@ import java.util.ArrayList;
 public class ImageAdapter extends BaseAdapter {
 
     private final String LOG_TAG = getClass().getSimpleName();
-
+    public ImageView movie_posters_imageView;
     ArrayList<String> moviePosters = new ArrayList<>();
     Context context;
-    ImageView movie_posters_imageView;
     String BASE_POSTER_URL = "http://image.tmdb.org/t/p/w185/";
 
 

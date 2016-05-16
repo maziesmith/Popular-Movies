@@ -7,6 +7,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.example.pavan.moviesapp.ImageAdapter;
+import com.example.pavan.moviesapp.MainActivityFragment;
+import com.example.pavan.moviesapp.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -22,6 +25,9 @@ public class AndroidUtil {
     public String LOG_TAG = "Utils";
 
     private Context con;
+    private MainActivityFragment mainActivityFragment = new MainActivityFragment();
+    private ImageAdapter imageAdapter = new ImageAdapter(con, null);
+
 
 
     public AndroidUtil(Context con) {
@@ -80,12 +86,12 @@ public class AndroidUtil {
 
             @Override
             public void onBitmapFailed(Drawable errorDrawable) {
-
+                imageAdapter.movie_posters_imageView.setImageResource(R.drawable.ic_mood_bad_black_24dp);
             }
 
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {
-
+                imageAdapter.movie_posters_imageView.setImageResource(R.drawable.InternetSlowdown_Day);
             }
         };
         return target;
