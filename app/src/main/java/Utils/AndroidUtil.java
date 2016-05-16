@@ -1,8 +1,18 @@
 package Utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Created by pavan on 3/21/2016.
@@ -22,30 +32,6 @@ public class AndroidUtil {
 
     }
 
-
-//    public static void validateCurrentRecord(String error, Cursor valueCursor, ContentValues expectedValues) {
-//        Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet();
-//
-//        for (Map.Entry<String, Object> entry : valueSet) {
-//            String columnName = entry.getKey();
-//
-//            int idx = valueCursor.getColumnIndex(columnName);
-//            if (idx == -1)
-//                System.out.println("Column ' " + columnName + " ' not found. " + error);
-//            else {
-//                String expectedValue = entry.getValue().toString();
-//                System.out.println("Value ' " + entry.getValue().toString() + "' &  " + expectedValue + " '.");
-//
-//                valueCursor.moveToFirst();
-//                do {
-//                    System.out.println("cursor contents : " + valueCursor.getString(idx));
-//                } while (valueCursor.moveToNext());
-//
-//            }
-//        }
-
-//    }
-
     public boolean isOnline() {
         boolean connected = false;
         ConnectivityManager connectivity = (ConnectivityManager) con.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -57,6 +43,52 @@ public class AndroidUtil {
                     connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED;
 
         return connected;
+    }
+
+    public Target getTarget(final String url) {
+        Target target = new Target() {
+
+            @Override
+            public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        final File dir = new File(con.getFilesDir() + "MoviesApp Posters");
+                        if (!dir.exists()) {
+                            dir.mkdir();
+                            Log.i(LOG_TAG, "dir created");
+                        }
+
+
+                        File file = new File(dir, url);
+
+                        try {
+                            file.createNewFile();
+                            FileOutputStream ostream = new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
+                            ostream.flush();
+                            ostream.close();
+                        } catch (IOException e) {
+                            Log.e("IOException", e.getLocalizedMessage());
+                        }
+                    }
+                }).start();
+
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
+        return target;
     }
 }
 

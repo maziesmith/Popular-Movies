@@ -20,6 +20,7 @@ import com.example.pavan.moviesapp.MovieSQLiteDatabase.ValuesForDatabase;
 import com.example.pavan.moviesapp.MovieSQLiteDatabase.checkDatabaseRecords;
 import com.squareup.picasso.Picasso;
 
+import Utils.AndroidUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -53,6 +54,7 @@ public class MovieDetail_tab extends Fragment {
     private DeleteMovieRecords deleteMovieRecords;
     private DatabaseInsertions databaseInsertions;
     private ValuesForDatabase valuesForDatabase;
+    private AndroidUtil androidUtil;
     private ReadDatabaseRecords readDatabaseRecords;
     private Uri uri;
     private String confirmation;
@@ -104,6 +106,7 @@ public class MovieDetail_tab extends Fragment {
         valuesForDatabase = new ValuesForDatabase();
         deleteMovieRecords = new DeleteMovieRecords(getContext());
         readDatabaseRecords = new ReadDatabaseRecords(getContext());
+        androidUtil = new AndroidUtil(getContext());
 
         release_date = (TextView) view.findViewById(R.id.release_year);
         movie_overview = (TextView) view.findViewById(R.id.movie_overview);
@@ -131,6 +134,14 @@ public class MovieDetail_tab extends Fragment {
 //                long rowId = databaseInsertions.insertDataIntoMoviesTable(movieID,movieTitle,Double.parseDouble(voteAverage),releaseDate,poster_path,movie_overview);
                 String confirmation = databaseInsertions.insertDataIntoMoviesTable(movieID, movieTitle, Double.parseDouble(voteAverage), releaseDate, poster_path, movieOverview);
 //                if (rowId != -1) {
+
+                Picasso.with(getContext())
+                        .load(BASE_POSTER_URL + poster_path).resize(165 * 2, 250 * 2)
+                        .into(androidUtil.getTarget(BASE_POSTER_URL + poster_path));
+
+//                String str = androidUtil.getTarget(BASE_POSTER_URL+poster_path).toString();
+//                Log.i(LOG_TAG,"get target string : " + str);
+
                 if (confirmation == "inserted successfully")
 //                    Log.i(LOG_TAG, "row id in detail tab : " + rowId);
                 {
@@ -212,8 +223,6 @@ public class MovieDetail_tab extends Fragment {
         });
 
     }
-
-
 }
 
 
