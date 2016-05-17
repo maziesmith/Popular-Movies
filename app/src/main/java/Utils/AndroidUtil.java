@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.example.pavan.moviesapp.ImageAdapter;
 import com.example.pavan.moviesapp.MainActivityFragment;
-import com.example.pavan.moviesapp.R;
+import com.example.pavan.moviesapp.MovieSQLiteDatabase.UpdateMovieRecord;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -23,11 +23,12 @@ import java.io.IOException;
 public class AndroidUtil {
 
     public String LOG_TAG = "Utils";
-
+    public File dir;
+    public File file;
     private Context con;
     private MainActivityFragment mainActivityFragment = new MainActivityFragment();
     private ImageAdapter imageAdapter = new ImageAdapter(con, null);
-
+    private UpdateMovieRecord updateMovieRecord;
 
 
     public AndroidUtil(Context con) {
@@ -41,7 +42,6 @@ public class AndroidUtil {
     public boolean isOnline() {
         boolean connected = false;
         ConnectivityManager connectivity = (ConnectivityManager) con.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivity.getActiveNetworkInfo();
         if (connectivity != null)
             //Check Mobile data or Wifi net is present
             //we are connected to a network
@@ -51,8 +51,10 @@ public class AndroidUtil {
         return connected;
     }
 
-    public Target getTarget(final String url) {
+    public Target getTarget(final String url, final long movieID) {
+        updateMovieRecord = new UpdateMovieRecord(con);
         Target target = new Target() {
+
 
             @Override
             public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -61,21 +63,23 @@ public class AndroidUtil {
                     @Override
                     public void run() {
 
-                        final File dir = new File(con.getFilesDir() + "MoviesApp Posters");
+                        dir = new File(con.getFilesDir() + "/MoviesApp_Posters");
                         if (!dir.exists()) {
                             dir.mkdir();
                             Log.i(LOG_TAG, "dir created");
                         }
 
 
-                        File file = new File(dir, url);
-
+                        file = new File(dir, String.valueOf(url.hashCode()));
+                        Log.i(LOG_TAG, "file name : " + file);
                         try {
                             file.createNewFile();
                             FileOutputStream ostream = new FileOutputStream(file);
                             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
                             ostream.flush();
                             ostream.close();
+                            updateMovieRecord.UpdateMoviePoster(String.valueOf(file), movieID);
+                            Log.i(LOG_TAG, "saved into the file system");
                         } catch (IOException e) {
                             Log.e("IOException", e.getLocalizedMessage());
                         }
@@ -86,12 +90,12 @@ public class AndroidUtil {
 
             @Override
             public void onBitmapFailed(Drawable errorDrawable) {
-                imageAdapter.movie_posters_imageView.setImageResource(R.drawable.ic_mood_bad_black_24dp);
+
             }
 
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {
-                imageAdapter.movie_posters_imageView.setImageResource(R.drawable.InternetSlowdown_Day);
+
             }
         };
         return target;

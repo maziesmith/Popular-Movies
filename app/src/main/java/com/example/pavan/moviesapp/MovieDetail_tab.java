@@ -135,12 +135,9 @@ public class MovieDetail_tab extends Fragment {
                 String confirmation = databaseInsertions.insertDataIntoMoviesTable(movieID, movieTitle, Double.parseDouble(voteAverage), releaseDate, poster_path, movieOverview);
 //                if (rowId != -1) {
 
-                Picasso.with(getContext())
-                        .load(BASE_POSTER_URL + poster_path).resize(165 * 2, 250 * 2)
-                        .into(androidUtil.getTarget(BASE_POSTER_URL + poster_path));
+                Picasso.with(getContext()).load(BASE_POSTER_URL + poster_path)
+                        .resize(185 * 2, 278 * 2).into(androidUtil.getTarget(BASE_POSTER_URL + poster_path, movieID));
 
-//                String str = androidUtil.getTarget(BASE_POSTER_URL+poster_path).toString();
-//                Log.i(LOG_TAG,"get target string : " + str);
 
                 if (confirmation == "inserted successfully")
 //                    Log.i(LOG_TAG, "row id in detail tab : " + rowId);

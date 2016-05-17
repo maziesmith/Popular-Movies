@@ -44,14 +44,13 @@ import retrofit.Retrofit;
  */
 public class MainActivityFragment extends Fragment {
 
+    public static ArrayList<String> Posters = new ArrayList<>();
+    public static ArrayList movieOverViews = new ArrayList();
+    public static ArrayList releaseDates = new ArrayList();
+    public static ArrayList titles = new ArrayList();
+    public static ArrayList voteAverageArray = new ArrayList();
+    public static ArrayList movie_ids_for_trailers_and_reviews = new ArrayList();
     private final String LOG_TAG = getClass().getSimpleName();
-
-    ArrayList<String> Posters = new ArrayList<>();
-    ArrayList movieOverViews = new ArrayList();
-    ArrayList releaseDates = new ArrayList();
-    ArrayList titles = new ArrayList();
-    ArrayList voteAverageArray = new ArrayList();
-    ArrayList movie_ids_for_trailers_and_reviews = new ArrayList();
     //    GridView gridView = null;
     @BindView(R.id.movie_grid_view)
     GridView gridView;
@@ -75,6 +74,8 @@ public class MainActivityFragment extends Fragment {
     private MovieDetail_PagerAdapter movieDetail_pagerAdapter;
     private MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
     private ValuesForDatabase valuesForDatabase = new ValuesForDatabase();
+    private ImageAdapter imageAdapter;
+    private AndroidUtil androidUtil;
 
     private List<MoviesResultsJSON> moviesResultsJSONs = new ArrayList<>();
     private Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
@@ -121,6 +122,8 @@ public class MainActivityFragment extends Fragment {
         databaseInsertions = new DatabaseInsertions(getContext());
         readDatabaseRecords = new ReadDatabaseRecords(getContext());
         builder = new AlertDialog.Builder(getContext());
+        imageAdapter = new ImageAdapter(getContext());
+        androidUtil = new AndroidUtil(getContext());
 
 
         sortByPref = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -132,6 +135,8 @@ public class MainActivityFragment extends Fragment {
 
         if (sortByPrefValue == getString(R.string.favorites_value)) {
             // TODO: offline data from the database.
+            readDatabaseRecords.fetchAllMovieDatabaseRecords();
+            gridView.setAdapter(new ImageAdapter(getContext(), Posters));
         }
 
 
@@ -178,7 +183,6 @@ public class MainActivityFragment extends Fragment {
                 }
             }
         });
-
 
         return rootView;
     }
@@ -244,8 +248,10 @@ public class MainActivityFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        if (checkConnectivityStatus.isOnline())
+        if (checkConnectivityStatus.isOnline()) {
             getMoviesListData();
+        }
+
         else
             builder.setMessage("We couldn't detect an INTERNET Connectivity to your device. You can view your favorite movies without Internet Connectivity").setCancelable(false)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -254,7 +260,7 @@ public class MainActivityFragment extends Fragment {
 
                             readDatabaseRecords.fetchAllMovieDatabaseRecords();
 
-                            if (readDatabaseRecords.NoDBContent)
+                            if (readDatabaseRecords.NoDBContent == 0)
                                 builder.setMessage("No favorite movies marked to show when the device is offline")
                                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                             @Override
@@ -263,15 +269,15 @@ public class MainActivityFragment extends Fragment {
                                             }
                                         });
 
-                            for (MoviesResultsJSON moviesResultsJSON : moviesResultsJSONs) {
-                                movie_ids_for_trailers_and_reviews.add(moviesResultsJSON.getId());
-                                movieOverViews.add(moviesResultsJSON.getOverView());
-                                Posters.add(moviesResultsJSON.getPoster_path());
-                                titles.add(moviesResultsJSON.getTitle());
-                                voteAverageArray.add(moviesResultsJSON.getVote_average());
-                                releaseDates.add(moviesResultsJSON.getRelease_date());
+                            Log.i(LOG_TAG, "titles array : " + titles);
+                            Log.i(LOG_TAG, "posters path : " + Posters);
+                            Log.i(LOG_TAG, "vote avg : " + voteAverageArray);
+                            Log.i(LOG_TAG, "release date : " + releaseDates);
+                            Log.i(LOG_TAG, "over views : " + movieOverViews);
+                            Log.i(LOG_TAG, "movie IDs : " + movie_ids_for_trailers_and_reviews);
 
-                            }
+                            gridView.setAdapter(new ImageAdapter(getContext(), Posters));
+
                         }
                     }).create().show();
     }

@@ -60,11 +60,13 @@ public class DatabaseInsertions {
                 Log.i(LOG_TAG, "cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID) :" + cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_OVERVIEW)));
             } while (cursor.moveToNext());
 
+            cursor.close();
             liteDatabase.setTransactionSuccessful();
             liteDatabase.endTransaction();
             databaseHelper.close();
             return "inserted successfully";
         } else {
+            cursor.close();
             liteDatabase.endTransaction();
             databaseHelper.close();
             return "insertion unsuccessful";

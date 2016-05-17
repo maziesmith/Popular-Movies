@@ -2,6 +2,7 @@ package com.example.pavan.moviesapp;
 
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import Utils.AndroidUtil;
 
 
 /**
@@ -24,6 +27,12 @@ public class ImageAdapter extends BaseAdapter {
     Context context;
     String BASE_POSTER_URL = "http://image.tmdb.org/t/p/w185/";
 
+    private AndroidUtil androidUtil;
+
+
+    public ImageAdapter(Context context) {
+        this.context = context;
+    }
 
     public ImageAdapter(Context context, ArrayList<String> Posters) {
         this.context = context;
@@ -53,16 +62,26 @@ public class ImageAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.movie_image, parent, false);
             movie_posters_imageView = (ImageView) convertView.findViewById(R.id.movie_poster_image_view);
+            androidUtil = new AndroidUtil(context);
         }
 
         else
             movie_posters_imageView = (ImageView) convertView;
 
+        if (androidUtil.isOnline())
          Picasso.with(context)
                  .load(BASE_POSTER_URL + moviePosters.get(position))
                 .noFade()
                 .resize(185 * 2, 278 * 2)
                 .into(movie_posters_imageView);
+        else
+            Picasso.with(context)
+                    .load(Uri.parse(moviePosters.get(position)))
+                    .noFade()
+                    .resize(185 * 2, 278 * 2)
+                    .into(movie_posters_imageView);
+
+
 
         return movie_posters_imageView;
     }

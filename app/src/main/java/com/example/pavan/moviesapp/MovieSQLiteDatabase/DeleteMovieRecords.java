@@ -61,6 +61,7 @@ public class DeleteMovieRecords {
 
         sqLiteDatabase.setTransactionSuccessful();
         sqLiteDatabase.endTransaction();
+        sqLiteDatabase.close();
         moviesDatabaseHelper.close();
 
         return "movie record deleted";

@@ -64,13 +64,18 @@ public class checkDatabaseRecords {
 
         if (cursor.getCount() == 0) {
             Log.i(LOG_TAG, "movie is not marked as favorite movie");
+            cursor.close();
+            sqLiteDatabase.close();
             moviesDatabaseHelper.close();
             return "not marked yet";
         } else {
             Log.i(LOG_TAG, "movie id : " + movie_ID + " is already inserted");
+            cursor.close();
+            sqLiteDatabase.close();
             moviesDatabaseHelper.close();
             return "already marked favorite";
         }
+
     }
 
 
