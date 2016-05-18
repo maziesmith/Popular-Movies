@@ -220,6 +220,7 @@ public class MovieDetail_tab extends Fragment {
         mark_favorite_button.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                androidUtil.deleteMoviePosterFromFileSystem(poster_path);
                 String confirmation = deleteMovieRecords.deleteFavoriteMovieRecord(movieID);
                 if (confirmation == "movie record deleted") {
                     FavoriteButtonNotMarked();
