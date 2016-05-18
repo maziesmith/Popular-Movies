@@ -20,6 +20,8 @@ import com.example.pavan.moviesapp.MovieSQLiteDatabase.ValuesForDatabase;
 import com.example.pavan.moviesapp.MovieSQLiteDatabase.checkDatabaseRecords;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+
 import Utils.AndroidUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +57,7 @@ public class MovieDetail_tab extends Fragment {
     private DatabaseInsertions databaseInsertions;
     private ValuesForDatabase valuesForDatabase;
     private AndroidUtil androidUtil;
+    private Picasso picasso;
     private ReadDatabaseRecords readDatabaseRecords;
     private Uri uri;
     private String confirmation;
@@ -107,6 +110,8 @@ public class MovieDetail_tab extends Fragment {
         deleteMovieRecords = new DeleteMovieRecords(getContext());
         readDatabaseRecords = new ReadDatabaseRecords(getContext());
         androidUtil = new AndroidUtil(getContext());
+        picasso = Picasso.with(getContext());
+
 
         release_date = (TextView) view.findViewById(R.id.release_year);
         movie_overview = (TextView) view.findViewById(R.id.movie_overview);
@@ -135,7 +140,7 @@ public class MovieDetail_tab extends Fragment {
                 String confirmation = databaseInsertions.insertDataIntoMoviesTable(movieID, movieTitle, Double.parseDouble(voteAverage), releaseDate, poster_path, movieOverview);
 //                if (rowId != -1) {
 
-                Picasso.with(getContext()).load(BASE_POSTER_URL + poster_path)
+                picasso.load(BASE_POSTER_URL + poster_path)
                         .resize(185 * 2, 278 * 2).into(androidUtil.getTarget(BASE_POSTER_URL + poster_path, movieID));
 
 
@@ -155,10 +160,17 @@ public class MovieDetail_tab extends Fragment {
         });
 
 
-        Picasso.with(getContext())
+        if (androidUtil.isOnline())
+            picasso
                 .load(BASE_POSTER_URL + poster_path)
                 .resize(165 * 2, 250 * 2)
                 .into(Poster);
+        else
+            picasso
+                    .load(Uri.fromFile(new File(poster_path)))
+                    .noFade()
+                    .resize(185 * 2, 278 * 2)
+                    .into(Poster);
 
 
         release_date.setText(releaseDate);

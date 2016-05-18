@@ -250,24 +250,23 @@ public class MainActivityFragment extends Fragment {
 
         if (checkConnectivityStatus.isOnline()) {
             getMoviesListData();
-        }
+        } else {
+            int confirmation = readDatabaseRecords.fetchAllMovieDatabaseRecords();
 
-        else
+            if (confirmation == 0)
+                builder.setMessage("Sorry,We couldn't detect an INTERNET Connectivity to your device & there are no movies marked favorite.\n click OK to close the app.")
+                        .setCancelable(false).setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                killActivity();
+                            }
+                        }).create().show();
+            else
             builder.setMessage("We couldn't detect an INTERNET Connectivity to your device. You can view your favorite movies without Internet Connectivity").setCancelable(false)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
-                            readDatabaseRecords.fetchAllMovieDatabaseRecords();
-
-                            if (readDatabaseRecords.NoDBContent == 0)
-                                builder.setMessage("No favorite movies marked to show when the device is offline")
-                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                killActivity();
-                                            }
-                                        });
 
                             Log.i(LOG_TAG, "titles array : " + titles);
                             Log.i(LOG_TAG, "posters path : " + Posters);
@@ -280,8 +279,8 @@ public class MainActivityFragment extends Fragment {
 
                         }
                     }).create().show();
+        }
     }
-
     @Override
     public void onPause() {
         super.onPause();

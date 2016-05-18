@@ -1,11 +1,9 @@
 package com.example.pavan.moviesapp.MovieSQLiteDatabase;
 
-import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.util.Log;
 
 /**
@@ -25,28 +23,7 @@ public class DeleteMovieRecords {
         this.context = context;
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public void deleteAllFavoriteMovieRecords() {
-        moviesDatabaseHelper = new MoviesDatabaseHelper(context, MoviesDatabaseHelper.DATABASE_NAME, null, MoviesDatabaseHelper.DATABASE_VERSION);
 
-        sqLiteDatabase = moviesDatabaseHelper.getWritableDatabase();
-
-        sqLiteDatabase.enableWriteAheadLogging();
-
-        sqLiteDatabase.beginTransaction();
-
-        int flag = sqLiteDatabase.delete(MovieContract.FavoriteMoviesDatabase.TABLE_NAME, null, null);
-
-        Log.i(LOG_TAG, "flag : " + flag);
-
-        Log.i(LOG_TAG, "favorite movie table records deleted");
-        sqLiteDatabase.setTransactionSuccessful();
-        sqLiteDatabase.endTransaction();
-        sqLiteDatabase.disableWriteAheadLogging();
-        moviesDatabaseHelper.close();
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public String deleteFavoriteMovieRecord(long movieID) {
         moviesDatabaseHelper = new MoviesDatabaseHelper(context, MoviesDatabaseHelper.DATABASE_NAME, null, MoviesDatabaseHelper.DATABASE_VERSION);
 

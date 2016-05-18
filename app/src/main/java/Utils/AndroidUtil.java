@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.util.Log;
 
 import com.example.pavan.moviesapp.ImageAdapter;
@@ -63,14 +64,14 @@ public class AndroidUtil {
                     @Override
                     public void run() {
 
-                        dir = new File(con.getFilesDir() + "/MoviesApp_Posters");
+                        dir = new File(Environment.getExternalStorageDirectory() + "/MoviesApp_Posters");
                         if (!dir.exists()) {
                             dir.mkdir();
                             Log.i(LOG_TAG, "dir created");
                         }
 
 
-                        file = new File(dir, String.valueOf(url.hashCode()));
+                        file = new File(dir, String.valueOf(url.hashCode()) + ".jpg");
                         Log.i(LOG_TAG, "file name : " + file);
                         try {
                             file.createNewFile();
@@ -100,6 +101,12 @@ public class AndroidUtil {
         };
         return target;
     }
+
+    public void deleteMoviePosterFromFileSystem() {
+
+    }
+
+
 }
 
 

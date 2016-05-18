@@ -19,7 +19,6 @@ public class ReadDatabaseRecords {
     // select statements
 
     private final String LOG_TAG = getClass().getSimpleName();
-    public int NoDBContent = 0;
     private MoviesDatabaseHelper moviesDatabaseHelper;
     private com.example.pavan.moviesapp.MovieSQLiteDatabase.ValuesForDatabase valuesForDatabase = new ValuesForDatabase();
     private ValuesForDatabase ValuesForDatabase = new ValuesForDatabase();
@@ -31,13 +30,15 @@ public class ReadDatabaseRecords {
     private MoviesResultsJSON moviesResultsJSON = new MoviesResultsJSON();
     private Set<Map.Entry<String, Object>> valueSet;
     private int index;
+
     private String columnName;
 
     public ReadDatabaseRecords(Context context) {
         this.context = context;
     }
 
-    public void fetchAllMovieDatabaseRecords() {
+
+    public int fetchAllMovieDatabaseRecords() {
 
         moviesDatabaseHelper = new MoviesDatabaseHelper(context, MoviesDatabaseHelper.DATABASE_NAME, null, MoviesDatabaseHelper.DATABASE_VERSION);
 
@@ -50,7 +51,7 @@ public class ReadDatabaseRecords {
 
 
         Log.i(LOG_TAG, "cursor.getCount() : " + cursor.getCount());
-        NoDBContent = cursor.getCount();
+
 
         if (cursor.getCount() != 0) {
             cursor.moveToFirst();
@@ -60,7 +61,7 @@ public class ReadDatabaseRecords {
                 Log.i(LOG_TAG, "cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID) :" + cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID)));
 
                 Log.i(LOG_TAG, "cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_TITLE) :" + cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_TITLE)));
-                MainActivityFragment.movie_ids_for_trailers_and_reviews.add(cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID)));
+                MainActivityFragment.movie_ids_for_trailers_and_reviews.add(Long.parseLong(cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID))));
 
                 MainActivityFragment.titles.add(cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_TITLE)));
 
@@ -82,11 +83,15 @@ public class ReadDatabaseRecords {
 
             } while (cursor.moveToNext());
 
+            cursor.close();
+            sqLiteDatabase.close();
+            moviesDatabaseHelper.close();
+            return cursor.getCount();
+        } else {
+            cursor.close();
+            sqLiteDatabase.close();
+            moviesDatabaseHelper.close();
+            return cursor.getCount();
         }
-
-        cursor.close();
-        sqLiteDatabase.close();
-        moviesDatabaseHelper.close();
-
     }
 }

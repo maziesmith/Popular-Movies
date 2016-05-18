@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -65,6 +66,7 @@ public class Trailers_tab extends Fragment {
     private MovieTrailerAdapter movieTrailerAdapter;
     private AndroidUtil androidUtil;
     private Uri uri;
+    private LinearLayout header;
 
     public Trailers_tab() {
         // Required empty public constructor
@@ -101,9 +103,12 @@ public class Trailers_tab extends Fragment {
         trailersListView = (ListView) view.findViewById(R.id.trailers_list_view);
         no_of_trailers = (TextView) view.findViewById(R.id.no_of_Trailers);
 
+        header = (LinearLayout) view.findViewById(R.id.header);
+
         androidUtil = new AndroidUtil(getContext());
 
         if (androidUtil.isOnline() != true) {
+            header.setVisibility(View.GONE);
             no_trailers_msg.setText("Trailers cannot be displayed when there is no Internet Connectivity");
             return view;
         }
@@ -134,8 +139,10 @@ public class Trailers_tab extends Fragment {
 
 //                    Log.i(LOG_TAG, "movieTrailerData.getResults().size() : " + movieTrailerData.getResults().size());
 
-                    if (movieTrailerData.getResults().size() == 0)
+                    if (movieTrailerData.getResults().size() == 0) {
+                        header.setVisibility(View.GONE);
                         no_trailers_msg.setText("No Trailers Found for this Movie");
+                    }
                     else
                         no_of_trailers.setText("Number of Trailers available : " + movieTrailerData.getResults().size());
 
