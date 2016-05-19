@@ -68,24 +68,5 @@ public class DatabaseInsertions {
             databaseHelper.close();
             return "insertion unsuccessful";
         }
-//        long movieRowId = liteDatabase.insert(MovieContract.FavoriteMoviesDatabase.TABLE_NAME, null, contentValues);
-
-//        if (movieRowId != -1)  // movieRowId value will be -1 if the insertion fails.
-//        {
-//            Log.d(LOG_TAG, "data successfully inserted into row : " + movieRowId);
-//        liteDatabase.setTransactionSuccessful();
-//        } else {
-//            Log.d(LOG_TAG, "data insertion failed, error code : " + movieRowId);
-//            liteDatabase.endTransaction();
-//            databaseHelper.close();
-//            return movieRowId;
-//        }
-
-
-//        liteDatabase.endTransaction();
-//        databaseHelper.close();
-
-//        return movieRowId;
     }
-
 }

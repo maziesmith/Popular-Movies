@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,7 +132,7 @@ public class MovieDetail_tab extends Fragment {
         else if (confirmation == "not marked yet")
             FavoriteButtonNotMarked();
 
-
+        sendMessage();
 
         mark_favorite_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,31 +184,6 @@ public class MovieDetail_tab extends Fragment {
         return view;
     }
 
-    public String getConfirmation() {
-        return confirmation;
-    }
-
-    public void setConfirmation(String confirmation) {
-        this.confirmation = confirmation;
-    }
-
-    public String getMovieTitle() {
-        return movieTitle;
-    }
-
-    public String getMovieOverview() {
-        return movieOverview;
-    }
-
-    Intent shareMovieAndTrailersInfo() {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, "Movie Title : " + getMovieTitle() + ", \n\n" + "Overview : " + getMovieOverview() +
-                ",\n\n" + "Trailer : " + uri);
-
-        return shareIntent;
-    }
-
     public void FavoriteButtonNotMarked() {
         mark_favorite_button.setText("Mark as Favorite");
         mark_favorite_button.setBackgroundColor(Color.parseColor("#029789"));
@@ -232,6 +209,15 @@ public class MovieDetail_tab extends Fragment {
             }
         });
 
+    }
+
+    private void sendMessage() {
+        Log.d(LOG_TAG, "Broadcasting message");
+        Intent intent = new Intent("share-movie-data");
+        // You can also include some extra data.
+        intent.putExtra("movieTitle", movieTitle);
+        intent.putExtra("synopsis", movieOverview);
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
     }
 }
 

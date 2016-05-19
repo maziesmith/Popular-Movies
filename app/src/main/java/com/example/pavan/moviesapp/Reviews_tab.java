@@ -92,8 +92,6 @@ public class Reviews_tab extends Fragment {
         movieDetail_tab = new MovieDetail_tab();
         fetchReviewsData();
 
-        Log.i(LOG_TAG, "movieDetail_tab.getConfirmation() : " + movieDetail_tab.getConfirmation());
-
 
         return view;
     }
