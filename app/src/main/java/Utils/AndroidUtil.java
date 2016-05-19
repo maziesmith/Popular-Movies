@@ -104,14 +104,12 @@ public class AndroidUtil {
 
     public void deleteMoviePosterFromFileSystem(String poster_path) {
 
-        File fdelete = new File(poster_path);
-        if (fdelete.exists()) {
-
-            if (fdelete.delete()) {
+        File moviePoster = new File(poster_path);
+        if (moviePoster.exists()) {
+            if (moviePoster.delete())
                 Log.i(LOG_TAG, "file Deleted :" + poster_path);
-            } else {
+            else
                 Log.i(LOG_TAG, "file not Deleted :" + poster_path);
-            }
         } else
             Log.i(LOG_TAG, "file does not exist in the file system to delete.");
     }

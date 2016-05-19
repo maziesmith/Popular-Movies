@@ -25,9 +25,6 @@ public class DatabaseInsertions {
         SQLiteDatabase liteDatabase = databaseHelper.getWritableDatabase();
         liteDatabase.beginTransaction();
 
-
-//        ContentValues contentValues = valuesForDatabase.getMovieTableValues();
-
         movie_title = DatabaseUtils.sqlEscapeString(movie_title);
         release_date = DatabaseUtils.sqlEscapeString(release_date);
         movie_poster = DatabaseUtils.sqlEscapeString(movie_poster);

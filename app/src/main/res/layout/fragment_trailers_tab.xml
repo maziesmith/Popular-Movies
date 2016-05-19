@@ -28,7 +28,7 @@
     <ListView
         android:id="@+id/trailers_list_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/header"></ListView>
 
     <TextView
