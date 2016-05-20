@@ -20,15 +20,12 @@ import butterknife.BindView;
 public class MovieTrailerAdapter extends BaseAdapter {
 
 
-    private final String LOG_TAG = getClass().getSimpleName();
 
     ArrayList<String> Name, Key;
 
     int noOfTrailers;
     Context context;
 
-//    ImageView trailer_thumbnail_image;
-//    TextView trailer_title;
 
     @BindView(R.id.trailer_title)
     TextView trailer_title;
@@ -65,14 +62,6 @@ public class MovieTrailerAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.trailers, parent, false);
             trailer_thumbnail_image = (ImageView) convertView.findViewById(R.id.trailer_thumbnail_image);
             trailer_title = (TextView) convertView.findViewById(R.id.trailer_title);
-
-//            Log.i(LOG_TAG, "position : " + position);
-//
-//            Log.i(LOG_TAG, "names in adapter pos : " + Name.get(position));
-//            Log.i(LOG_TAG, "keys in adapter pos : " + Key.get(position));
-//
-//            Log.i(LOG_TAG, "names in adapter : " + Name);
-//            Log.i(LOG_TAG, "keys in adapter : " + Key);
 
             trailer_title.setText(Name.get(position));
 

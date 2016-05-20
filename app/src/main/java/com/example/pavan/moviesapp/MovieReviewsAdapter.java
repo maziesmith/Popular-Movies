@@ -17,10 +17,9 @@ import butterknife.BindView;
  */
 public class MovieReviewsAdapter extends BaseAdapter {
 
-    private final String LOG_TAG = getClass().getSimpleName();
 
     int noOfReviews;
-    //    TextView review_author_name, review_content;
+
     @BindView(R.id.review_author_name)
     TextView review_author_name;
     @BindView(R.id.review_content)

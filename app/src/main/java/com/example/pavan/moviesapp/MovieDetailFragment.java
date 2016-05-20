@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 public class MovieDetailFragment extends Fragment {
 
 
-    private final String LOG_TAG = getClass().getSimpleName();
 
     private MovieDetail_PagerAdapter movieDetail_pagerAdapter;
 

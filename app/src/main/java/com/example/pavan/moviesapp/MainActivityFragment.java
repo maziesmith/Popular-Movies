@@ -20,9 +20,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.example.pavan.moviesapp.MovieSQLiteDatabase.DatabaseInsertions;
 import com.example.pavan.moviesapp.MovieSQLiteDatabase.ReadDatabaseRecords;
-import com.example.pavan.moviesapp.MovieSQLiteDatabase.ValuesForDatabase;
 import com.example.pavan.moviesapp.MovieSQLiteDatabase.checkDatabaseRecords;
 import com.example.pavan.moviesapp.NetworkActivity.MoviesListData;
 import com.example.pavan.moviesapp.NetworkActivity.MoviesResultsJSON;
@@ -51,7 +49,7 @@ public class MainActivityFragment extends Fragment {
     public static ArrayList voteAverageArray = new ArrayList();
     public static ArrayList movie_ids_for_trailers_and_reviews = new ArrayList();
     private final String LOG_TAG = getClass().getSimpleName();
-    //    GridView gridView = null;
+
     @BindView(R.id.movie_grid_view)
     GridView gridView;
 
@@ -70,12 +68,8 @@ public class MainActivityFragment extends Fragment {
     private MoviesListData moviesListData = new MoviesListData();
     private checkDatabaseRecords checkDatabaseRecords;
     private ReadDatabaseRecords readDatabaseRecords;
-    private DatabaseInsertions databaseInsertions;
     private MovieDetail_PagerAdapter movieDetail_pagerAdapter;
     private MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
-    private ValuesForDatabase valuesForDatabase = new ValuesForDatabase();
-    private ImageAdapter imageAdapter;
-    private AndroidUtil androidUtil;
 
     private List<MoviesResultsJSON> moviesResultsJSONs = new ArrayList<>();
     private Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
@@ -119,11 +113,8 @@ public class MainActivityFragment extends Fragment {
 
         checkConnectivityStatus = new AndroidUtil(getContext());
         checkDatabaseRecords = new checkDatabaseRecords(getContext());
-        databaseInsertions = new DatabaseInsertions(getContext());
         readDatabaseRecords = new ReadDatabaseRecords(getContext());
         builder = new AlertDialog.Builder(getContext());
-        imageAdapter = new ImageAdapter(getContext());
-        androidUtil = new AndroidUtil(getContext());
 
 
         sortByPref = PreferenceManager.getDefaultSharedPreferences(getContext());

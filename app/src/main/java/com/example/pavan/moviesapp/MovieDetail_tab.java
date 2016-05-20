@@ -1,24 +1,19 @@
 package com.example.pavan.moviesapp;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.pavan.moviesapp.MovieSQLiteDatabase.DatabaseInsertions;
 import com.example.pavan.moviesapp.MovieSQLiteDatabase.DeleteMovieRecords;
 import com.example.pavan.moviesapp.MovieSQLiteDatabase.ReadDatabaseRecords;
-import com.example.pavan.moviesapp.MovieSQLiteDatabase.ValuesForDatabase;
 import com.example.pavan.moviesapp.MovieSQLiteDatabase.checkDatabaseRecords;
 import com.squareup.picasso.Picasso;
 
@@ -50,19 +45,15 @@ public class MovieDetail_tab extends Fragment {
     private String movieTitle;
     private String voteAverage;
     private Long movieID;
-    private ListView trailersListView;
-    private String BASE_TRAILERS_AND_REVIEWS_URL = "http://api.themoviedb.org/3/movie/";
-    //    private TextView release_date, movie_overview, movie_title, vote_average, mark_favorite_button;
     private String BASE_POSTER_URL = "http://image.tmdb.org/t/p/w185/";
     private checkDatabaseRecords checkDatabaseRecords;
     private DeleteMovieRecords deleteMovieRecords;
     private DatabaseInsertions databaseInsertions;
-    private ValuesForDatabase valuesForDatabase;
+
     private AndroidUtil androidUtil;
     private Picasso picasso;
     private ReadDatabaseRecords readDatabaseRecords;
-    private Uri uri;
-    private String confirmation;
+    private String confirmation, confirmation2;
 
     public MovieDetail_tab() {
         // Required empty public constructor
@@ -82,6 +73,7 @@ public class MovieDetail_tab extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,7 +100,7 @@ public class MovieDetail_tab extends Fragment {
 
         checkDatabaseRecords = new checkDatabaseRecords(getContext());
         databaseInsertions = new DatabaseInsertions(getContext());
-        valuesForDatabase = new ValuesForDatabase();
+
         deleteMovieRecords = new DeleteMovieRecords(getContext());
         readDatabaseRecords = new ReadDatabaseRecords(getContext());
         androidUtil = new AndroidUtil(getContext());
@@ -121,10 +113,8 @@ public class MovieDetail_tab extends Fragment {
         vote_average = (TextView) view.findViewById(R.id.vote_average);
         mark_favorite_button = (TextView) view.findViewById(R.id.mark_favorite);
 
-//        deleteMovieRecords.deleteAllFavoriteMovieRecords();
 
-        valuesForDatabase.createMoviesDatabaseValues(movieID, movieTitle, Double.parseDouble(voteAverage), releaseDate, poster_path, movieOverview);
-//        readDatabaseRecords.fetchAllMovieDatabaseRecords();
+
         confirmation = checkDatabaseRecords.checkAllMovieRecordsWithDBRecords(movieID);
 
         if (confirmation == "already marked favorite")
@@ -132,33 +122,35 @@ public class MovieDetail_tab extends Fragment {
         else if (confirmation == "not marked yet")
             FavoriteButtonNotMarked();
 
-        sendMessage();
 
         mark_favorite_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-//                long rowId = databaseInsertions.insertDataIntoMoviesTable(movieID,movieTitle,Double.parseDouble(voteAverage),releaseDate,poster_path,movie_overview);
-                String confirmation = databaseInsertions.insertDataIntoMoviesTable(movieID, movieTitle, Double.parseDouble(voteAverage), releaseDate, poster_path, movieOverview);
-//                if (rowId != -1) {
-
-                picasso.load(BASE_POSTER_URL + poster_path)
-                        .resize(185 * 2, 278 * 2).into(androidUtil.getTarget(BASE_POSTER_URL + poster_path, movieID));
-
-
-                if (confirmation == "inserted successfully")
-//                    Log.i(LOG_TAG, "row id in detail tab : " + rowId);
-                {
-                    FavoriteButtonMarked();
-                    Toast.makeText(getContext(), "added into your favorite movies list.", Toast.LENGTH_SHORT).show();
+                if (confirmation == "already marked favorite") {
+                    Toast.makeText(getContext(), "Movie is already added in your favorites.", Toast.LENGTH_SHORT).show();
                 } else {
-                    FavoriteButtonNotMarked();
-//                    Log.i(LOG_TAG, "row id of inserted record : " + rowId);
-                    Toast.makeText(getContext(), " problem occurred while adding it to your favorite movies list.", Toast.LENGTH_SHORT).show();
+
+                    confirmation2 = databaseInsertions.insertDataIntoMoviesTable(movieID, movieTitle, Double.parseDouble(voteAverage), releaseDate, poster_path, movieOverview);
+
+
+                    picasso.load(BASE_POSTER_URL + poster_path)
+                            .resize(185 * 2, 278 * 2).into(androidUtil.getTarget(BASE_POSTER_URL + poster_path, movieID));
+
+
+                    if (confirmation2 == "inserted successfully")
+
+                    {
+                        FavoriteButtonMarked();
+                        Toast.makeText(getContext(), "added into your favorite movies list.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        FavoriteButtonNotMarked();
+
+                        Toast.makeText(getContext(), " problem occurred while adding it to your favorite movies list.", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
-
             }
-
         });
 
 
@@ -187,7 +179,6 @@ public class MovieDetail_tab extends Fragment {
     public void FavoriteButtonNotMarked() {
         mark_favorite_button.setText("Mark as Favorite");
         mark_favorite_button.setBackgroundColor(Color.parseColor("#029789"));
-        mark_favorite_button.cancelLongPress();
     }
 
     public void FavoriteButtonMarked() {
@@ -209,15 +200,6 @@ public class MovieDetail_tab extends Fragment {
             }
         });
 
-    }
-
-    private void sendMessage() {
-        Log.d(LOG_TAG, "Broadcasting message");
-        Intent intent = new Intent("share-movie-data");
-        // You can also include some extra data.
-        intent.putExtra("movieTitle", movieTitle);
-        intent.putExtra("synopsis", movieOverview);
-        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
     }
 }
 

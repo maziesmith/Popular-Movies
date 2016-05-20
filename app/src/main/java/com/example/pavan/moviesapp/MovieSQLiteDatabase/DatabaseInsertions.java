@@ -12,7 +12,6 @@ import android.util.Log;
 public class DatabaseInsertions {
     private final String LOG_TAG = getClass().getSimpleName();
     private Context con;
-    private ValuesForDatabase valuesForDatabase = new ValuesForDatabase();
     private Cursor cursor;
 
     public DatabaseInsertions(Context con) {

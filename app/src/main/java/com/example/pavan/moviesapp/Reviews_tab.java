@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.pavan.moviesapp.MovieSQLiteDatabase.ValuesForDatabase;
-import com.example.pavan.moviesapp.MovieSQLiteDatabase.checkDatabaseRecords;
 import com.example.pavan.moviesapp.NetworkActivity.MovieReviewsResponse;
 import com.example.pavan.moviesapp.NetworkActivity.ReviewsData;
 
@@ -30,20 +28,19 @@ import retrofit.Retrofit;
 public class Reviews_tab extends Fragment {
 
     private final String LOG_TAG = getClass().getSimpleName();
-    //    private TextView no_reviews_msg;
+
     @BindView(R.id.no_reviews_msg)
     TextView no_reviews_msg;
-    //    private ListView reviews_list_view;
+
     @BindView(R.id.reviews_list_view)
     ListView reviews_list_view;
     private long movieID;
     private List<MovieReviewsResponse> movieReviewsResponses;
     private Trailers_tab trailers_tab = new Trailers_tab();
     private MainActivityFragment mainActivityFragment = new MainActivityFragment();
-    private MovieDetail_tab movieDetail_tab;
     private MovieReviewsAdapter movieReviewsAdapter;
-    private ValuesForDatabase valuesForDatabase = new ValuesForDatabase();
-    private checkDatabaseRecords checkDatabaseRecords;
+
+
     private ReviewsData reviewsData = new ReviewsData();
     private AndroidUtil androidUtil;
     private AlertDialog.Builder builder;
@@ -88,8 +85,7 @@ public class Reviews_tab extends Fragment {
         }
 
         movieReviewsAdapter = new MovieReviewsAdapter(getContext());
-        checkDatabaseRecords = new checkDatabaseRecords(getContext());
-        movieDetail_tab = new MovieDetail_tab();
+
         fetchReviewsData();
 
 
@@ -104,13 +100,11 @@ public class Reviews_tab extends Fragment {
             @Override
             public void onResponse(Response<ReviewsData> response, Retrofit retrofit) {
 
-//                Log.i(LOG_TAG, "response status reviews : " + response.isSuccess());
 
                 reviewsData = response.body();
                 movieReviewsResponses = reviewsData.getReviewsResponse();
 
                 movieReviewsAdapter.noOfReviews = reviewsData.getReviewsResponse().size();
-//                Log.i(LOG_TAG, "response.body().getReviewsResponse() : " + response.body().getReviewsResponse().size());
 
                 if (response.body().getReviewsResponse().size() == 0) {
                     no_reviews_msg.setText("No Reviews Found for this Movie");

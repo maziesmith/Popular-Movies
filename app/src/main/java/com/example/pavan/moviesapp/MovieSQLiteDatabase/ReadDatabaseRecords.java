@@ -1,16 +1,11 @@
 package com.example.pavan.moviesapp.MovieSQLiteDatabase;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.pavan.moviesapp.MainActivityFragment;
-import com.example.pavan.moviesapp.NetworkActivity.MoviesResultsJSON;
-
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by pavan on 4/29/2016.
@@ -20,18 +15,11 @@ public class ReadDatabaseRecords {
 
     private final String LOG_TAG = getClass().getSimpleName();
     private MoviesDatabaseHelper moviesDatabaseHelper;
-    private com.example.pavan.moviesapp.MovieSQLiteDatabase.ValuesForDatabase valuesForDatabase = new ValuesForDatabase();
-    private ValuesForDatabase ValuesForDatabase = new ValuesForDatabase();
-    private MainActivityFragment mainActivityFragment = new MainActivityFragment();
     private SQLiteDatabase sqLiteDatabase;
-    private ContentValues contentValues;
+
     private Cursor cursor;
     private Context context;
-    private MoviesResultsJSON moviesResultsJSON = new MoviesResultsJSON();
-    private Set<Map.Entry<String, Object>> valueSet;
-    private int index;
 
-    private String columnName;
 
     public ReadDatabaseRecords(Context context) {
         this.context = context;
@@ -45,9 +33,7 @@ public class ReadDatabaseRecords {
 
         sqLiteDatabase = moviesDatabaseHelper.getReadableDatabase();
 
-//        contentValues = ValuesForDatabase.getMovieTableValues();
-
-        cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + MovieContract.FavoriteMoviesDatabase.TABLE_NAME, null);
+        cursor = sqLiteDatabase.query(MovieContract.FavoriteMoviesDatabase.TABLE_NAME, null, null, null, null, null, null);
 
 
         Log.i(LOG_TAG, "cursor.getCount() : " + cursor.getCount());

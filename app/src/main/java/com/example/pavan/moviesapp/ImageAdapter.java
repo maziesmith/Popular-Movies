@@ -36,9 +36,6 @@ public class ImageAdapter extends BaseAdapter {
     private AndroidUtil androidUtil;
 
 
-    public ImageAdapter(Context context) {
-        this.context = context;
-    }
 
     public ImageAdapter(Context context, ArrayList<String> Posters) {
         this.context = context;

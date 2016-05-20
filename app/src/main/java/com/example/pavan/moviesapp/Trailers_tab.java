@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,10 +35,10 @@ import retrofit.Retrofit;
 public class Trailers_tab extends Fragment {
 
     private final String LOG_TAG = getClass().getSimpleName();
-    //    private ListView trailersListView;
+
     @BindView(R.id.trailers_list_view)
     ListView trailersListView;
-    //    private TextView no_trailers_msg, no_of_trailers;
+
     @BindView(R.id.no_trailers_msg)
     TextView no_trailers_msg;
     @BindView(R.id.no_of_Trailers)
@@ -45,6 +46,7 @@ public class Trailers_tab extends Fragment {
     private String BASE_TRAILERS_AND_REVIEWS_URL = "http://api.themoviedb.org/3/movie/";
     private String BASE_YOUTUBE_URL = "http://www.youtube.com/watch";
     private long movieID;
+    private MovieDetail_tab movieDetail_tab = new MovieDetail_tab();
 
 
     private List<MovieTrailerResponse> movieTrailerResponses;
@@ -62,7 +64,6 @@ public class Trailers_tab extends Fragment {
     private RetrofitAPI api = retrofit.create(RetrofitAPI.class);
     private MainActivityFragment mainActivityFragment = new MainActivityFragment();
     private MovieTrailerData movieTrailerData = new MovieTrailerData();
-    private MovieDetail_tab movieDetail_tab = new MovieDetail_tab();
     private MovieTrailerAdapter movieTrailerAdapter;
     private AndroidUtil androidUtil;
     private Uri uri;
@@ -72,13 +73,20 @@ public class Trailers_tab extends Fragment {
         // Required empty public constructor
     }
 
-
     public static Trailers_tab newInstance(Long movieID) {
         Trailers_tab fragment = new Trailers_tab();
         Bundle args = new Bundle();
         args.putLong("movieID", movieID);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public Uri getUri() {
+        return uri;
+    }
+
+    public void setUri(Uri uri) {
+        this.uri = uri;
     }
 
     public RetrofitAPI getApi() {
@@ -116,8 +124,8 @@ public class Trailers_tab extends Fragment {
         movieTrailerAdapter = new MovieTrailerAdapter(getContext(), Name, Key);
 
 
-
         fetchTrailerData();
+
 
         return view;
     }
@@ -137,13 +145,10 @@ public class Trailers_tab extends Fragment {
 
                     movieTrailerResponses = movieTrailerData.getResults();
 
-//                    Log.i(LOG_TAG, "movieTrailerData.getResults().size() : " + movieTrailerData.getResults().size());
-
                     if (movieTrailerData.getResults().size() == 0) {
                         header.setVisibility(View.GONE);
                         no_trailers_msg.setText("No Trailers Found for this Movie");
-                    }
-                    else
+                    } else
                         no_of_trailers.setText("Number of Trailers available : " + movieTrailerData.getResults().size());
 
                     for (final MovieTrailerResponse movieTrailerResponses1 : movieTrailerResponses) {
@@ -157,22 +162,21 @@ public class Trailers_tab extends Fragment {
 
                         movieTrailerAdapter.noOfTrailers = movieTrailerData.getResults().size();
                     }
-//                    Log.i(LOG_TAG, "KEY ArrayList : " + Key);
-//                    Log.i(LOG_TAG, String.valueOf(size));
-//                    Log.i(LOG_TAG, String.valueOf(Name));
-//                    Log.i(LOG_TAG, String.valueOf(iso_639_1));
-//                    Log.i(LOG_TAG, String.valueOf(iso_3166_1));
-//                    Log.i(LOG_TAG, String.valueOf(id));
 
+                    uri = Uri.parse(BASE_YOUTUBE_URL).buildUpon().appendQueryParameter("v", movieTrailerAdapter.Key.get(1)).build();
+
+                    setUri(uri);
 
                     trailersListView.setAdapter(movieTrailerAdapter);
+
+                    sendMessage();
 
                     trailersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             uri = Uri.parse(BASE_YOUTUBE_URL).buildUpon()
                                     .appendQueryParameter("v", movieTrailerAdapter.Key.get(position)).build();
-                            YOUTUBE_INTENT = new Intent(Intent.ACTION_VIEW, uri);
+                            YOUTUBE_INTENT = new Intent(Intent.ACTION_VIEW, getUri());
                             startActivity(YOUTUBE_INTENT);
                         }
                     });
@@ -196,5 +200,11 @@ public class Trailers_tab extends Fragment {
 
     }
 
+    private void sendMessage() {
+        Log.d(LOG_TAG, "Broadcasting message");
+        Intent intent = new Intent("share-movie-data");
+        intent.putExtra("Trailer", getUri().toString());
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+    }
 
 }

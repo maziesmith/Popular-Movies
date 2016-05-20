@@ -30,9 +30,9 @@ public class TestDB extends AndroidTestCase {
     public void testCreateDb() throws Throwable {
 
         final HashSet<String> tableNameHashSet = new HashSet<>();
-        tableNameHashSet.add(MovieContract.MoviesDatabase.TABLE_NAME);
-        tableNameHashSet.add(MovieContract.MovieReviewsDB.TABLE_NAME);
-        tableNameHashSet.add(MovieContract.FavoriteMovie.TABLE_NAME);
+        tableNameHashSet.add(MovieContract.FavoriteMoviesDatabase.TABLE_NAME);
+        tableNameHashSet.add(MovieContract.FavoriteMoviesDatabase.TABLE_NAME);
+        tableNameHashSet.add(MovieContract.FavoriteMoviesDatabase.TABLE_NAME);
 
 
         mContext.deleteDatabase("movies.db");
@@ -49,20 +49,20 @@ public class TestDB extends AndroidTestCase {
 
         assertTrue("Error: Your database was created without movies table, reviews table, and favorite movies tables", tableNameHashSet.isEmpty());
 
-        cursor = sqLiteDatabase.rawQuery("PRAGMA table_info (" + MovieContract.MoviesDatabase.TABLE_NAME + ")", null);
+        cursor = sqLiteDatabase.rawQuery("PRAGMA table_info (" + MovieContract.FavoriteMoviesDatabase.TABLE_NAME + ")", null);
 
         assertTrue("Error: This means that we were unable to query the database for table information.", cursor.moveToFirst());
 
 
         final HashSet<String> moviesColumnHashSet = new HashSet<>();
 
-        moviesColumnHashSet.add(MovieContract.MoviesDatabase._ID);
-        moviesColumnHashSet.add(MovieContract.MoviesDatabase.COLUMN_MOVIE_ID);
-        moviesColumnHashSet.add(MovieContract.MoviesDatabase.COLUMN_MOVIE_OVERVIEW);
-        moviesColumnHashSet.add(MovieContract.MoviesDatabase.COLUMN_MOVIE_POSTER);
-        moviesColumnHashSet.add(MovieContract.MoviesDatabase.COLUMN_MOVIE_RELEASE_DATE);
-        moviesColumnHashSet.add(MovieContract.MoviesDatabase.COLUMN_MOVIE_TITLE);
-        moviesColumnHashSet.add(MovieContract.MoviesDatabase.COLUMN_MOVIE_VOTE_AVERAGE);
+        moviesColumnHashSet.add(MovieContract.FavoriteMoviesDatabase._ID);
+        moviesColumnHashSet.add(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID);
+        moviesColumnHashSet.add(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_OVERVIEW);
+        moviesColumnHashSet.add(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_POSTER);
+        moviesColumnHashSet.add(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_RELEASE_DATE);
+        moviesColumnHashSet.add(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_TITLE);
+        moviesColumnHashSet.add(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_VOTE_AVERAGE);
 
         int columnNameIndex = cursor.getColumnIndex("name");
         do {
@@ -74,14 +74,14 @@ public class TestDB extends AndroidTestCase {
         assertTrue("Error: The database doesn't contain all the required movies table columns", moviesColumnHashSet.isEmpty());
 
 
-        cursor = sqLiteDatabase.rawQuery("PRAGMA table_info (" + MovieContract.FavoriteMovie.TABLE_NAME + ")", null);
+        cursor = sqLiteDatabase.rawQuery("PRAGMA table_info (" + MovieContract.FavoriteMoviesDatabase.TABLE_NAME + ")", null);
 
         assertTrue("Error: This means that we were unable to query the database for favorite movies table information.", cursor.moveToFirst());
 
         final HashSet<String> favoriteMoviesColumnHashSet = new HashSet<>();
 
-        favoriteMoviesColumnHashSet.add(MovieContract.FavoriteMovie._ID);
-        favoriteMoviesColumnHashSet.add(MovieContract.FavoriteMovie.COLUMN_FAVORITE_MOVIES_ID);
+        favoriteMoviesColumnHashSet.add(MovieContract.FavoriteMoviesDatabase._ID);
+        favoriteMoviesColumnHashSet.add(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID);
 
         columnNameIndex = cursor.getColumnIndex("name");
         do {
@@ -92,15 +92,14 @@ public class TestDB extends AndroidTestCase {
 
         assertTrue("Error: The database doesn't contain all the required favorite movies table columns", favoriteMoviesColumnHashSet.isEmpty());
 
-        cursor = sqLiteDatabase.rawQuery("PRAGMA table_info (" + MovieContract.MovieReviewsDB.TABLE_NAME + ")", null);
+        cursor = sqLiteDatabase.rawQuery("PRAGMA table_info (" + MovieContract.FavoriteMoviesDatabase.TABLE_NAME + ")", null);
 
         assertTrue("Error: This means that we were unable to query the database for movies reviews table information.", cursor.moveToFirst());
 
         final HashSet<String> reviewsTableColumnHashSet = new HashSet<>();
 
-        reviewsTableColumnHashSet.add(MovieContract.MovieReviewsDB._ID);
-        reviewsTableColumnHashSet.add(MovieContract.MovieReviewsDB.COLUMN_MOVIE_ID);
-        reviewsTableColumnHashSet.add(MovieContract.MovieReviewsDB.COLUMN_MOVIE_REVIEWS);
+        reviewsTableColumnHashSet.add(MovieContract.FavoriteMoviesDatabase._ID);
+        reviewsTableColumnHashSet.add(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID);
 
         columnNameIndex = cursor.getColumnIndex("name");
         do {
@@ -120,11 +119,11 @@ public class TestDB extends AndroidTestCase {
 
         ContentValues contentValues = TestDatabaseUtil.createMoviesDatabaseValues();
 
-        long movieRowId = liteDatabase.insert(MovieContract.MoviesDatabase.TABLE_NAME, null, contentValues);
+        long movieRowId = liteDatabase.insert(MovieContract.FavoriteMoviesDatabase.TABLE_NAME, null, contentValues);
         assertTrue(movieRowId != -1); // movieRowId value will be -1 if the insertion fails.
 
         Cursor cursor = liteDatabase.query(
-                MovieContract.MoviesDatabase.TABLE_NAME,
+                MovieContract.FavoriteMoviesDatabase.TABLE_NAME,
                 null, null, null, null, null, null);
 
         assertTrue("Error: No Records returned from movies database query.", cursor.moveToFirst());
@@ -142,13 +141,13 @@ public class TestDB extends AndroidTestCase {
         MoviesDatabaseHelper databaseHelper = new MoviesDatabaseHelper(mContext, "movies.db", null, 1);
         SQLiteDatabase liteDatabase = databaseHelper.getWritableDatabase();
 
-        ContentValues contentValues = TestDatabaseUtil.createFavoriteMoviesDatabaseValues();
+        ContentValues contentValues = TestDatabaseUtil.createMoviesDatabaseValues();
 
-        long movieRowId = liteDatabase.insert(MovieContract.FavoriteMovie.TABLE_NAME, null, contentValues);
+        long movieRowId = liteDatabase.insert(MovieContract.FavoriteMoviesDatabase.TABLE_NAME, null, contentValues);
         assertTrue(movieRowId != -1); // movieRowId value will be -1 if the insertion fails.
 
         Cursor cursor = liteDatabase.query(
-                MovieContract.FavoriteMovie.TABLE_NAME,
+                MovieContract.FavoriteMoviesDatabase.TABLE_NAME,
                 null, null, null, null, null, null);
 
         assertTrue("Error: No Records returned from favorite movies database query.", cursor.moveToFirst());
@@ -167,13 +166,13 @@ public class TestDB extends AndroidTestCase {
         MoviesDatabaseHelper databaseHelper = new MoviesDatabaseHelper(mContext, "movies.db", null, 1);
         SQLiteDatabase liteDatabase = databaseHelper.getWritableDatabase();
 
-        ContentValues contentValues = TestDatabaseUtil.createMovieReviewsDatabaseValues();
+        ContentValues contentValues = TestDatabaseUtil.createMoviesDatabaseValues();
 
-        long movieRowId = liteDatabase.insert(MovieContract.FavoriteMovie.TABLE_NAME, null, contentValues);
+        long movieRowId = liteDatabase.insert(MovieContract.FavoriteMoviesDatabase.TABLE_NAME, null, contentValues);
         assertTrue(movieRowId != -1); // movieRowId value will be -1 if the insertion fails.
 
         Cursor cursor = liteDatabase.query(
-                MovieContract.MovieReviewsDB.TABLE_NAME,
+                MovieContract.FavoriteMoviesDatabase.TABLE_NAME,
                 null, null, null, null, null, null);
 
         assertTrue("Error: No Records returned from  movie reviews database query.", cursor.moveToFirst());

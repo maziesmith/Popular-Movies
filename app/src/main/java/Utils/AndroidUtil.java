@@ -8,8 +8,6 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 import android.util.Log;
 
-import com.example.pavan.moviesapp.ImageAdapter;
-import com.example.pavan.moviesapp.MainActivityFragment;
 import com.example.pavan.moviesapp.MovieSQLiteDatabase.UpdateMovieRecord;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -27,8 +25,6 @@ public class AndroidUtil {
     public File dir;
     public File file;
     private Context con;
-    private MainActivityFragment mainActivityFragment = new MainActivityFragment();
-    private ImageAdapter imageAdapter = new ImageAdapter(con, null);
     private UpdateMovieRecord updateMovieRecord;
 
 
@@ -36,16 +32,10 @@ public class AndroidUtil {
         this.con = con;
     }
 
-    public AndroidUtil() {
-
-    }
-
     public boolean isOnline() {
         boolean connected = false;
         ConnectivityManager connectivity = (ConnectivityManager) con.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity != null)
-            //Check Mobile data or Wifi net is present
-            //we are connected to a network
             connected = connectivity.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                     connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED;
 

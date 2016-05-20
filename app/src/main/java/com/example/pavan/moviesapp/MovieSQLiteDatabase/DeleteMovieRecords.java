@@ -1,6 +1,5 @@
 package com.example.pavan.moviesapp.MovieSQLiteDatabase;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,8 +13,6 @@ public class DeleteMovieRecords {
     private final String LOG_TAG = getClass().getSimpleName();
     private Context context;
     private MoviesDatabaseHelper moviesDatabaseHelper;
-    private ValuesForDatabase valuesForDatabase = new ValuesForDatabase();
-    private ContentValues contentValues;
     private Cursor cursor;
     private SQLiteDatabase sqLiteDatabase;
 
