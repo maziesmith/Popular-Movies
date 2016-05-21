@@ -1,8 +1,10 @@
-package com.example.pavan.moviesapp.MovieSQLiteDatabase;
+package com.example.pavan.moviesapp;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.test.AndroidTestCase;
+
+import com.example.pavan.moviesapp.MovieSQLiteDatabase.MovieContract;
 
 import java.util.Map;
 import java.util.Set;

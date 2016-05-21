@@ -7,7 +7,6 @@ import android.test.AndroidTestCase;
 
 import com.example.pavan.moviesapp.MovieSQLiteDatabase.MovieContract;
 import com.example.pavan.moviesapp.MovieSQLiteDatabase.MoviesDatabaseHelper;
-import com.example.pavan.moviesapp.MovieSQLiteDatabase.TestDatabaseUtil;
 
 import java.util.HashSet;
 

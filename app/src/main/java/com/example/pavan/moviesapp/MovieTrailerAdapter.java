@@ -58,7 +58,7 @@ public class MovieTrailerAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
+        if (convertView == null)
             convertView = LayoutInflater.from(context).inflate(R.layout.trailers, parent, false);
             trailer_thumbnail_image = (ImageView) convertView.findViewById(R.id.trailer_thumbnail_image);
             trailer_title = (TextView) convertView.findViewById(R.id.trailer_title);
@@ -72,7 +72,6 @@ public class MovieTrailerAdapter extends BaseAdapter {
                     .resize(150, 150).error(R.drawable.ic_play_arrow_black_84dp)
                     .into(trailer_thumbnail_image);
 
-        }
 
         return convertView;
     }

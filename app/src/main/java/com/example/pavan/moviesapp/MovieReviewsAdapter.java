@@ -52,7 +52,7 @@ public class MovieReviewsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        if (convertView == null) {
+        if (convertView == null)
             convertView = LayoutInflater.from(context).inflate(R.layout.reviews, parent, false);
 
             review_author_name = (TextView) convertView.findViewById(R.id.review_author_name);
@@ -61,8 +61,6 @@ public class MovieReviewsAdapter extends BaseAdapter {
 
             review_author_name.setText(author_name.get(position));
             review_content.setText(author_review.get(position));
-
-        }
 
         return convertView;
     }

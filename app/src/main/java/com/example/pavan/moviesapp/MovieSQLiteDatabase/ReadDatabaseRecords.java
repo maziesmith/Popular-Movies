@@ -43,7 +43,6 @@ public class ReadDatabaseRecords {
             cursor.moveToFirst();
 
             do {
-                Log.i(LOG_TAG, "cursor.getString(cursor.getPosition()) : " + cursor.getColumnName(cursor.getPosition()));
                 Log.i(LOG_TAG, "cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID) :" + cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID)));
 
                 Log.i(LOG_TAG, "cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_TITLE) :" + cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_TITLE)));
