@@ -48,6 +48,7 @@ public class MainActivityFragment extends Fragment {
     public static ArrayList releaseDates = new ArrayList();
     public static ArrayList titles = new ArrayList();
     public static ArrayList voteAverageArray = new ArrayList();
+
     public static ArrayList movie_ids_for_trailers_and_reviews = new ArrayList();
     private final String LOG_TAG = getClass().getSimpleName();
 
@@ -68,12 +69,12 @@ public class MainActivityFragment extends Fragment {
     private int confirmation;
 
     private MoviesListData moviesListData = new MoviesListData();
+    private List<MoviesResultsJSON> moviesResultsJSONs = new ArrayList<>();
     private checkDatabaseRecords checkDatabaseRecords;
     private ReadDatabaseRecords readDatabaseRecords;
     private MovieDetail_PagerAdapter movieDetail_pagerAdapter;
     private MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
 
-    private List<MoviesResultsJSON> moviesResultsJSONs = new ArrayList<>();
     private Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
     protected RetrofitAPI api = retrofit.create(RetrofitAPI.class);
 
@@ -185,11 +186,22 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onResponse(Response<MoviesListData> response, Retrofit retrofit) {
                 if (response.isSuccess()) {
+
                     moviesListData = response.body();
+
+                    moviesResultsJSONs.clear();
+
                     moviesResultsJSONs = response.body().getResults();
 
                     Log.i(LOG_TAG, "response.body() : " + response.body());
                     Log.i(LOG_TAG, "response.raw() : " + response.raw());
+
+                    movie_ids_for_trailers_and_reviews.clear();
+                    movieOverViews.clear();
+                    Posters.clear();
+                    titles.clear();
+                    voteAverageArray.clear();
+                    releaseDates.clear();
 
 
                     for (MoviesResultsJSON moviesResultsJSON : moviesResultsJSONs) {
@@ -201,6 +213,7 @@ public class MainActivityFragment extends Fragment {
                         voteAverageArray.add(moviesResultsJSON.getVote_average());
                         releaseDates.add(moviesResultsJSON.getRelease_date());
                     }
+
                 }
 
                 Log.i(LOG_TAG, "titles array : " + titles);
