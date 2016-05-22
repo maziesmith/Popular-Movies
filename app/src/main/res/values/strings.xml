@@ -25,7 +25,7 @@
     <!--sort movies based on the following values-->
     <string name="popularity_value" translatable="false">popularity.desc</string>
     <string name="vote_average" translatable="false">vote_count.desc</string>
-    <string name="favorites_value" translatable="false">Favorites</string>
+    <string name="favorites_value" translatable="false">favorites</string>
 
     <string-array name="sort_by_options">
         <item>@string/popularity</item>

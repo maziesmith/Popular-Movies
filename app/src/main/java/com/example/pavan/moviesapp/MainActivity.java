@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     MenuItem shareItem;
     ShareActionProvider shareActionProvider;
     String Trailer;
-    private Trailers_tab trailers_tab = new Trailers_tab();
+
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override

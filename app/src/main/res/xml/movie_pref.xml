@@ -7,6 +7,5 @@
         android:entryValues="@array/sort_by_values"
         android:key="@string/SortBy_key"
         android:selectable="true"
-        android:title="@string/SortBy_label"
-        />
+        android:title="@string/SortBy_label" />
 </PreferenceScreen>

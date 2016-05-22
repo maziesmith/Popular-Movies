@@ -3,6 +3,7 @@ package com.example.pavan.moviesapp;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -64,6 +65,7 @@ public class MainActivityFragment extends Fragment {
 
     private String BASE_URL = "http://api.themoviedb.org";
     private String API_KEY = "f9b69f2b96bfaa9b1748f12afbe14cea";
+    private int confirmation;
 
     private MoviesListData moviesListData = new MoviesListData();
     private checkDatabaseRecords checkDatabaseRecords;
@@ -124,13 +126,6 @@ public class MainActivityFragment extends Fragment {
         Log.i("sortByPrefValue", sortByPrefValue);
 
 
-        if (sortByPrefValue == getString(R.string.favorites_value)) {
-            // TODO: offline data from the database.
-            readDatabaseRecords.fetchAllMovieDatabaseRecords();
-            gridView.setAdapter(new ImageAdapter(getContext(), Posters));
-        }
-
-
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -178,7 +173,7 @@ public class MainActivityFragment extends Fragment {
         return rootView;
     }
 
-    protected void killActivity(){
+    protected void killActivity() {
         getActivity().finish();
     }
 
@@ -205,8 +200,8 @@ public class MainActivityFragment extends Fragment {
                         titles.add(moviesResultsJSON.getTitle());
                         voteAverageArray.add(moviesResultsJSON.getVote_average());
                         releaseDates.add(moviesResultsJSON.getRelease_date());
-                        }
                     }
+                }
 
                 Log.i(LOG_TAG, "titles array : " + titles);
                 Log.i(LOG_TAG, "posters path : " + Posters);
@@ -215,8 +210,8 @@ public class MainActivityFragment extends Fragment {
                 Log.i(LOG_TAG, "over views : " + movieOverViews);
                 Log.i(LOG_TAG, "movie IDs : " + movie_ids_for_trailers_and_reviews);
 
-                    gridView.setAdapter(new ImageAdapter(getContext(), Posters));
-                }
+                gridView.setAdapter(new ImageAdapter(getContext(), Posters));
+            }
 
 
             @Override
@@ -235,46 +230,82 @@ public class MainActivityFragment extends Fragment {
         });
     }
 
+    public void favoriteMoviesInfo() {
+        confirmation = readDatabaseRecords.fetchAllMovieDatabaseRecords();
+
+        if (confirmation == 0 && checkConnectivityStatus.isOnline())
+            builder.setMessage("There are no movies marked favorite.").setCancelable(false)
+                    .setPositiveButton("Change Sort preference", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(getContext(), SettingsActivity.class));
+                        }
+                    }).setNegativeButton("close", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    killActivity();
+                }
+            });
+        else if (confirmation == 0 && checkConnectivityStatus.isOnline() == false) {
+            builder.setMessage("Sorry,We couldn't detect an INTERNET Connectivity to your device & there are no movies marked favorite.\n click OK to close the app.")
+                    .setCancelable(false).setPositiveButton("OK",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            killActivity();
+                        }
+                    }).create().show();
+
+        } else if (confirmation != 0 && (checkConnectivityStatus.isOnline() || checkConnectivityStatus.isOnline() != true)) {
+            Log.i(LOG_TAG, "titles array : " + titles);
+            Log.i(LOG_TAG, "posters path : " + Posters);
+            Log.i(LOG_TAG, "vote avg : " + voteAverageArray);
+            Log.i(LOG_TAG, "release date : " + releaseDates);
+            Log.i(LOG_TAG, "over views : " + movieOverViews);
+            Log.i(LOG_TAG, "movie IDs : " + movie_ids_for_trailers_and_reviews);
+
+            gridView.setAdapter(new ImageAdapter(getContext(), Posters));
+        }
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(LOG_TAG, "onPause fired");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(LOG_TAG, "onResume fired");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i(LOG_TAG, "onStop fired");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(LOG_TAG, "onDestroy fired");
+    }
+
+
     @Override
     public void onStart() {
         super.onStart();
 
-        if (checkConnectivityStatus.isOnline()) {
+        Log.i(LOG_TAG, "onStart fired");
+
+        if (sortByPrefValue == getString(R.string.favorites_value))
+            favoriteMoviesInfo();
+        if (checkConnectivityStatus.isOnline())
             getMoviesListData();
-        } else {
-            int confirmation = readDatabaseRecords.fetchAllMovieDatabaseRecords();
-
-            if (confirmation == 0)
-                builder.setMessage("Sorry,We couldn't detect an INTERNET Connectivity to your device & there are no movies marked favorite.\n click OK to close the app.")
-                        .setCancelable(false).setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                killActivity();
-                            }
-                        }).create().show();
-            else
-            builder.setMessage("We couldn't detect an INTERNET Connectivity to your device. You can view your favorite movies without Internet Connectivity").setCancelable(false)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            Log.i(LOG_TAG, "titles array : " + titles);
-                            Log.i(LOG_TAG, "posters path : " + Posters);
-                            Log.i(LOG_TAG, "vote avg : " + voteAverageArray);
-                            Log.i(LOG_TAG, "release date : " + releaseDates);
-                            Log.i(LOG_TAG, "over views : " + movieOverViews);
-                            Log.i(LOG_TAG, "movie IDs : " + movie_ids_for_trailers_and_reviews);
-
-                            gridView.setAdapter(new ImageAdapter(getContext(), Posters));
-
-                        }
-                    }).create().show();
-        }
-    }
-    @Override
-    public void onPause() {
-        super.onPause();
+        else
+            favoriteMoviesInfo();
 
     }
 
