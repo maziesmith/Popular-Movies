@@ -69,7 +69,7 @@ public class MainActivityFragment extends Fragment {
     private int confirmation;
 
     private MoviesListData moviesListData = new MoviesListData();
-    private List<MoviesResultsJSON> moviesResultsJSONs = new ArrayList<>();
+    private List<MoviesResultsJSON> moviesResultsJSONs;
     private checkDatabaseRecords checkDatabaseRecords;
     private ReadDatabaseRecords readDatabaseRecords;
     private MovieDetail_PagerAdapter movieDetail_pagerAdapter;
@@ -113,6 +113,7 @@ public class MainActivityFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         gridView = (GridView) rootView.findViewById(R.id.movie_grid_view);
+
 
         checkConnectivityStatus = new AndroidUtil(getContext());
         checkDatabaseRecords = new checkDatabaseRecords(getContext());
@@ -189,20 +190,22 @@ public class MainActivityFragment extends Fragment {
 
                     moviesListData = response.body();
 
-                    moviesResultsJSONs.clear();
+                    moviesResultsJSONs = new ArrayList<>();
 
                     moviesResultsJSONs = response.body().getResults();
 
                     Log.i(LOG_TAG, "response.body() : " + response.body());
                     Log.i(LOG_TAG, "response.raw() : " + response.raw());
 
-                    movie_ids_for_trailers_and_reviews.clear();
-                    movieOverViews.clear();
-                    Posters.clear();
-                    titles.clear();
-                    voteAverageArray.clear();
-                    releaseDates.clear();
 
+                    if (movie_ids_for_trailers_and_reviews.isEmpty() != true) {
+                        movie_ids_for_trailers_and_reviews.clear();
+                        movieOverViews.clear();
+                        Posters.clear();
+                        titles.clear();
+                        voteAverageArray.clear();
+                        releaseDates.clear();
+                    }
 
                     for (MoviesResultsJSON moviesResultsJSON : moviesResultsJSONs) {
 
@@ -283,39 +286,14 @@ public class MainActivityFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        Log.i(LOG_TAG, "onPause fired");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(LOG_TAG, "onResume fired");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.i(LOG_TAG, "onStop fired");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(LOG_TAG, "onDestroy fired");
-    }
-
-
-    @Override
     public void onStart() {
         super.onStart();
 
         Log.i(LOG_TAG, "onStart fired");
 
-        if (sortByPrefValue == getString(R.string.favorites_value))
+        if (sortByPrefValue == getString(R.string.favorites))
             favoriteMoviesInfo();
-        if (checkConnectivityStatus.isOnline())
+        else if (checkConnectivityStatus.isOnline())
             getMoviesListData();
         else
             favoriteMoviesInfo();
