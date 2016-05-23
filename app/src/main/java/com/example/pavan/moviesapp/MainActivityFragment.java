@@ -261,9 +261,9 @@ public class MainActivityFragment extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
                     killActivity();
                 }
-            });
+            }).show();
         else if (confirmation == 0 && checkConnectivityStatus.isOnline() == false) {
-            builder.setMessage("Sorry,We couldn't detect an INTERNET Connectivity to your device & there are no movies marked favorite.\n click OK to close the app.")
+            builder.setMessage("Sorry,We couldn't detect an INTERNET Connectivity to your device & there are no movies marked favorite to display when the device OFFLINE.\n click OK to close the app.")
                     .setCancelable(false).setPositiveButton("OK",
                     new DialogInterface.OnClickListener() {
                         @Override
@@ -272,7 +272,7 @@ public class MainActivityFragment extends Fragment {
                         }
                     }).create().show();
 
-        } else if (confirmation != 0 && (checkConnectivityStatus.isOnline() || checkConnectivityStatus.isOnline() != true)) {
+        } else if (confirmation != 0 && (checkConnectivityStatus.isOnline() == true || checkConnectivityStatus.isOnline() != true)) {
             Log.i(LOG_TAG, "titles array : " + titles);
             Log.i(LOG_TAG, "posters path : " + Posters);
             Log.i(LOG_TAG, "vote avg : " + voteAverageArray);
@@ -291,7 +291,7 @@ public class MainActivityFragment extends Fragment {
 
         Log.i(LOG_TAG, "onStart fired");
 
-        if (sortByPrefValue == getString(R.string.favorites))
+        if (sortByPrefValue.equals(getString(R.string.favorites_value)))
             favoriteMoviesInfo();
         else if (checkConnectivityStatus.isOnline())
             getMoviesListData();

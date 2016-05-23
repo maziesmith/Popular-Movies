@@ -33,14 +33,19 @@ public class AndroidUtil {
     }
 
     public boolean isOnline() {
-        boolean connected = false;
         ConnectivityManager connectivity = (ConnectivityManager) con.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivity != null)
-            connected = connectivity.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                    connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED;
+        if (connectivity != null) {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null)
+                for (int i = 0; i < info.length; i++)
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                        return true;
+                    }
 
-        return connected;
+        }
+        return false;
     }
+
 
     public Target getTarget(final String url, final long movieID) {
         updateMovieRecord = new UpdateMovieRecord(con);
