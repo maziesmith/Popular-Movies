@@ -150,6 +150,7 @@ public class MainActivityFragment extends Fragment {
                 bundle.putString("movieTitle", movieTitle);
                 bundle.putLong("movieID", movie_id_for_trailers);
                 bundle.putString("voteAverage", voteAverage);
+                bundle.putString("sortPreference", sortByPrefValue);
 
                 Log.i(LOG_TAG, "bundle data : " + bundle);
 
@@ -226,7 +227,7 @@ public class MainActivityFragment extends Fragment {
                 Log.i(LOG_TAG, "over views : " + movieOverViews);
                 Log.i(LOG_TAG, "movie IDs : " + movie_ids_for_trailers_and_reviews);
 
-                gridView.setAdapter(new ImageAdapter(getContext(), Posters));
+                gridView.setAdapter(new ImageAdapter(getContext(), Posters, sortByPrefValue));
             }
 
 
@@ -280,7 +281,7 @@ public class MainActivityFragment extends Fragment {
             Log.i(LOG_TAG, "over views : " + movieOverViews);
             Log.i(LOG_TAG, "movie IDs : " + movie_ids_for_trailers_and_reviews);
 
-            gridView.setAdapter(new ImageAdapter(getContext(), Posters));
+            gridView.setAdapter(new ImageAdapter(getContext(), Posters, sortByPrefValue));
         }
 
     }

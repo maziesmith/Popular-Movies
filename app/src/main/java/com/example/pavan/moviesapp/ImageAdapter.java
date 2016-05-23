@@ -27,16 +27,17 @@ public class ImageAdapter extends BaseAdapter {
     ArrayList<String> moviePosters = new ArrayList<>();
     Context context;
     String BASE_POSTER_URL = "http://image.tmdb.org/t/p/w185/";
+    String preference;
 
     Picasso picasso;
 
     private AndroidUtil androidUtil;
 
 
-
-    public ImageAdapter(Context context, ArrayList<String> Posters) {
+    public ImageAdapter(Context context, ArrayList<String> Posters, String preference) {
         this.context = context;
         this.moviePosters = Posters;
+        this.preference = preference;
     }
 
     @Override
@@ -68,18 +69,19 @@ public class ImageAdapter extends BaseAdapter {
         else
             movie_posters_imageView = (ImageView) convertView;
 
-        if (androidUtil.isOnline())
-            picasso
-                 .load(BASE_POSTER_URL + moviePosters.get(position))
-                .noFade()
-                .resize(185 * 2, 278 * 2)
-                .into(movie_posters_imageView);
-        else
+        if (preference.equals("favorites") || androidUtil.isOnline() != true)
             picasso
                     .load(Uri.fromFile(new File(moviePosters.get(position))))
                     .noFade()
                     .resize(185 * 2, 278 * 2)
                     .into(movie_posters_imageView);
+
+        else if (androidUtil.isOnline())
+            picasso
+                 .load(BASE_POSTER_URL + moviePosters.get(position))
+                .noFade()
+                .resize(185 * 2, 278 * 2)
+                .into(movie_posters_imageView);
 
 
 

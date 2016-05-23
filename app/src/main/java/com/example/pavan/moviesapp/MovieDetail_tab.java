@@ -44,6 +44,7 @@ public class MovieDetail_tab extends Fragment {
     private String movieOverview;
     private String movieTitle;
     private String voteAverage;
+    private String preference;
     private Long movieID;
     private String BASE_POSTER_URL = "http://image.tmdb.org/t/p/w185/";
     private checkDatabaseRecords checkDatabaseRecords;
@@ -59,7 +60,7 @@ public class MovieDetail_tab extends Fragment {
         // Required empty public constructor
     }
 
-    public static MovieDetail_tab newInstance(String clickedPoster, String movieTitle, String releaseDate, String movieOverView, String voteAverage, Long movieID) {
+    public static MovieDetail_tab newInstance(String clickedPoster, String movieTitle, String releaseDate, String movieOverView, String voteAverage, Long movieID, String Preference) {
         MovieDetail_tab fragment = new MovieDetail_tab();
         Bundle args = new Bundle();
 
@@ -69,6 +70,7 @@ public class MovieDetail_tab extends Fragment {
         args.putString("movieTitle", movieTitle);
         args.putString("voteAverage", voteAverage);
         args.putLong("movieID", movieID);
+        args.putString("sortPreference", Preference);
 
         fragment.setArguments(args);
         return fragment;
@@ -85,6 +87,7 @@ public class MovieDetail_tab extends Fragment {
             movieTitle = getArguments().getString("movieTitle");
             voteAverage = getArguments().getString("voteAverage");
             movieID = getArguments().getLong("movieID");
+            preference = getArguments().getString("sortPreference");
         }
     }
 
@@ -149,16 +152,17 @@ public class MovieDetail_tab extends Fragment {
         });
 
 
-        if (androidUtil.isOnline())
-            picasso
-                .load(BASE_POSTER_URL + poster_path)
-                .resize(165 * 2, 250 * 2)
-                .into(Poster);
-        else
+        if (preference.equals("favorites") || androidUtil.isOnline() != true)
             picasso
                     .load(Uri.fromFile(new File(poster_path)))
                     .noFade()
                     .resize(185 * 2, 278 * 2)
+                    .into(Poster);
+
+        else if (androidUtil.isOnline())
+            picasso
+                    .load(BASE_POSTER_URL + poster_path)
+                    .resize(165 * 2, 250 * 2)
                     .into(Poster);
 
 
