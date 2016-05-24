@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">MoviesApp</string>
     <string name="movies_list">Pop Movies</string>
-    <string name="movie_detail">Movie Detail</string>
     <string name="action_settings">Settings</string>
 
 
@@ -14,35 +13,32 @@
     <string name="SortBy_key" translatable="false">chosenSortValue</string>
 
     <!--default value to be considered for sorting the movies -->
-    <string name="SortBy_default" translatable="false">popularity.desc</string>
+    <string name="SortBy_default" translatable="false">popular</string>
 
 
     <!--sort movies based on the following-->
     <string name="popularity" translatable="false">Popularity</string>
-    <string name="UserRating" translatable="false">User Rating</string>
+    <string name="TopRating" translatable="false">Top Rated</string>
     <string name="favorites" translatable="false">Favorites</string>
 
     <!--sort movies based on the following values-->
-    <string name="popularity_value" translatable="false">popularity.desc</string>
-    <string name="vote_average" translatable="false">vote_count.desc</string>
+    <string name="popularity_value" translatable="false">popular</string>
+    <string name="top_rated_value" translatable="false">top_rated</string>
     <string name="favorites_value" translatable="false">favorites</string>
 
     <string-array name="sort_by_options">
         <item>@string/popularity</item>
-        <item>@string/UserRating</item>
+        <item>@string/TopRating</item>
         <item>@string/favorites</item>
     </string-array>
 
     <string-array name="sort_by_values">
         <item>@string/popularity_value</item>
-        <item>@string/vote_average</item>
+        <item>@string/top_rated_value</item>
         <item>@string/favorites_value</item>
     </string-array>
 
-    <string name="title_activity_movie_detail">MovieDetail</string>
-
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="share_menu_item_title">Share</string>
 

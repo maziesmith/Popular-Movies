@@ -13,7 +13,7 @@ public class MovieTrailerResponse {
     private String key;
     private String name;
     private String site;
-    private Long size;
+    private Integer size;
     private String type;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -67,11 +67,11 @@ public class MovieTrailerResponse {
         this.site = site;
     }
 
-    public long getSize() {
+    public Integer getSize() {
         return size;
     }
 
-    public void setSize(Long size) {
+    public void setSize(Integer size) {
         this.size = size;
     }
 

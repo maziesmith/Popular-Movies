@@ -3,7 +3,9 @@ package com.example.pavan.moviesapp;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,23 +22,17 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 
 import Utils.AndroidUtil;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 
 public class MovieDetail_tab extends Fragment {
 
 
     private final String LOG_TAG = getClass().getSimpleName();
-    @BindView(R.id.release_year)
+
     TextView release_date;
-    @BindView(R.id.movie_overview)
     TextView movie_overview;
-    @BindView(R.id.movie_title)
     TextView movie_title;
-    @BindView(R.id.vote_average)
     TextView vote_average;
-    @BindView(R.id.mark_favorite)
     TextView mark_favorite_button;
     private ImageView Poster;
     private String poster_path;
@@ -55,6 +51,7 @@ public class MovieDetail_tab extends Fragment {
     private Picasso picasso;
     private ReadDatabaseRecords readDatabaseRecords;
     private String confirmation, confirmation2;
+
 
     public MovieDetail_tab() {
         // Required empty public constructor
@@ -76,6 +73,36 @@ public class MovieDetail_tab extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        Log.i(LOG_TAG, "onSaveInstanceState fired");
+
+        outState.putString("posterURL", poster_path);
+        outState.putString("releaseDate", releaseDate);
+        outState.putString("movieOverview", movieOverview);
+        outState.putString("movieTitle", movieTitle);
+        outState.putString("voteAverage", voteAverage);
+        outState.putLong("movieID", movieID);
+        outState.putString("sortPreference", preference);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Log.i(LOG_TAG, "onActivityCreated fired");
+
+        poster_path = savedInstanceState.getString("posterURL");
+        releaseDate = savedInstanceState.getString("releaseDate");
+        movieOverview = savedInstanceState.getString("movieOverview");
+        movieTitle = savedInstanceState.getString("movieTitle");
+        voteAverage = savedInstanceState.getString("voteAverage");
+        movieID = savedInstanceState.getLong("movieID");
+        preference = savedInstanceState.getString("sortPreference");
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,8 +123,6 @@ public class MovieDetail_tab extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_movie_detail_tab, container, false);
-
-        ButterKnife.bind(view);
 
         Poster = (ImageView) view.findViewById(R.id.movie_poster_in_movie_detail_activity);
 

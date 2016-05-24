@@ -52,7 +52,7 @@ public class Trailers_tab extends Fragment {
     private List<MovieTrailerResponse> movieTrailerResponses;
     private ArrayList<String> Key = new ArrayList<String>();
     private ArrayList<String> id = new ArrayList<String>();
-    private ArrayList<Long> size = new ArrayList<Long>();
+    private ArrayList<Integer> size = new ArrayList<>();
     private ArrayList<String> iso_3166_1 = new ArrayList<String>();
     private ArrayList<String> Name = new ArrayList<String>();
     private ArrayList<String> iso_639_1 = new ArrayList<String>();
@@ -91,6 +91,22 @@ public class Trailers_tab extends Fragment {
 
     public RetrofitAPI getApi() {
         return api;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        Log.i(LOG_TAG, "onSaveInstanceState fired");
+
+        outState.putLong("movieID", movieID);
+        outState.putStringArrayList("id", id);
+        outState.putStringArrayList("iso_3166_1", iso_3166_1);
+        outState.putStringArrayList("iso_639_1", iso_639_1);
+        outState.putStringArrayList("Name", Name);
+        outState.putStringArrayList("Key", Key);
+        outState.putIntegerArrayList("size", size);
+
     }
 
     @Override
