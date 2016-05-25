@@ -93,9 +93,13 @@ public class MainActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        Log.i(LOG_TAG, "onCreate in fired");
+    }
 
-        Log.i(LOG_TAG, "savedInstanceState in onCreate() : " + savedInstanceState);
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        Log.i(LOG_TAG, "savedInstanceState in onActivityCreated() : " + savedInstanceState);
 
         if (savedInstanceState != null) {
             movie_ids_for_trailers_and_reviews = (ArrayList) savedInstanceState.getSerializable("movie_ids_for_trailers_and_reviews");
@@ -106,15 +110,16 @@ public class MainActivityFragment extends Fragment {
             releaseDates = savedInstanceState.getStringArrayList("releaseDates");
 
 
-            Log.i(LOG_TAG, "in onCreate  titles array : " + titles);
-            Log.i(LOG_TAG, "in onCreate  posters path : " + Posters);
-            Log.i(LOG_TAG, "in onCreate  vote avg : " + voteAverageArray);
-            Log.i(LOG_TAG, "in onCreate  release date : " + releaseDates);
-            Log.i(LOG_TAG, "in onCreate  over views : " + movieOverViews);
-            Log.i(LOG_TAG, "in onCreate  movie IDs : " + movie_ids_for_trailers_and_reviews);
+            Log.i(LOG_TAG, "in onActivityCreated titles array : " + titles);
+            Log.i(LOG_TAG, "in onActivityCreated  posters path : " + Posters);
+            Log.i(LOG_TAG, "in onActivityCreated  vote avg : " + voteAverageArray);
+            Log.i(LOG_TAG, "in onActivityCreated  release date : " + releaseDates);
+            Log.i(LOG_TAG, "in onActivityCreated  over views : " + movieOverViews);
+            Log.i(LOG_TAG, "in onActivityCreated  movie IDs : " + movie_ids_for_trailers_and_reviews);
 
 
         }
+
     }
 
     @Override
@@ -313,7 +318,7 @@ public class MainActivityFragment extends Fragment {
         outState.putStringArrayList("titles", titles);
         outState.putSerializable("movie_ids_for_trailers_and_reviews", movie_ids_for_trailers_and_reviews);
         outState.putStringArrayList("voteAverageArray", voteAverageArray);
-        outState.putString("sortPreference", sortByPrefValue);
+//        outState.putString("sortPreference", sortByPrefValue);
 
         Log.i(LOG_TAG, "onSaveInstanceState() outState : " + outState);
     }
