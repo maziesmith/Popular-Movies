@@ -42,6 +42,12 @@ import retrofit.Retrofit;
  */
 public class MainActivityFragment extends Fragment {
 
+    public static ArrayList Movie_ids_for_trailers_and_reviews_D = new ArrayList();
+    public static ArrayList<String> Posters_D = new ArrayList<>();
+    public static ArrayList<String> MovieOverViews_D = new ArrayList<>();
+    public static ArrayList<String> ReleaseDates_D = new ArrayList<>();
+    public static ArrayList<String> titles_D = new ArrayList<>();
+    public static ArrayList VoteAverageArray_D = new ArrayList();
     private final String LOG_TAG = getClass().getSimpleName();
     GridView gridView;
     private ArrayList movie_ids_for_trailers_and_reviews = new ArrayList();
@@ -72,30 +78,6 @@ public class MainActivityFragment extends Fragment {
         return (context.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK)
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
-    }
-
-    public void setPosters(ArrayList<String> posters) {
-        Posters = posters;
-    }
-
-    public void setMovieOverViews(ArrayList<String> movieOverViewss) {
-        movieOverViews = movieOverViewss;
-    }
-
-    public void setReleaseDates(ArrayList<String> releaseDatess) {
-        releaseDates = releaseDatess;
-    }
-
-    public void setTitles(ArrayList<String> titless) {
-        titles = titless;
-    }
-
-    public void setVoteAverageArray(ArrayList voteAverageArrayy) {
-        voteAverageArray = voteAverageArrayy;
-    }
-
-    public void setMovie_ids_for_trailers_and_reviews(ArrayList movie_ids_for_trailers_and_reviewss) {
-        movie_ids_for_trailers_and_reviews = movie_ids_for_trailers_and_reviewss;
     }
 
     public String getAPI_KEY() {
@@ -132,6 +114,25 @@ public class MainActivityFragment extends Fragment {
 
 
         }
+//        else if (checkConnectivityStatus.isOnline() != true && savedInstanceState != null)
+//        {
+//            Movie_ids_for_trailers_and_reviews_D = (ArrayList) savedInstanceState.getSerializable("movie_ids_for_trailers_and_reviews");
+//            MovieOverViews_D = savedInstanceState.getStringArrayList("movieOverViews");
+//            Posters_D = savedInstanceState.getStringArrayList("Posters");
+//            titles_D = savedInstanceState.getStringArrayList("titles");
+//            VoteAverageArray_D = savedInstanceState.getStringArrayList("voteAverageArray");
+//            ReleaseDates_D= savedInstanceState.getStringArrayList("releaseDates");
+//
+//
+//            Log.i(LOG_TAG, "in onActivityCreated titles array : " + titles_D);
+//            Log.i(LOG_TAG, "in onActivityCreated  posters path : " + Posters_D);
+//            Log.i(LOG_TAG, "in onActivityCreated  vote avg : " + VoteAverageArray_D);
+//            Log.i(LOG_TAG, "in onActivityCreated  release date : " + ReleaseDates_D);
+//            Log.i(LOG_TAG, "in onActivityCreated  over views : " + MovieOverViews_D);
+//            Log.i(LOG_TAG, "in onActivityCreated  movie IDs : " + Movie_ids_for_trailers_and_reviews_D);
+//
+//
+//        }
 
     }
 
@@ -181,9 +182,9 @@ public class MainActivityFragment extends Fragment {
 
 
                 clickedPoster = Posters.get(position);
-                releaseDate = releaseDates.get(position).toString();
+                releaseDate = releaseDates.get(position);
                 movieOverView = movieOverViews.get(position);
-                voteAverage = (String) voteAverageArray.get(position);
+                voteAverage = voteAverageArray.get(position).toString();
                 movieTitle = titles.get(position).toString();
                 movie_id_for_trailers = (Long) movie_ids_for_trailers_and_reviews.get(position);
 
@@ -282,6 +283,13 @@ public class MainActivityFragment extends Fragment {
 
     public void favoriteMoviesInfo() {
         confirmation = readDatabaseRecords.fetchAllMovieDatabaseRecords();
+
+        movie_ids_for_trailers_and_reviews = Movie_ids_for_trailers_and_reviews_D;
+        titles = titles_D;
+        Posters = Posters_D;
+        voteAverageArray = VoteAverageArray_D;
+        releaseDates = ReleaseDates_D;
+        movieOverViews = MovieOverViews_D;
 
         if (confirmation == 0 && checkConnectivityStatus.isOnline())
             builder.setMessage("There are no movies marked favorite.").setCancelable(false)
