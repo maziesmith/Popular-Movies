@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Utils.AndroidUtil;
-import butterknife.BindView;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -43,38 +42,29 @@ import retrofit.Retrofit;
  */
 public class MainActivityFragment extends Fragment {
 
-    public static ArrayList<String> Posters = new ArrayList<>();
-    public static ArrayList movieOverViews = new ArrayList();
-    public static ArrayList releaseDates = new ArrayList();
-    public static ArrayList titles = new ArrayList();
-    public static ArrayList voteAverageArray = new ArrayList();
-
-    public static ArrayList movie_ids_for_trailers_and_reviews = new ArrayList();
     private final String LOG_TAG = getClass().getSimpleName();
-
-    @BindView(R.id.movie_grid_view)
     GridView gridView;
-
+    private ArrayList movie_ids_for_trailers_and_reviews = new ArrayList();
+    private ArrayList<String> Posters = new ArrayList<>();
+    private ArrayList<String> movieOverViews = new ArrayList<>();
+    private ArrayList<String> releaseDates = new ArrayList<>();
+    private ArrayList<String> titles = new ArrayList<>();
+    private ArrayList voteAverageArray = new ArrayList();
     private String clickedPoster, releaseDate, movieOverView, movieTitle, voteAverage, sortByPrefValue;
     private Long movie_id_for_trailers;
     private Bundle bundle = new Bundle();
-
-
     private AndroidUtil checkConnectivityStatus;
     private AlertDialog.Builder builder;
     private SharedPreferences sortByPref;
-
     private String BASE_URL = "http://api.themoviedb.org";
     private String API_KEY = "f9b69f2b96bfaa9b1748f12afbe14cea";
     private int confirmation;
-
     private MoviesListData moviesListData = new MoviesListData();
     private List<MoviesResultsJSON> moviesResultsJSONs = new ArrayList<>();
     private checkDatabaseRecords checkDatabaseRecords;
     private ReadDatabaseRecords readDatabaseRecords;
     private MovieDetail_PagerAdapter movieDetail_pagerAdapter;
     private MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
-
     private Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
     protected RetrofitAPI api = retrofit.create(RetrofitAPI.class);
 
@@ -82,6 +72,30 @@ public class MainActivityFragment extends Fragment {
         return (context.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK)
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+
+    public void setPosters(ArrayList<String> posters) {
+        Posters = posters;
+    }
+
+    public void setMovieOverViews(ArrayList<String> movieOverViewss) {
+        movieOverViews = movieOverViewss;
+    }
+
+    public void setReleaseDates(ArrayList<String> releaseDatess) {
+        releaseDates = releaseDatess;
+    }
+
+    public void setTitles(ArrayList<String> titless) {
+        titles = titless;
+    }
+
+    public void setVoteAverageArray(ArrayList voteAverageArrayy) {
+        voteAverageArray = voteAverageArrayy;
+    }
+
+    public void setMovie_ids_for_trailers_and_reviews(ArrayList movie_ids_for_trailers_and_reviewss) {
+        movie_ids_for_trailers_and_reviews = movie_ids_for_trailers_and_reviewss;
     }
 
     public String getAPI_KEY() {
@@ -92,7 +106,6 @@ public class MainActivityFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
     }
 
     @Override
@@ -169,8 +182,8 @@ public class MainActivityFragment extends Fragment {
 
                 clickedPoster = Posters.get(position);
                 releaseDate = releaseDates.get(position).toString();
-                movieOverView = (String) movieOverViews.get(position);
-                voteAverage = voteAverageArray.get(position).toString();
+                movieOverView = movieOverViews.get(position);
+                voteAverage = (String) voteAverageArray.get(position);
                 movieTitle = titles.get(position).toString();
                 movie_id_for_trailers = (Long) movie_ids_for_trailers_and_reviews.get(position);
 
@@ -312,13 +325,14 @@ public class MainActivityFragment extends Fragment {
 
         Log.i(LOG_TAG, "onSaveInstanceState() fired");
 
+        outState.putString("qwerty", "tewytdrjyc lingiyutfyi");
         outState.putStringArrayList("Posters", Posters);
         outState.putStringArrayList("releaseDates", releaseDates);
         outState.putStringArrayList("movieOverViews", movieOverViews);
         outState.putStringArrayList("titles", titles);
         outState.putSerializable("movie_ids_for_trailers_and_reviews", movie_ids_for_trailers_and_reviews);
         outState.putStringArrayList("voteAverageArray", voteAverageArray);
-//        outState.putString("sortPreference", sortByPrefValue);
+        outState.putString("sortPreference", sortByPrefValue);
 
         Log.i(LOG_TAG, "onSaveInstanceState() outState : " + outState);
     }

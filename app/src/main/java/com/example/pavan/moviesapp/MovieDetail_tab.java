@@ -86,6 +86,9 @@ public class MovieDetail_tab extends Fragment {
         outState.putString("voteAverage", voteAverage);
         outState.putLong("movieID", movieID);
         outState.putString("sortPreference", preference);
+
+        Log.i(LOG_TAG, " outState bundle of savedInstanceState() :  " + outState);
+
     }
 
     @Override
@@ -94,14 +97,17 @@ public class MovieDetail_tab extends Fragment {
 
         Log.i(LOG_TAG, "onActivityCreated fired");
 
-        poster_path = savedInstanceState.getString("posterURL");
-        releaseDate = savedInstanceState.getString("releaseDate");
-        movieOverview = savedInstanceState.getString("movieOverview");
-        movieTitle = savedInstanceState.getString("movieTitle");
-        voteAverage = savedInstanceState.getString("voteAverage");
-        movieID = savedInstanceState.getLong("movieID");
-        preference = savedInstanceState.getString("sortPreference");
+        Log.i(LOG_TAG, "savedInstanceState of onActivityCreated() :  " + savedInstanceState);
 
+        if (savedInstanceState != null) {
+            poster_path = savedInstanceState.getString("posterURL");
+            releaseDate = savedInstanceState.getString("releaseDate");
+            movieOverview = savedInstanceState.getString("movieOverview");
+            movieTitle = savedInstanceState.getString("movieTitle");
+            voteAverage = savedInstanceState.getString("voteAverage");
+            movieID = savedInstanceState.getLong("movieID");
+            preference = savedInstanceState.getString("sortPreference");
+        }
     }
 
     @Override
