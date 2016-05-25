@@ -325,7 +325,7 @@ public class MainActivityFragment extends Fragment {
 
         Log.i(LOG_TAG, "onSaveInstanceState() fired");
 
-        outState.putString("qwerty", "tewytdrjyc lingiyutfyi");
+
         outState.putStringArrayList("Posters", Posters);
         outState.putStringArrayList("releaseDates", releaseDates);
         outState.putStringArrayList("movieOverViews", movieOverViews);
