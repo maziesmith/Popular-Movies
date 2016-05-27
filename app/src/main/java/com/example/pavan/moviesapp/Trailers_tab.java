@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.example.pavan.moviesapp.NetworkActivity.MovieTrailerData;
 import com.example.pavan.moviesapp.NetworkActivity.MovieTrailerResponse;
 import com.example.pavan.moviesapp.NetworkActivity.RetrofitAPI;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +67,7 @@ public class Trailers_tab extends Fragment {
     private AndroidUtil androidUtil;
     private Uri uri;
     private LinearLayout header;
-    private int noOfTrailers;
+    private int noOfTrailers = 0;
 
     public Trailers_tab() {
         // Required empty public constructor
@@ -84,10 +83,6 @@ public class Trailers_tab extends Fragment {
 
     public Uri getUri() {
         return uri;
-    }
-
-    public void setUri(Uri uri) {
-        this.uri = uri;
     }
 
     public RetrofitAPI getApi() {
@@ -117,17 +112,11 @@ public class Trailers_tab extends Fragment {
 
         androidUtil = new AndroidUtil(getContext());
 
-        if (androidUtil.isOnline() != true) {
-            header.setVisibility(View.GONE);
-            no_trailers_msg.setText("Trailers cannot be displayed when there is no Internet Connectivity");
-            return view;
-        }
-
-
         return view;
     }
 
     public void viewSetup() {
+
         if (noOfTrailers == 0) {
             header.setVisibility(View.GONE);
             no_trailers_msg.setText("No Trailers Found for this Movie");
@@ -154,8 +143,16 @@ public class Trailers_tab extends Fragment {
     public void onStart() {
         super.onStart();
 
-        if (Key == null || Key.isEmpty())
+        if (androidUtil.isOnline() && (Key == null || Key.isEmpty()))
             fetchTrailerData();
+        else if (androidUtil.isOnline() != true) {
+            header.setVisibility(View.GONE);
+            no_trailers_msg.setText("Trailers cannot be displayed when there is no Internet Connectivity");
+        }
+
+
+
+
     }
 
     public void fetchTrailerData() {
@@ -189,13 +186,7 @@ public class Trailers_tab extends Fragment {
 
             @Override
             public void onFailure(Throwable t) {
-                Picasso.with(getContext())
-                        .load(R.drawable.ic_mood_bad_black_24dp)
-                        .centerCrop()
-                        .noFade()
-                        .resize(150, 150)
-                        .into(movieTrailerAdapter.trailer_thumbnail_image);
-                movieTrailerAdapter.trailer_title.setText("Sorry, we couldn't fetch the Trailer information");
+                no_trailers_msg.setText("We failed to fetch the List of trailers for this movie.\n Inconvenience regretted");
             }
         });
 

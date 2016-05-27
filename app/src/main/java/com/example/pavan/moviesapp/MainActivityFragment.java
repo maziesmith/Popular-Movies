@@ -237,6 +237,7 @@ public class MainActivityFragment extends Fragment {
     public void favoriteMoviesInfo() {
         confirmation = readDatabaseRecords.fetchAllMovieDatabaseRecords();
 
+
         movie_ids_for_trailers_and_reviews = Movie_ids_for_trailers_and_reviews_D;
         titles = titles_D;
         Posters = Posters_D;
@@ -292,11 +293,18 @@ public class MainActivityFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        if (sortByPrefValue.equals(getString(R.string.favorites_value)) && movie_ids_for_trailers_and_reviews.isEmpty())
+
+        if (!checkConnectivityStatus.isOnline() && movie_ids_for_trailers_and_reviews.isEmpty()) {
+            Log.i(LOG_TAG, "device offline");
             favoriteMoviesInfo();
-        else if (checkConnectivityStatus.isOnline() && (movie_ids_for_trailers_and_reviews.isEmpty() || movie_ids_for_trailers_and_reviews == null))
+        } else if (sortByPrefValue.equals(getString(R.string.favorites_value)) && movie_ids_for_trailers_and_reviews.isEmpty()) {
+            Log.i(LOG_TAG, "check pref");
+            favoriteMoviesInfo();
+        }
+        else if (checkConnectivityStatus.isOnline() && (movie_ids_for_trailers_and_reviews.isEmpty() || movie_ids_for_trailers_and_reviews == null)) {
+            Log.i(LOG_TAG, "retrofit kirikiri");
             getMoviesListData();
-        else if (!checkConnectivityStatus.isOnline() && movie_ids_for_trailers_and_reviews.isEmpty())
-            favoriteMoviesInfo();
+        }
+
     }
 }

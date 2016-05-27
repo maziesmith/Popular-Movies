@@ -22,11 +22,16 @@ public class MovieReviewsAdapter extends BaseAdapter {
     TextView review_author_name;
 
     TextView review_content;
-
-
     List<String> author_name = new ArrayList<>();
     List<String> author_review = new ArrayList<>();
     Context context;
+
+    public MovieReviewsAdapter(List<String> author_review, List<String> author_name, Context context, int noOfReviews) {
+        this.author_review = author_review;
+        this.author_name = author_name;
+        this.context = context;
+        this.noOfReviews = noOfReviews;
+    }
 
     public MovieReviewsAdapter(Context context) {
         this.context = context;

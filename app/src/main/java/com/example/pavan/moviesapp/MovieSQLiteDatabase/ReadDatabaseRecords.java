@@ -42,6 +42,16 @@ public class ReadDatabaseRecords {
         if (cursor.getCount() != 0) {
             cursor.moveToFirst();
 
+            if (!MainActivityFragment.Movie_ids_for_trailers_and_reviews_D.isEmpty()) {
+                MainActivityFragment.Movie_ids_for_trailers_and_reviews_D.clear();
+                MainActivityFragment.titles_D.clear();
+                MainActivityFragment.Posters_D.clear();
+                MainActivityFragment.VoteAverageArray_D.clear();
+                MainActivityFragment.ReleaseDates_D.clear();
+                MainActivityFragment.MovieOverViews_D.clear();
+            }
+
+
             do {
 
                 MainActivityFragment.Movie_ids_for_trailers_and_reviews_D.add(Long.parseLong(cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID))));

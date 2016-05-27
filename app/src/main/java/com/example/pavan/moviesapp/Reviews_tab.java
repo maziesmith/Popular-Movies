@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Utils.AndroidUtil;
-import butterknife.BindView;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
@@ -30,17 +29,17 @@ public class Reviews_tab extends Fragment {
 
     private final String LOG_TAG = getClass().getSimpleName();
 
-    @BindView(R.id.no_reviews_msg)
+
     TextView no_reviews_msg;
 
-    @BindView(R.id.reviews_list_view)
     ListView reviews_list_view;
     private long movieID;
     private List<MovieReviewsResponse> movieReviewsResponses;
     private Trailers_tab trailers_tab = new Trailers_tab();
     private MainActivityFragment mainActivityFragment = new MainActivityFragment();
-    private MovieReviewsAdapter movieReviewsAdapter;
-
+    private ArrayList author_name = new ArrayList();
+    private ArrayList author_review = new ArrayList();
+    private int noOfReviews;
 
     private ReviewsData reviewsData = new ReviewsData();
     private AndroidUtil androidUtil;
@@ -85,8 +84,6 @@ public class Reviews_tab extends Fragment {
             return view;
         }
 
-        movieReviewsAdapter = new MovieReviewsAdapter(getContext());
-
 
 
         return view;
@@ -105,16 +102,16 @@ public class Reviews_tab extends Fragment {
                 reviewsData = response.body();
                 movieReviewsResponses = reviewsData.getReviewsResponse();
 
-                movieReviewsAdapter.noOfReviews = reviewsData.getReviewsResponse().size();
+                noOfReviews = reviewsData.getReviewsResponse().size();
 
                 if (response.body().getReviewsResponse().size() == 0) {
                     no_reviews_msg.setText("No Reviews Found for this Movie");
                 } else
                 for (MovieReviewsResponse movieReviewsResponse : movieReviewsResponses) {
-                    movieReviewsAdapter.author_name.add(movieReviewsResponse.getAuthor());
-                    movieReviewsAdapter.author_review.add(movieReviewsResponse.getContent());
+                    author_name.add(movieReviewsResponse.getAuthor());
+                    author_review.add(movieReviewsResponse.getContent());
                 }
-                reviews_list_view.setAdapter(movieReviewsAdapter);
+                reviews_list_view.setAdapter(new MovieReviewsAdapter(author_review, author_name, getContext(), noOfReviews));
             }
 
             @Override
@@ -135,9 +132,9 @@ public class Reviews_tab extends Fragment {
         super.onSaveInstanceState(outState);
 
 
-        outState.putStringArrayList("author_name", (ArrayList<String>) movieReviewsAdapter.author_name);
-        outState.putStringArrayList("author_review", (ArrayList<String>) movieReviewsAdapter.author_review);
-        outState.putInt("noOfReviews", movieReviewsAdapter.noOfReviews);
+        outState.putStringArrayList("author_name", author_name);
+        outState.putStringArrayList("author_review", author_review);
+        outState.putInt("noOfReviews", noOfReviews);
     }
 
     @Override
@@ -145,14 +142,16 @@ public class Reviews_tab extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState != null) {
-            movieReviewsAdapter.author_name = savedInstanceState.getStringArrayList("author_name");
-            movieReviewsAdapter.author_review = savedInstanceState.getStringArrayList("author_review");
-            movieReviewsAdapter.noOfReviews = savedInstanceState.getInt("noOfReviews");
+            author_name = savedInstanceState.getStringArrayList("author_name");
+            author_review = savedInstanceState.getStringArrayList("author_review");
+            noOfReviews = savedInstanceState.getInt("noOfReviews");
 
-            if (movieReviewsAdapter.noOfReviews == 0)
+            if (!androidUtil.isOnline())
+                no_reviews_msg.setText("Reviews cannot be shown when there is no Internet Connectivity");
+            else if (noOfReviews == 0)
                 no_reviews_msg.setText("No Reviews Found for this Movie");
             else
-                reviews_list_view.setAdapter(movieReviewsAdapter);
+                reviews_list_view.setAdapter(new MovieReviewsAdapter(author_review, author_name, getContext(), noOfReviews));
 
         }
     }
@@ -161,7 +160,7 @@ public class Reviews_tab extends Fragment {
     public void onStart() {
         super.onStart();
 
-        if (movieReviewsAdapter.author_name.isEmpty() || movieReviewsAdapter.author_name == null)
+        if (androidUtil.isOnline() && (author_name.isEmpty() || author_name == null))
             fetchReviewsData();
     }
 }
