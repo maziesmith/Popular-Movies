@@ -38,7 +38,7 @@ public class SettingsActivity extends PreferenceActivity implements
             ListPreference listPreference = (ListPreference) preference;
             int prefIndex = listPreference.findIndexOfValue(stringValue);
 
-            if (prefIndex > 0){
+            if (prefIndex >= 0) {
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
             }
         }
