@@ -3,7 +3,6 @@ package com.example.pavan.moviesapp.MovieSQLiteDatabase;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 /**
  * Created by pavan on 4/29/2016.
@@ -34,18 +33,14 @@ public class checkDatabaseRecords {
         String query = "SELECT movie_id FROM " + MovieContract.FavoriteMoviesDatabase.TABLE_NAME + " WHERE movie_id = " + movie_ID;
 
 
-        Log.i(LOG_TAG, "Query : " + query);
-
         cursor = sqLiteDatabase.rawQuery(query, null);
 
         if (cursor.getCount() == 0) {
-            Log.i(LOG_TAG, "movie is not marked as favorite movie");
             cursor.close();
             sqLiteDatabase.close();
             moviesDatabaseHelper.close();
             return "not marked yet";
         } else {
-            Log.i(LOG_TAG, "movie id : " + movie_ID + " is already inserted");
             cursor.close();
             sqLiteDatabase.close();
             moviesDatabaseHelper.close();

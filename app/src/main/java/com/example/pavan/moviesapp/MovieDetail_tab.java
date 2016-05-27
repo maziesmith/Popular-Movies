@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,7 +76,6 @@ public class MovieDetail_tab extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        Log.i(LOG_TAG, "onSaveInstanceState fired");
 
         outState.putString("posterURL", poster_path);
         outState.putString("releaseDate", releaseDate);
@@ -87,17 +85,12 @@ public class MovieDetail_tab extends Fragment {
         outState.putLong("movieID", movieID);
         outState.putString("sortPreference", preference);
 
-        Log.i(LOG_TAG, " outState bundle of savedInstanceState() :  " + outState);
-
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Log.i(LOG_TAG, "onActivityCreated fired");
-
-        Log.i(LOG_TAG, "savedInstanceState of onActivityCreated() :  " + savedInstanceState);
 
         if (savedInstanceState != null) {
             poster_path = savedInstanceState.getString("posterURL");
@@ -108,6 +101,11 @@ public class MovieDetail_tab extends Fragment {
             movieID = savedInstanceState.getLong("movieID");
             preference = savedInstanceState.getString("sortPreference");
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override

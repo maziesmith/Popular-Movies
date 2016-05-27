@@ -60,14 +60,11 @@ public class AndroidUtil {
                     public void run() {
 
                         dir = new File(Environment.getExternalStorageDirectory() + "/MoviesApp_Posters");
-                        if (!dir.exists()) {
+                        if (!dir.exists())
                             dir.mkdir();
-                            Log.i(LOG_TAG, "dir created");
-                        }
 
 
                         file = new File(dir, String.valueOf(url.hashCode()) + ".jpg");
-                        Log.i(LOG_TAG, "file name : " + file);
                         try {
                             file.createNewFile();
                             FileOutputStream ostream = new FileOutputStream(file);
@@ -75,7 +72,6 @@ public class AndroidUtil {
                             ostream.flush();
                             ostream.close();
                             updateMovieRecord.UpdateMoviePoster(String.valueOf(file), movieID);
-                            Log.i(LOG_TAG, "saved into the file system");
                         } catch (IOException e) {
                             Log.e("IOException", e.getLocalizedMessage());
                         }

@@ -9,7 +9,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -27,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
             // Get extra data included in the Intent
 
             Trailer = intent.getStringExtra("Trailer");
-            Log.d(LOG_TAG, "Got message: Trailer : " + Trailer);
-
             if (shareActionProvider != null) {
                 shareActionProvider.setShareIntent(shareMovieAndTrailersInfo());
             }
@@ -78,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     Intent shareMovieAndTrailersInfo() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, "Trailer : " + Trailer);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "Trailer : \n" + Trailer);
 
         return shareIntent;
     }

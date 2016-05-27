@@ -3,9 +3,9 @@ package com.example.pavan.moviesapp;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,10 +64,11 @@ public class Trailers_tab extends Fragment {
     private RetrofitAPI api = retrofit.create(RetrofitAPI.class);
     private MainActivityFragment mainActivityFragment = new MainActivityFragment();
     private MovieTrailerData movieTrailerData = new MovieTrailerData();
-    private MovieTrailerAdapter movieTrailerAdapter;
+    private MovieTrailerAdapter movieTrailerAdapter = new MovieTrailerAdapter();
     private AndroidUtil androidUtil;
     private Uri uri;
     private LinearLayout header;
+    private int noOfTrailers;
 
     public Trailers_tab() {
         // Required empty public constructor
@@ -93,21 +94,6 @@ public class Trailers_tab extends Fragment {
         return api;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        Log.i(LOG_TAG, "onSaveInstanceState fired");
-
-        outState.putLong("movieID", movieID);
-        outState.putStringArrayList("id", id);
-        outState.putStringArrayList("iso_3166_1", iso_3166_1);
-        outState.putStringArrayList("iso_639_1", iso_639_1);
-        outState.putStringArrayList("Name", Name);
-        outState.putStringArrayList("Key", Key);
-        outState.putIntegerArrayList("size", size);
-
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -137,13 +123,39 @@ public class Trailers_tab extends Fragment {
             return view;
         }
 
-        movieTrailerAdapter = new MovieTrailerAdapter(getContext(), Name, Key);
-
-
-        fetchTrailerData();
-
 
         return view;
+    }
+
+    public void viewSetup() {
+        if (noOfTrailers == 0) {
+            header.setVisibility(View.GONE);
+            no_trailers_msg.setText("No Trailers Found for this Movie");
+        } else {
+            no_of_trailers.setText("Number of Trailers available : " + noOfTrailers);
+            uri = Uri.parse(BASE_YOUTUBE_URL).buildUpon().appendQueryParameter("v", Key.get(1)).build();
+            sendMessage();
+            trailersListView.setAdapter(new MovieTrailerAdapter(getContext(), Name, Key, noOfTrailers));
+
+            trailersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    uri = Uri.parse(BASE_YOUTUBE_URL).buildUpon()
+                            .appendQueryParameter("v", Key.get(position)).build();
+                    YOUTUBE_INTENT = new Intent(Intent.ACTION_VIEW, getUri());
+                    startActivity(YOUTUBE_INTENT);
+                }
+            });
+        }
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (Key == null || Key.isEmpty())
+            fetchTrailerData();
     }
 
     public void fetchTrailerData() {
@@ -161,49 +173,22 @@ public class Trailers_tab extends Fragment {
 
                     movieTrailerResponses = movieTrailerData.getResults();
 
-                    if (movieTrailerData.getResults().size() == 0) {
-                        header.setVisibility(View.GONE);
-                        no_trailers_msg.setText("No Trailers Found for this Movie");
-                    } else
-                        no_of_trailers.setText("Number of Trailers available : " + movieTrailerData.getResults().size());
+                    noOfTrailers = movieTrailerData.getResults().size();
 
                     for (final MovieTrailerResponse movieTrailerResponses1 : movieTrailerResponses) {
 
-                        id.add(movieTrailerResponses1.getId());
-                        iso_3166_1.add(movieTrailerResponses1.getIso_3166_1());
-                        iso_639_1.add(movieTrailerResponses1.getIso_639_1());
+
                         Name.add(movieTrailerResponses1.getName());
                         Key.add(movieTrailerResponses1.getKey());
-                        size.add(movieTrailerResponses1.getSize());
 
-                        movieTrailerAdapter.noOfTrailers = movieTrailerData.getResults().size();
+                        noOfTrailers = movieTrailerData.getResults().size();
                     }
-
-                    uri = Uri.parse(BASE_YOUTUBE_URL).buildUpon().appendQueryParameter("v", movieTrailerAdapter.Key.get(1)).build();
-
-                    setUri(uri);
-
-                    trailersListView.setAdapter(movieTrailerAdapter);
-
-                    sendMessage();
-
-                    trailersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            uri = Uri.parse(BASE_YOUTUBE_URL).buildUpon()
-                                    .appendQueryParameter("v", movieTrailerAdapter.Key.get(position)).build();
-                            YOUTUBE_INTENT = new Intent(Intent.ACTION_VIEW, getUri());
-                            startActivity(YOUTUBE_INTENT);
-                        }
-                    });
-
+                    viewSetup();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-
-                Log.i(LOG_TAG, "failed to fetch trailer data....");
                 Picasso.with(getContext())
                         .load(R.drawable.ic_mood_bad_black_24dp)
                         .centerCrop()
@@ -217,10 +202,33 @@ public class Trailers_tab extends Fragment {
     }
 
     private void sendMessage() {
-        Log.d(LOG_TAG, "Broadcasting message");
         Intent intent = new Intent("share-movie-data");
         intent.putExtra("Trailer", getUri().toString());
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putLong("movieID", movieID);
+        outState.putStringArrayList("Name", Name);
+        outState.putStringArrayList("Key", Key);
+        outState.putInt("noOfTrailers", noOfTrailers);
+
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            movieID = savedInstanceState.getLong("movieID");
+            Name = savedInstanceState.getStringArrayList("Name");
+            Key = savedInstanceState.getStringArrayList("Key");
+            noOfTrailers = savedInstanceState.getInt("noOfTrailers");
+            viewSetup();
+        }
+    }
 }

@@ -2,9 +2,9 @@ package com.example.pavan.moviesapp;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.pavan.moviesapp.NetworkActivity.MovieReviewsResponse;
 import com.example.pavan.moviesapp.NetworkActivity.ReviewsData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Utils.AndroidUtil;
@@ -86,13 +87,13 @@ public class Reviews_tab extends Fragment {
 
         movieReviewsAdapter = new MovieReviewsAdapter(getContext());
 
-        fetchReviewsData();
 
 
         return view;
     }
 
     public void fetchReviewsData() {
+
 
         Call<ReviewsData> reviewsDataCall = trailers_tab.getApi().REVIEWS_DATA_CALL(movieID, mainActivityFragment.getAPI_KEY());
 
@@ -118,7 +119,6 @@ public class Reviews_tab extends Fragment {
 
             @Override
             public void onFailure(Throwable t) {
-                Log.i(LOG_TAG, "failed to fetch reviews data....");
                 builder.setMessage("Sorry, We couldn't fetch the movie reviews information. Inconvenience regretted").setCancelable(false)
                         .setPositiveButton("It's Okay", new DialogInterface.OnClickListener() {
                             @Override
@@ -128,5 +128,40 @@ public class Reviews_tab extends Fragment {
                         }).create().show();
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+
+        outState.putStringArrayList("author_name", (ArrayList<String>) movieReviewsAdapter.author_name);
+        outState.putStringArrayList("author_review", (ArrayList<String>) movieReviewsAdapter.author_review);
+        outState.putInt("noOfReviews", movieReviewsAdapter.noOfReviews);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            movieReviewsAdapter.author_name = savedInstanceState.getStringArrayList("author_name");
+            movieReviewsAdapter.author_review = savedInstanceState.getStringArrayList("author_review");
+            movieReviewsAdapter.noOfReviews = savedInstanceState.getInt("noOfReviews");
+
+            if (movieReviewsAdapter.noOfReviews == 0)
+                no_reviews_msg.setText("No Reviews Found for this Movie");
+            else
+                reviews_list_view.setAdapter(movieReviewsAdapter);
+
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (movieReviewsAdapter.author_name.isEmpty() || movieReviewsAdapter.author_name == null)
+            fetchReviewsData();
     }
 }

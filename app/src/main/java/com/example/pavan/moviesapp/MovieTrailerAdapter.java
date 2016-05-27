@@ -12,8 +12,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-
 /**
  * Created by pavan on 4/10/2016.
  */
@@ -27,18 +25,22 @@ public class MovieTrailerAdapter extends BaseAdapter {
     Context context;
 
 
-    @BindView(R.id.trailer_title)
+
     TextView trailer_title;
-    @BindView(R.id.trailer_thumbnail_image)
+
     ImageView trailer_thumbnail_image;
 
     private String YOUTUBE_THUMBNAIL_BASE_URL = "http://img.youtube.com/vi/";
 
 
-    public MovieTrailerAdapter(Context context, ArrayList<String> name, ArrayList<String> key) {
+    public MovieTrailerAdapter(Context context, ArrayList<String> name, ArrayList<String> key, int noOfTrailers) {
         this.context = context;
         this.Name = name;
         this.Key = key;
+        this.noOfTrailers = noOfTrailers;
+    }
+
+    public MovieTrailerAdapter() {
     }
 
     @Override
@@ -63,7 +65,8 @@ public class MovieTrailerAdapter extends BaseAdapter {
             trailer_thumbnail_image = (ImageView) convertView.findViewById(R.id.trailer_thumbnail_image);
             trailer_title = (TextView) convertView.findViewById(R.id.trailer_title);
 
-            trailer_title.setText(Name.get(position));
+
+        trailer_title.setText(Name.get(position));
 
             Picasso.with(context)
                     .load(YOUTUBE_THUMBNAIL_BASE_URL + Key.get(position) + "/maxresdefault.jpg")

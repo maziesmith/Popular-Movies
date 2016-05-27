@@ -94,8 +94,6 @@ public class MainActivityFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Log.i(LOG_TAG, "savedInstanceState in onActivityCreated() : " + savedInstanceState);
-
         if (savedInstanceState != null) {
             movie_ids_for_trailers_and_reviews = (ArrayList) savedInstanceState.getSerializable("movie_ids_for_trailers_and_reviews");
             movieOverViews = savedInstanceState.getStringArrayList("movieOverViews");
@@ -104,35 +102,9 @@ public class MainActivityFragment extends Fragment {
             voteAverageArray = savedInstanceState.getStringArrayList("voteAverageArray");
             releaseDates = savedInstanceState.getStringArrayList("releaseDates");
 
-
-            Log.i(LOG_TAG, "in onActivityCreated titles array : " + titles);
-            Log.i(LOG_TAG, "in onActivityCreated  posters path : " + Posters);
-            Log.i(LOG_TAG, "in onActivityCreated  vote avg : " + voteAverageArray);
-            Log.i(LOG_TAG, "in onActivityCreated  release date : " + releaseDates);
-            Log.i(LOG_TAG, "in onActivityCreated  over views : " + movieOverViews);
-            Log.i(LOG_TAG, "in onActivityCreated  movie IDs : " + movie_ids_for_trailers_and_reviews);
-
+            gridView.setAdapter(new ImageAdapter(getContext(), Posters, sortByPrefValue));
 
         }
-//        else if (checkConnectivityStatus.isOnline() != true && savedInstanceState != null)
-//        {
-//            Movie_ids_for_trailers_and_reviews_D = (ArrayList) savedInstanceState.getSerializable("movie_ids_for_trailers_and_reviews");
-//            MovieOverViews_D = savedInstanceState.getStringArrayList("movieOverViews");
-//            Posters_D = savedInstanceState.getStringArrayList("Posters");
-//            titles_D = savedInstanceState.getStringArrayList("titles");
-//            VoteAverageArray_D = savedInstanceState.getStringArrayList("voteAverageArray");
-//            ReleaseDates_D= savedInstanceState.getStringArrayList("releaseDates");
-//
-//
-//            Log.i(LOG_TAG, "in onActivityCreated titles array : " + titles_D);
-//            Log.i(LOG_TAG, "in onActivityCreated  posters path : " + Posters_D);
-//            Log.i(LOG_TAG, "in onActivityCreated  vote avg : " + VoteAverageArray_D);
-//            Log.i(LOG_TAG, "in onActivityCreated  release date : " + ReleaseDates_D);
-//            Log.i(LOG_TAG, "in onActivityCreated  over views : " + MovieOverViews_D);
-//            Log.i(LOG_TAG, "in onActivityCreated  movie IDs : " + Movie_ids_for_trailers_and_reviews_D);
-//
-//
-//        }
 
     }
 
@@ -154,8 +126,6 @@ public class MainActivityFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        Log.i(LOG_TAG, "onCreateView() fired");
-//        Log.i(LOG_TAG,"onCreateView() savedInstanceState :  " + savedInstanceState);
 
         gridView = (GridView) rootView.findViewById(R.id.movie_grid_view);
 
@@ -170,15 +140,12 @@ public class MainActivityFragment extends Fragment {
 
         sortByPrefValue = sortByPref.getString(getString(R.string.SortBy_key),
                 getString(R.string.SortBy_default));
-        Log.i(LOG_TAG, "sortByPrefValue : " + sortByPrefValue);
 
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getContext(), "position : " + position, Toast.LENGTH_SHORT).show();
-
-                Log.i("poster string", Posters.get(position));
 
 
                 clickedPoster = Posters.get(position);
@@ -195,9 +162,6 @@ public class MainActivityFragment extends Fragment {
                 bundle.putLong("movieID", movie_id_for_trailers);
                 bundle.putString("voteAverage", voteAverage);
                 bundle.putString("sortPreference", sortByPrefValue);
-
-
-                Log.i(LOG_TAG, "bundle data : " + bundle);
 
 
                 movieDetail_pagerAdapter = new MovieDetail_PagerAdapter(getFragmentManager(), getContext(), bundle);
@@ -238,10 +202,6 @@ public class MainActivityFragment extends Fragment {
 
                     moviesResultsJSONs = response.body().getResults();
 
-                    Log.i(LOG_TAG, "response.body() : " + response.body());
-                    Log.i(LOG_TAG, "response.raw() : " + response.raw());
-
-
                     for (MoviesResultsJSON moviesResultsJSON : moviesResultsJSONs) {
 
                         movie_ids_for_trailers_and_reviews.add(moviesResultsJSON.getId());
@@ -254,20 +214,13 @@ public class MainActivityFragment extends Fragment {
 
                 }
 
-                Log.i(LOG_TAG, "titles array : " + titles);
-                Log.i(LOG_TAG, "posters path : " + Posters);
-                Log.i(LOG_TAG, "vote avg : " + voteAverageArray);
-                Log.i(LOG_TAG, "release date : " + releaseDates);
-                Log.i(LOG_TAG, "over views : " + movieOverViews);
-                Log.i(LOG_TAG, "movie IDs : " + movie_ids_for_trailers_and_reviews);
-
                 gridView.setAdapter(new ImageAdapter(getContext(), Posters, sortByPrefValue));
             }
 
 
             @Override
             public void onFailure(Throwable t) {
-                Log.i(LOG_TAG, "failed to fetch the data");
+
                 builder.setMessage("Sorry, We couldn't fetch the movies information. Please try after sometime. Inconvenience regretted").setCancelable(false)
                         .setPositiveButton("It's Okay", new DialogInterface.OnClickListener() {
                             @Override
@@ -315,12 +268,6 @@ public class MainActivityFragment extends Fragment {
                     }).create().show();
 
         } else if (confirmation != 0 && (checkConnectivityStatus.isOnline() == true || checkConnectivityStatus.isOnline() != true)) {
-            Log.i(LOG_TAG, "titles array : " + titles);
-            Log.i(LOG_TAG, "posters path : " + Posters);
-            Log.i(LOG_TAG, "vote avg : " + voteAverageArray);
-            Log.i(LOG_TAG, "release date : " + releaseDates);
-            Log.i(LOG_TAG, "over views : " + movieOverViews);
-            Log.i(LOG_TAG, "movie IDs : " + movie_ids_for_trailers_and_reviews);
 
             gridView.setAdapter(new ImageAdapter(getContext(), Posters, sortByPrefValue));
         }
@@ -331,9 +278,6 @@ public class MainActivityFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        Log.i(LOG_TAG, "onSaveInstanceState() fired");
-
-
         outState.putStringArrayList("Posters", Posters);
         outState.putStringArrayList("releaseDates", releaseDates);
         outState.putStringArrayList("movieOverViews", movieOverViews);
@@ -342,42 +286,17 @@ public class MainActivityFragment extends Fragment {
         outState.putStringArrayList("voteAverageArray", voteAverageArray);
         outState.putString("sortPreference", sortByPrefValue);
 
-        Log.i(LOG_TAG, "onSaveInstanceState() outState : " + outState);
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-        Log.i(LOG_TAG, "onStart fired");
-
-        if (sortByPrefValue.equals(getString(R.string.favorites_value)))
+        if (sortByPrefValue.equals(getString(R.string.favorites_value)) && movie_ids_for_trailers_and_reviews.isEmpty())
             favoriteMoviesInfo();
-        else if (checkConnectivityStatus.isOnline() && (movie_ids_for_trailers_and_reviews.isEmpty() || movie_ids_for_trailers_and_reviews == null)) {
-            Log.i(LOG_TAG, "retrofit activity");
+        else if (checkConnectivityStatus.isOnline() && (movie_ids_for_trailers_and_reviews.isEmpty() || movie_ids_for_trailers_and_reviews == null))
             getMoviesListData();
-        }
-        else
+        else if (!checkConnectivityStatus.isOnline() && movie_ids_for_trailers_and_reviews.isEmpty())
             favoriteMoviesInfo();
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        Log.i(LOG_TAG, "on destroy fired");
-
-        if (movie_ids_for_trailers_and_reviews.isEmpty() != true) {
-            movie_ids_for_trailers_and_reviews.clear();
-            movieOverViews.clear();
-            Posters.clear();
-            titles.clear();
-            voteAverageArray.clear();
-            releaseDates.clear();
-            Log.i(LOG_TAG, "all clear");
-        }
-
-
     }
 }
