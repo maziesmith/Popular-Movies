@@ -104,6 +104,34 @@ public class MainActivityFragment extends Fragment {
 
             gridView.setAdapter(new ImageAdapter(getContext(), Posters, sortByPrefValue));
 
+
+            if (isTablet(getContext())) {
+
+                Log.i(LOG_TAG, "running on tablet");
+                clickedPoster = Posters.get(0);
+                releaseDate = releaseDates.get(0);
+                movieOverView = movieOverViews.get(0);
+                voteAverage = voteAverageArray.get(0).toString();
+                movieTitle = titles.get(0).toString();
+                movie_id_for_trailers = (Long) movie_ids_for_trailers_and_reviews.get(0);
+
+                bundle.putString("posterURL", clickedPoster);
+                bundle.putString("releaseDate", releaseDate);
+                bundle.putString("movieOverview", movieOverView);
+                bundle.putString("movieTitle", movieTitle);
+                bundle.putLong("movieID", movie_id_for_trailers);
+                bundle.putString("voteAverage", voteAverage);
+                bundle.putString("sortPreference", sortByPrefValue);
+
+                new MovieDetail_PagerAdapter(getFragmentManager(), getContext(), bundle);
+
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.movie_detail_fragment_placeholder_for_tablet, new MovieDetailFragment(), "movie details")
+                        .commit();
+            }
+
+
+
         }
 
     }
@@ -168,8 +196,6 @@ public class MainActivityFragment extends Fragment {
 
                 if (isTablet(getContext())) {
                     Log.i(LOG_TAG, "running on tablet");
-                    ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
-                    layoutParams.width = 0;
 
                     getFragmentManager().beginTransaction()
                             .replace(R.id.movie_detail_fragment_placeholder_for_tablet, new MovieDetailFragment(), "movie details")
@@ -215,6 +241,32 @@ public class MainActivityFragment extends Fragment {
                 }
 
                 gridView.setAdapter(new ImageAdapter(getContext(), Posters, sortByPrefValue));
+
+                if (isTablet(getContext())) {
+
+                    Log.i(LOG_TAG, "running on tablet");
+                    clickedPoster = Posters.get(0);
+                    releaseDate = releaseDates.get(0);
+                    movieOverView = movieOverViews.get(0);
+                    voteAverage = voteAverageArray.get(0).toString();
+                    movieTitle = titles.get(0).toString();
+                    movie_id_for_trailers = (Long) movie_ids_for_trailers_and_reviews.get(0);
+
+                    bundle.putString("posterURL", clickedPoster);
+                    bundle.putString("releaseDate", releaseDate);
+                    bundle.putString("movieOverview", movieOverView);
+                    bundle.putString("movieTitle", movieTitle);
+                    bundle.putLong("movieID", movie_id_for_trailers);
+                    bundle.putString("voteAverage", voteAverage);
+                    bundle.putString("sortPreference", sortByPrefValue);
+
+                    new MovieDetail_PagerAdapter(getFragmentManager(), getContext(), bundle);
+
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.movie_detail_fragment_placeholder_for_tablet, new MovieDetailFragment(), "movie details")
+                            .commit();
+                }
+
             }
 
 
@@ -271,6 +323,32 @@ public class MainActivityFragment extends Fragment {
         } else if (confirmation != 0 && (checkConnectivityStatus.isOnline() == true || checkConnectivityStatus.isOnline() != true)) {
 
             gridView.setAdapter(new ImageAdapter(getContext(), Posters, sortByPrefValue));
+
+            if (isTablet(getContext())) {
+
+                Log.i(LOG_TAG, "running on tablet");
+                clickedPoster = Posters.get(0);
+                releaseDate = releaseDates.get(0);
+                movieOverView = movieOverViews.get(0);
+                voteAverage = voteAverageArray.get(0).toString();
+                movieTitle = titles.get(0).toString();
+                movie_id_for_trailers = (Long) movie_ids_for_trailers_and_reviews.get(0);
+
+                bundle.putString("posterURL", clickedPoster);
+                bundle.putString("releaseDate", releaseDate);
+                bundle.putString("movieOverview", movieOverView);
+                bundle.putString("movieTitle", movieTitle);
+                bundle.putLong("movieID", movie_id_for_trailers);
+                bundle.putString("voteAverage", voteAverage);
+                bundle.putString("sortPreference", sortByPrefValue);
+
+                new MovieDetail_PagerAdapter(getFragmentManager(), getContext(), bundle);
+
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.movie_detail_fragment_placeholder_for_tablet, new MovieDetailFragment(), "movie details")
+                        .commit();
+            }
+
         }
 
     }
@@ -295,14 +373,11 @@ public class MainActivityFragment extends Fragment {
 
 
         if (!checkConnectivityStatus.isOnline() && movie_ids_for_trailers_and_reviews.isEmpty()) {
-            Log.i(LOG_TAG, "device offline");
             favoriteMoviesInfo();
         } else if (sortByPrefValue.equals(getString(R.string.favorites_value)) && movie_ids_for_trailers_and_reviews.isEmpty()) {
-            Log.i(LOG_TAG, "check pref");
             favoriteMoviesInfo();
         }
         else if (checkConnectivityStatus.isOnline() && (movie_ids_for_trailers_and_reviews.isEmpty() || movie_ids_for_trailers_and_reviews == null)) {
-            Log.i(LOG_TAG, "retrofit kirikiri");
             getMoviesListData();
         }
 
