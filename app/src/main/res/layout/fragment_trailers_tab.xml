@@ -19,7 +19,6 @@
             android:textSize="20sp" />
 
         <View
-            android:id="@+id/border_line"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="@android:color/darker_gray" />

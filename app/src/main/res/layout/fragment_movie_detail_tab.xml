@@ -26,7 +26,6 @@
 
 
     <ScrollView
-        android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/title_background"
@@ -91,7 +90,6 @@
                 android:textStyle="normal" />
 
             <View
-                android:id="@+id/border_line"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_below="@+id/movie_overview"

@@ -166,8 +166,6 @@ public class MainActivityFragment extends Fragment {
 
         sortByPref = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        sortByPrefValue = sortByPref.getString(getString(R.string.SortBy_key),
-                getString(R.string.SortBy_default));
 
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -371,6 +369,8 @@ public class MainActivityFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+        sortByPrefValue = sortByPref.getString(getString(R.string.SortBy_key),
+                getString(R.string.SortBy_default));
 
         if (!checkConnectivityStatus.isOnline() && movie_ids_for_trailers_and_reviews.isEmpty()) {
             favoriteMoviesInfo();
