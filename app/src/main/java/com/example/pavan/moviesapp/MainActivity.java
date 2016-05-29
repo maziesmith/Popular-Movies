@@ -14,7 +14,7 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String LOG_TAG = getClass().getSimpleName();
+
     MenuItem shareItem;
     ShareActionProvider shareActionProvider;
     String Trailer;
