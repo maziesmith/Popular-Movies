@@ -26,25 +26,18 @@ public class DeleteMovieRecords {
 
         sqLiteDatabase = moviesDatabaseHelper.getWritableDatabase();
 
+        int rowsDeleted = context.getContentResolver().delete(
+                MovieContract.FavoriteMoviesDatabase.buildFavoriteMoviesUri(movieID),
+                MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID + " = " + movieID,
+                null);
 
-        sqLiteDatabase.beginTransaction();
+        Log.d(LOG_TAG, "deleted provider rows : " + rowsDeleted);
 
-        sqLiteDatabase.execSQL("DELETE FROM " + MovieContract.FavoriteMoviesDatabase.TABLE_NAME + " WHERE " + MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID + " = " + movieID);
-
-        cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + MovieContract.FavoriteMoviesDatabase.TABLE_NAME + " WHERE " + MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID + " = " + movieID, null);
-
-        if (cursor.getCount() == 0) {
+        if (rowsDeleted > 0) {
             Log.i(LOG_TAG, "record : " + movieID + "is deleted");
-            sqLiteDatabase.setTransactionSuccessful();
-            sqLiteDatabase.endTransaction();
-            sqLiteDatabase.close();
-            moviesDatabaseHelper.close();
             return "movie record deleted";
         } else {
             Log.i(LOG_TAG, "record : " + movieID + "is not deleted");
-            sqLiteDatabase.endTransaction();
-            sqLiteDatabase.close();
-            moviesDatabaseHelper.close();
             return "movie record not deleted";
         }
     }

@@ -1,8 +1,10 @@
 package com.example.pavan.moviesapp.MovieSQLiteDatabase;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.util.Log;
 
 import com.example.pavan.moviesapp.MainActivityFragment;
@@ -26,15 +28,17 @@ public class ReadDatabaseRecords {
     }
 
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public int fetchAllMovieDatabaseRecords() {
 
-        moviesDatabaseHelper = new MoviesDatabaseHelper(context, MoviesDatabaseHelper.DATABASE_NAME, null, MoviesDatabaseHelper.DATABASE_VERSION);
+        cursor = context.getContentResolver().query(MovieContract.FavoriteMoviesDatabase.CONTENT_URI,
+                null,
+                null,
+                null,
+                null,
+                null);
 
-
-        sqLiteDatabase = moviesDatabaseHelper.getReadableDatabase();
-
-        cursor = sqLiteDatabase.query(MovieContract.FavoriteMoviesDatabase.TABLE_NAME, null, null, null, null, null, null);
-
+        Log.d(LOG_TAG, "selection provider : " + cursor.getCount());
 
         Log.i(LOG_TAG, "cursor.getCount() : " + cursor.getCount());
 
@@ -65,13 +69,9 @@ public class ReadDatabaseRecords {
 
 
             cursor.close();
-            sqLiteDatabase.close();
-            moviesDatabaseHelper.close();
             return cursor.getCount();
         } else {
             cursor.close();
-            sqLiteDatabase.close();
-            moviesDatabaseHelper.close();
             return cursor.getCount();
         }
     }

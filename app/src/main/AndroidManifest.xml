@@ -33,6 +33,11 @@
                 android:value=".MainActivity" />
         </activity>
 
+        <provider
+            android:name=".MovieSQLiteDatabase.MoviesContentProvider"
+            android:authorities="com.example.pavan.moviesapp"
+            android:enabled="true"
+            android:exported="true"></provider>
     </application>
 
 </manifest>

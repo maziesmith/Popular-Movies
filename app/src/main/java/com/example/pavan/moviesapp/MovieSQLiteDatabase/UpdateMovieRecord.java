@@ -1,9 +1,8 @@
 package com.example.pavan.moviesapp.MovieSQLiteDatabase;
 
+import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.DatabaseUtils;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 /**
@@ -21,39 +20,19 @@ public class UpdateMovieRecord {
 
     public void UpdateMoviePoster(String fileName, long movieID) {
 
-        MoviesDatabaseHelper databaseHelper = new MoviesDatabaseHelper(context, MoviesDatabaseHelper.DATABASE_NAME, null, MoviesDatabaseHelper.DATABASE_VERSION);
-        SQLiteDatabase sqLiteDatabase = databaseHelper.getWritableDatabase();
-        sqLiteDatabase.beginTransaction();
-
         fileName = DatabaseUtils.sqlEscapeString(fileName);
 
-        String query = "UPDATE " + MovieContract.FavoriteMoviesDatabase.TABLE_NAME + " SET "
-                + MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_POSTER + " = " + fileName
-                + " WHERE " + MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID + " = " + movieID;
+        ContentValues values = new ContentValues();
 
-        sqLiteDatabase.execSQL(query);
+        values.put(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_POSTER, fileName);
 
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + MovieContract.FavoriteMoviesDatabase.TABLE_NAME + " WHERE "
-                + MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID + " = " + movieID, null);
+        int _id = context.getContentResolver().update(
+                MovieContract.FavoriteMoviesDatabase.buildFavoriteMoviesUriWithFileNameAndMovieID(fileName, movieID),
+                values,
+                MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID + " = " + movieID,
+                null);
 
-        if (cursor.getCount() != 0) {
-            cursor.moveToFirst();
-        }
-        do {
-            Log.i(LOG_TAG, "cursor.getString(cursor.getPosition()) : " + cursor.getColumnName(cursor.getPosition()));
-            Log.i(LOG_TAG, "cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID) :" + cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID)));
-            Log.i(LOG_TAG, "cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID) :" + cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_TITLE)));
-            Log.i(LOG_TAG, "cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID) :" + cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_VOTE_AVERAGE)));
-            Log.i(LOG_TAG, "cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID) :" + cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_RELEASE_DATE)));
-            Log.i(LOG_TAG, "cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID) :" + cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_POSTER)));
-            Log.i(LOG_TAG, "cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_ID) :" + cursor.getString(cursor.getColumnIndex(MovieContract.FavoriteMoviesDatabase.COLUMN_MOVIE_OVERVIEW)));
-        } while (cursor.moveToNext());
+        Log.e(LOG_TAG, "update provider : " + _id);
 
-
-        cursor.close();
-        sqLiteDatabase.setTransactionSuccessful();
-        sqLiteDatabase.endTransaction();
-        sqLiteDatabase.close();
-        databaseHelper.close();
     }
 }

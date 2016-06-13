@@ -49,7 +49,7 @@ public class MovieDetail_tab extends Fragment {
     private AndroidUtil androidUtil;
     private Picasso picasso;
     private ReadDatabaseRecords readDatabaseRecords;
-    private String confirmation, confirmation2;
+    private String confirmation3, confirmation2;
 
 
     public MovieDetail_tab() {
@@ -146,12 +146,11 @@ public class MovieDetail_tab extends Fragment {
         mark_favorite_button = (TextView) view.findViewById(R.id.mark_favorite);
 
 
+        confirmation3 = checkDatabaseRecords.checkAllMovieRecordsWithDBRecords(movieID);
 
-        confirmation = checkDatabaseRecords.checkAllMovieRecordsWithDBRecords(movieID);
-
-        if (confirmation == "already marked favorite")
+        if (confirmation3 == "already marked favorite")
             FavoriteButtonMarked();
-        else if (confirmation == "not marked yet")
+        else if (confirmation3 == "not marked yet")
             FavoriteButtonNotMarked();
 
 
@@ -159,21 +158,20 @@ public class MovieDetail_tab extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if (confirmation == "already marked favorite") {
+                if (confirmation3 == "already marked favorite") {
 
                     Toast.makeText(getContext(), "Movie is already added in your favorites.", Toast.LENGTH_SHORT).show();
                 } else {
-                    confirmation = "already marked favorite";
                     confirmation2 = databaseInsertions.insertDataIntoMoviesTable(movieID, movieTitle, Double.parseDouble(voteAverage), releaseDate, poster_path, movieOverview);
                     picasso.load(BASE_POSTER_URL + poster_path)
                             .resize(185 * 2, 278 * 2).into(androidUtil.getTarget(BASE_POSTER_URL + poster_path, movieID));
                     if (confirmation2 == "inserted successfully")
                     {
+                        confirmation3 = "already marked favorite";
                         FavoriteButtonMarked();
                         Toast.makeText(getContext(), "added into your favorite movies list.", Toast.LENGTH_SHORT).show();
                     } else {
                         FavoriteButtonNotMarked();
-
                         Toast.makeText(getContext(), " problem occurred while adding it to your favorite movies list.", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -219,6 +217,7 @@ public class MovieDetail_tab extends Fragment {
                 androidUtil.deleteMoviePosterFromFileSystem(poster_path);
                 String confirmation = deleteMovieRecords.deleteFavoriteMovieRecord(movieID);
                 if (confirmation == "movie record deleted") {
+                    confirmation3 = "not marked yet";
                     FavoriteButtonNotMarked();
                     Toast.makeText(getContext(), "Movie is removed from your favorite movies list", Toast.LENGTH_SHORT).show();
                 } else
