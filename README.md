@@ -3,8 +3,9 @@ An Android movie mobile app which displays a grid of movie posters. Developed as
 
 ## Project Details
 The app has got a Movie posters grid on the Home Screen,
-[![app's home screen](https://github.com/pa1-teja/Popular-Movies/blob/master/app/src/main/res/drawable/Home%20Screen.png](#features)
-
+<br/>
+<img src="https://github.com/pa1-teja/Popular-Movies/blob/master/app/src/main/res/drawable/Home%20Screen.png" width="150" height = "220">
+<br/>
 a View Pager holding the more information such as movie details, trailers and reviews
 
 
