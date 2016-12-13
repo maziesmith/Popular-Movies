@@ -35,7 +35,7 @@ In case, if the user wants to remove a particular movie from his/her favorite mo
 The app checks for the chosen sort order and based on that, the app makes an API call when the app is launched. The app fetches movies details from the [MovieDB API](http://api.themoviedb.org/). 
 
 ### Dependencies used in the project
-Below are the dependencies used in the project : 
+Below are the dependencies used in the project : <br/>
 `com.android.support:appcompat-v7:23.3.0` <br/>
 `com.android.support:design:23.3.0`<br/>
 `com.squareup.picasso:picasso:2.5.2`<br/>
