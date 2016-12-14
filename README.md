@@ -34,7 +34,7 @@ In case, if the user wants to remove a particular movie from his/her favorite mo
 The app also supports Android Tablet UI. i.e. Users can also use the app on any Android Tablet device running android GINGERBREAD or above versions.
 
 <br/>
-<img src="https://github.com/pa1-teja/Popular-Movies/blob/master/app/src/main/res/drawable/tablet_screen%20movies.png" width="200" height = "350">
+<img src="https://github.com/pa1-teja/Popular-Movies/blob/master/app/src/main/res/drawable/tablet_screen%20movies.png" width="500" height = "350">
 <br/>
 
  
