@@ -54,7 +54,7 @@ Below are the dependencies used in the project : <br/>
  3.) Follow the commands to install the app via ADB using [Command Prompt](http://howto.highonandroid.com/android-how-to-tutorials/how-to-install-apk-to-your-android-device-via-adb-commands/).
  
  
- ### App Compatibility
+ ### Compatibility
   
   The App supports all the Android devices and Tablets which runs Android GINGERBREAD and above versions. 
  i.e sdk 9 and above.
