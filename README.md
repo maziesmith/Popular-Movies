@@ -64,4 +64,4 @@ Below are the dependencies used in the project : <br/>
 ## Version Compatibility
   
   The App supports all the Android devices and Tablets which runs Android GINGERBREAD and above versions. 
- i.e sdk 9 and above.
+ i.e API 9 and above.
