@@ -52,7 +52,7 @@ Below are the dependencies used in the project : <br/>
  2.) Import the project into the Android Studio IDE and hit the play button to install the app via ADB.
 
  3.) Follow the commands to install the app via ADB using [Command Prompt](http://howto.highonandroid.com/android-how-to-tutorials/how-to-install-apk-to-your-android-device-via-adb-commands/).
- 
+ <br/>
  
  ## Version Compatibility
   
